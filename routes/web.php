@@ -3,6 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\MainController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,15 +16,7 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [MainController::class, 'searchByRuta']);
 
 Route::middleware([
     'auth:sanctum',
@@ -33,3 +27,6 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 });
+
+Route::get('/{ruta}/info', [MainController::class, 'getInfoByRuta'])->name('infoByRuta');
+Route::get('/searchByRoute', [MainController::class, 'searchByRuta'])->name('searchByRuta');

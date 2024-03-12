@@ -14,6 +14,7 @@
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
+        <script src="https://kit.fontawesome.com/2780e63ff4.js" crossorigin="anonymous"></script>
     </head>
     <body class="font-sans antialiased">
         @inertia
