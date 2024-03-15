@@ -10,7 +10,7 @@ const searchByRuta = () => {
 </script>
 
 <template>
-    <GuestLayout title="Buscar por Ruta">
+    <GuestLayout title="Buscar | Salvador Palacios">
         <div class="flex items-center justify-center h-screen">
             <div class="w-full max-w-xs">
                 <form @submit.prevent="searchByRuta" class="bg-white shadow-md rounded-lg px-8 pt-6 pb-4 mb-4">
