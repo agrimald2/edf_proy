@@ -7,7 +7,9 @@ const props = defineProps({
     clients: Array,
     negociados: Number,
     noNegociados: Number,
-    gv: String
+    gv: String,
+    cuota: Number,
+    pending: Number,
 });
 
 const searchQuery = ref('');
@@ -119,10 +121,20 @@ const filteredNoNegociados = computed(() => {
                             <div class="bg-yellow-500 rounded-lg shadow-lg flex-1" style="background-color: #C6372A;">
                                 <div class="p-4 flex flex-col items-center justify-center">
                                     <i class="fa-solid fa-users text-white text-xl"></i>
-                                    <h3 class="text-lg font-semibold text-white">Pendientes</h3>
-                                    <p class="text-white text-2xl font-bold">{{ filteredNoNegociados }}</p>
+                                    <h3 class="text-xl font-semibold text-white">Pendientes</h3>
+                                    <p class="text-white text-2xl font-bold">{{ pending }}</p>
                                 </div>
                             </div>
+
+                            <!-- 
+                                <div class="bg-yellow-500 rounded-lg shadow-lg flex-1" style="background-color: #C6372A;">
+                                    <div class="p-4 flex flex-col items-center justify-center">
+                                        <i class="fa-solid fa-users text-white text-xl"></i>
+                                        <h3 class="text-lg font-semibold text-white">No Negociados</h3>
+                                        <p class="text-white text-2xl font-bold">{{ filteredNoNegociados }}</p>
+                                    </div>
+                                </div>
+                            -->
                         </div>
                     </div>
                 </div>
@@ -141,7 +153,7 @@ const filteredNoNegociados = computed(() => {
                             @click="selectedFilter = 'todos'">TODOS</button>
                         <button class="px-4 py-2 text-white rounded-full"
                             :class="{ 'bg-black': selectedFilter === 'pendientes', 'bg-gray-500': selectedFilter !== 'pendientes' }"
-                            @click="selectedFilter = 'pendientes'">PENDIENTES</button>
+                            @click="selectedFilter = 'pendientes'">NO NEGOCIADO</button>
                         <button class="px-4 py-2 text-white rounded-full"
                             :class="{ 'bg-black': selectedFilter === 'negociados', 'bg-gray-500': selectedFilter !== 'negociados' }"
                             @click="selectedFilter = 'negociados'">NEGOCIADOS</button>

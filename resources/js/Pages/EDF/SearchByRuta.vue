@@ -19,7 +19,7 @@ const searchByRuta = () => {
                     </div>
                     <div class="text-center mb-2">
                         <h1 class="text-4xl font-bold">
-                            NEDF
+                            NEEF
                         </h1>
                     </div>
                     <div class="mb-4">

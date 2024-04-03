@@ -13,16 +13,23 @@ class MainController extends Controller
     }
 
     public function getInfoByRuta($ruta){
+        $cuota = Main::where('RUTA', $ruta)->first()->CUOTA ?? 'N/A';
         $clients = Main::where('RUTA', $ruta)->get();
         $negociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->count();
         $noNegociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'PENDIENTE')->count();
         $gv = Main::where('RUTA', $ruta)->first()->GV ?? 'N/A';
+        $pending = $cuota - $negociados;
+        if ($pending < 0) {
+            $pending = 0; // Ensure pending is not negative
+        }
         return Inertia::render('EDF/InfoByRuta', [
                 'ruta' => $ruta,
                 'clients' => $clients,
                 'negociados' => $negociados,
                 'noNegociados' => $noNegociados,
-                'gv' => $gv
+                'gv' => $gv,
+                'cuota' => $cuota, 
+                'pending' => $pending
         ]);
     } 
 }
