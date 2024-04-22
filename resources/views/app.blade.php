@@ -8,7 +8,7 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
-        <meta name="description" content="Proyecto EDF - Salvador Palacios">
+        <meta name="description" content="Proyecto EDF">
         <meta name="author" content="Salvador Palacios">
 
         <!-- Fonts -->

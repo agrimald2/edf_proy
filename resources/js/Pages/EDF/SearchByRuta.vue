@@ -10,7 +10,7 @@ const searchByRuta = () => {
 </script>
 
 <template>
-    <GuestLayout title="Buscar | Salvador Palacios">
+    <GuestLayout title="Buscar | EDF">
         <div class="flex items-center justify-center h-screen">
             <div class="w-full max-w-xs">
                 <form @submit.prevent="searchByRuta" class="bg-white shadow-md rounded-lg px-8 pt-6 pb-4 mb-4">
@@ -19,7 +19,7 @@ const searchByRuta = () => {
                     </div>
                     <div class="text-center mb-2">
                         <h1 class="text-4xl font-bold">
-                            NEEF
+                            NEF
                         </h1>
                     </div>
                     <div class="mb-4">
