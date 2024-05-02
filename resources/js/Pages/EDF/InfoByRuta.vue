@@ -243,7 +243,7 @@ const filteredNoNegociados = computed(() => {
                                     <div class="text-xs text-gray-700 mt-1" v-if="client.FECHA_PROGRAMACION">
                                         <strong>
                                             F.E: {{ client.FECHA_PROGRAMACION }}
-                                            <span v-if="new Date(client.FECHA_PROGRAMACION) < new Date()" class="text-red-500">!</span>
+                                            <span v-if="new Date(client.FECHA_PROGRAMACION) < new Date()" class="text-red-500 text-lg">!</span>
                                         </strong>
                                     </div>
                                 </div>
