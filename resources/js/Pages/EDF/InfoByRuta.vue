@@ -240,9 +240,9 @@ const filteredNoNegociados = computed(() => {
                                             </span>
                                         </li>
                                     </ol>
-                                    <div class="text-xs text-gray-700 mt-1">
+                                    <div class="text-xs text-gray-700 mt-1" v-if="client.FECHA_PROGRAMACION">
                                         <strong>
-                                            {{ client.FECHA_PROGRAMACION }}
+                                            F.E: {{ client.FECHA_PROGRAMACION }}
                                         </strong>
                                     </div>
                                 </div>
