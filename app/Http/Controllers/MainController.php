@@ -13,9 +13,7 @@ class MainController extends Controller
     }
 
     public function getInfoByRuta($ruta){
-        $cuota = Main::where('RUTA', $ruta)->first()->CUOTA ?? null ;
-        $status = Main::where('RUTA', $ruta)->first()->STATUS ?? null;
-        $fecha_programacion = Main::where('RUTA', $ruta)->first()->FECHA_PROGRAMACION ?? 'N/A';
+        $cuota = Main::where('RUTA', $ruta)->first()->CUOTA ?? 'N/A' ;
         $clients = Main::where('RUTA', $ruta)->get();
         $negociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->count();
         $noNegociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'PENDIENTE')->count();
@@ -32,8 +30,6 @@ class MainController extends Controller
                 'gv' => $gv,
                 'cuota' => $cuota, 
                 'pending' => $pending,
-                'status' => $status,
-                'fecha_programacion' => $fecha_programacion
         ]); 
     } 
 }

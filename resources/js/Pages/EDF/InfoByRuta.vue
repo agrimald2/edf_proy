@@ -90,7 +90,7 @@ const filteredNoNegociados = computed(() => {
         <template #header>
             <div class="flex justify-between items-center">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    Hola, {{ props.gv}}!
+                    Hola, {{ props.gv }}!
                 </h2>
                 <select v-model="selectedDay"
                     class="form-select block w-1/4 mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
@@ -204,12 +204,47 @@ const filteredNoNegociados = computed(() => {
                                             class="fa-solid fa-check-to-slot mr-2"></i>Haz Negociado</div>
                                     <div class="flex items-center mt-2">
                                         <div class="text-sm font-semibold">EDF | {{ client.PUERTAS_A_NEGOCIAR }} Pts |
-                                            {{client.CONDICION}}</div>
+                                            {{ client.CONDICION }}</div>
                                     </div>
-                                    <button
-                                        class="ml-auto bg-green-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-md">
-                                        <i class="fa-solid fa-shuffle"></i>
-                                    </button>
+                                    <ol class="flex items-center w-full">
+                                        <li :class="{ 'text-green-500 dark:text-green-400': client.STATUS === 'NEGOCIADO', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'NEGOCIADO' }"
+                                            class="flex w-full items-center after:content-[''] after:w-full after:h-0.5 after:border-b after:border-gray-200 after:border-2 after:inline-block dark:after:border-gray-600">
+                                            <span
+                                                class="flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0"
+                                                :class="{ 'bg-green-50 dark:bg-green-700': client.STATUS === 'NEGOCIADO', 'bg-gray-50 dark:bg-gray-600': client.STATUS !== 'NEGOCIADO' }">
+                                                <i class="fa-solid fa-handshake text-xs"></i>
+                                            </span>
+                                        </li>
+                                        <li :class="{ 'text-green-500 dark:text-green-400': client.STATUS === 'PROGRAMADO', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'PROGRAMADO' }"
+                                            class="flex w-full items-center after:content-[''] after:w-full after:h-0.5 after:border-b after:border-gray-200 after:border-2 after:inline-block dark:after:border-gray-600">
+                                            <span
+                                                class="flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0"
+                                                :class="{ 'bg-green-50 dark:bg-green-700': client.STATUS === 'PROGRAMADO', 'bg-gray-50 dark:bg-gray-600': client.STATUS !== 'PROGRAMADO' }">
+                                                <i class="fa-solid fa-calendar text-xs"></i>
+                                            </span>
+                                        </li>
+                                        <li :class="{ 'text-green-500 dark:text-green-400': client.STATUS === 'EN RUTA', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'EN RUTA' }"
+                                            class="flex w-full items-center after:content-[''] after:w-full after:h-0.5 after:border-b after:border-gray-200 after:border-2 after:inline-block dark:after:border-gray-600">
+                                            <span
+                                                class="flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0"
+                                                :class="{ 'bg-green-50 dark:bg-green-700': client.STATUS === 'EN RUTA', 'bg-gray-50 dark:bg-gray-600': client.STATUS !== 'EN RUTA' }">
+                                                <i class="fa-solid fa-truck text-xs"></i>
+                                            </span>
+                                        </li>
+                                        <li :class="{ 'text-green-500 dark:text-green-400': client.STATUS === 'ENTREGADO', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'ENTREGADO' }"
+                                            class="flex w-full items-center">
+                                            <span
+                                                class="flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0"
+                                                :class="{ 'bg-green-50 dark:bg-green-700': client.STATUS === 'ENTREGADO', 'bg-gray-50 dark:bg-gray-600': client.STATUS !== 'ENTREGADO'}">
+                                                <i class="fa-solid fa-check text-xs"></i>
+                                            </span>
+                                        </li>
+                                    </ol>
+                                    <div class="text-xs text-gray-700 mt-1">
+                                        <strong>
+                                            {{ client.FECHA_PROGRAMACION }}
+                                        </strong>
+                                    </div>
                                 </div>
                             </div>
                         </div>
