@@ -29,5 +29,7 @@ class Main extends Model
         'POTENCIAL',
         'CONDICION',
         'PUERTAS_A_NEGOCIAR',
+        'STATUS',
+        'FECHA_PROGRAMACION',
     ];
 }
