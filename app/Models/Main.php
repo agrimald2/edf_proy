@@ -28,6 +28,7 @@ class Main extends Model
         'N_EDF',
         'N_PUERTAS',
         'SEGMENTO_EJECUCIÓN',
+        'NEGOCIADO',
         'POTENCIAL',
         'CONDICION',
         'PUERTAS_A_NEGOCIAR',
