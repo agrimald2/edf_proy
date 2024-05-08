@@ -33,6 +33,7 @@ class Main extends Model
         'CONDICION',
         'PUERTAS_A_NEGOCIAR',
         'STATUS',
+        'CUOTA',
         'FECHA_PROGRAMACION',
     ];
 }
