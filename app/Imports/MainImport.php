@@ -30,7 +30,7 @@ class MainImport implements ToModel, WithHeadingRow
             'POTENCIAL' => $row['potencial'],
             'CONDICION' => $row['condicion'],
             'PUERTAS_A_NEGOCIAR' => $row['puertas_a_negociar'],
-            'NEGOCIADO' => $row['negociado'],
+            'NEGOCIADO' => $row['negociado_status'],
             'CUOTA' => $row['cuota'],
         ]);
     }
