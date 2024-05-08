@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Main;
+use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\MainImport;
 
 class MainController extends Controller
 {
@@ -32,4 +35,16 @@ class MainController extends Controller
                 'pending' => $pending,
         ]); 
     } 
+
+    public function replaceDataFromExcel(Request $request){
+        $request->validate([
+            'excel' => 'required|file|mimes:xlsx,csv',
+        ]);
+    
+        DB::table('mains')->truncate(); // Empty the Main table
+    
+        Excel::import(new MainImport, $request->file('excel')); // Import the data
+    
+        return back()->with('success', 'Data has been replaced successfully.');
+    }
 }

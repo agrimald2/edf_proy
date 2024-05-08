@@ -30,3 +30,4 @@ Route::middleware([
 
 Route::get('/{ruta}/info', [MainController::class, 'getInfoByRuta'])->name('infoByRuta');
 Route::get('/searchByRoute', [MainController::class, 'searchByRuta'])->name('searchByRuta');
+Route::post('/upload-excel', [MainController::class, 'replaceDataFromExcel'])->name('upload.excel');
