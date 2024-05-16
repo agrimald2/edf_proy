@@ -10,22 +10,29 @@ class MainImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
-        $fields = [
-            'COD_CLIENTE', 'RUTA', 'FREC_VISITA', 'CLIENTE', 'DIRECCIÓN', 'SV', 'GV', 'SEGMENTO',
-            'COD_SUBCANAL', 'NOMBRE_SUBCANAL', 'TAMAÑO', 'SALA', 'PROMEDIO_CU_3M', 'N_EDF',
-            'N_PUERTAS', 'SEGMENTO_EJECUCIÓN', 'POTENCIAL', 'CONDICION', 'PUERTAS_A_NEGOCIAR',
-            'NEGOCIADO', 'CUOTA'
-        ];
-
-        $modelData = [];
-        foreach ($fields as $field) {
-            $key = strtolower($field);
-            if (isset($row[$key])) {
-                $modelData[$field] = $row[$key];
-            }
-        }
-
-        return new Main($modelData);
+        return new Main([
+            'COD_CLIENTE' => $row['cod_cliente'] ?? null,
+            'RUTA' => $row['ruta'] ?? null,
+            'FREC_VISITA' => $row['frec_visita'] ?? null,
+            'CLIENTE' => $row['cliente'] ?? null,
+            'DIRECCION' => $row['direccion'] ?? null,
+            'SV' => $row['sv'] ?? null,
+            'GV' => $row['gv'] ?? null,
+            'SEGMENTO' => $row['segmento'] ?? null,
+            'COD_SUBCANAL' => $row['cod_subcanal'] ?? null,
+            'NOMBRE_SUBCANAL' => $row['nombre_subcanal'] ?? null,
+            'TAMANO' => $row['tamano'] ?? null,
+            'SALA' => $row['sala'] ?? null,
+            'PROMEDIO_CU_3M' => $row['promedio_cu_3m'] ?? null,
+            'N_EDF' => $row['n_edf'] ?? null,
+            'N_PUERTAS' => $row['n_puertas'] ?? null,
+            'SEGMENTO_EJECUCION' => $row['segmento_ejecucion'] ?? null,
+            'POTENCIAL' => $row['potencial'] ?? null,
+            'CONDICION' => $row['condicion'] ?? null,
+            'PUERTAS_A_NEGOCIAR' => $row['puertas_a_negociar'] ?? null,
+            'NEGOCIADO' => $row['negociado_status'] ?? null,
+            'CUOTA' => $row['cuota'] ?? null,
+        ]);
     }
 }
 
