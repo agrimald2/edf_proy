@@ -10,6 +10,18 @@ class MainImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
+        $requiredFields = [
+            'cod_cliente', 'ruta', 'frec_visita', 'cliente', 'direccion', 'sv', 'gv',
+            'segmento', 'cod_subcanal', 'nombre_subcanal', 'tamano', 'sala',
+            'promedio_cu_3m', 'n_edf', 'n_puertas', 'segmento_ejecucion', 'potencial',
+            'condicion', 'puertas_a_negociar', 'negociado_status', 'cuota',
+        ];
+    
+        foreach ($requiredFields as $field) {
+            if (!isset($row[$field])) {
+                return null;
+            }
+        }
         return new Main([
             'COD_CLIENTE' => $row['cod_cliente'],
             'RUTA' => $row['ruta'],
