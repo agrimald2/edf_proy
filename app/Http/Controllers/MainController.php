@@ -25,6 +25,7 @@ class MainController extends Controller
         if ($pending < 0) {
             $pending = 0; // Ensure pending is not negative
         }
+        /*
         return Inertia::render('EDF/InfoByRuta', [
                 'ruta' => $ruta,
                 'clients' => $clients,
@@ -34,6 +35,16 @@ class MainController extends Controller
                 'cuota' => $cuota, 
                 'pending' => $pending,
         ]); 
+        */
+        return Inertia::render('EDF/MVP2/InfoByRuta', [
+            'ruta' => $ruta,
+            'clients' => $clients,
+            'negociados' => $negociados,
+            'noNegociados' => $noNegociados,
+            'gv' => $gv,
+            'cuota' => $cuota, 
+            'pending' => $pending,
+    ]); 
     } 
 
     public function replaceDataFromExcel(Request $request){
