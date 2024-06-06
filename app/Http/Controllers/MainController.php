@@ -16,7 +16,7 @@ class MainController extends Controller
     }
 
     public function getInfoByRuta($ruta){
-        $cuota = Main::where('RUTA', $ruta)->first()->CUOTA ?? 'N/A' ;
+        $cuota = Main::where('RUTA', $ruta)->first()->CUOTA ?? 0 ;
         $clients = Main::where('RUTA', $ruta)->get();
         $negociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->count();
         $noNegociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'PENDIENTE')->count();
