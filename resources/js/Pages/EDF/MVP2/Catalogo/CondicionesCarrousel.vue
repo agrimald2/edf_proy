@@ -1,5 +1,5 @@
 <template>
-    <div class="relative slide">
+    <div class="relative slide" @touchstart="startTouch" @touchmove="moveTouch">
         <div class="carousel-inner relative overflow-hidden w-full">
             <div v-for="(img, i) in images" :id="`slide-${i}`" :key="i"
                 :class="`${active === i ? 'active' : 'left-full'}`"
@@ -44,12 +44,38 @@ export default {
                 "/images/condiciones_1.png",
                 "/images/condiciones_2.png"
             ],
-            active: 0
+            active: 0,
+            startX: 0,
+            isSwiping: false
         };
     },
     methods: {
         setActive(index) {
             this.active = index;
+        },
+        startTouch(event) {
+            this.startX = event.touches[0].clientX;
+            this.isSwiping = false;
+        },
+        moveTouch(event) {
+            if (this.isSwiping) return;
+
+            const currentX = event.touches[0].clientX;
+            const diffX = this.startX - currentX;
+
+            if (diffX > 50) {
+                this.nextSlide();
+                this.isSwiping = true;
+            } else if (diffX < -50) {
+                this.prevSlide();
+                this.isSwiping = true;
+            }
+        },
+        nextSlide() {
+            this.active = (this.active + 1) % this.images.length;
+        },
+        prevSlide() {
+            this.active = (this.active - 1 + this.images.length) % this.images.length;
         }
     },
     mounted() {
