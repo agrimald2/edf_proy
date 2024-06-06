@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import AddPermutaModal from './Permutas/AddPermutaModal.vue';
+import CatalogoModal from './Catalogo/CatalogoModal.vue';
 
 const props = defineProps({
     ruta: String,
@@ -17,10 +18,29 @@ const searchQuery = ref('');
 const selectedFilter = ref('todos');
 const selectedDay = ref('');
 
+let showAddPermutaModal = ref(false);
+let showCatalogoModal = ref(false);
+
 // Function to get the current day of the week
 const getCurrentDayOfWeek = () => {
     const days = ['DOMINGO', 'LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES', 'SABADO'];
     return days[new Date().getDay()];
+};
+
+const openAddPermutaModal = () => {
+    showAddPermutaModal.value = true;
+};
+
+const closeAddPermutaModal = () => {
+    showAddPermutaModal.value = false;
+};
+
+const openCatalogoModal = () => {
+    showCatalogoModal.value = true;
+};
+
+const closeCatalogoModal = () => {
+    showCatalogoModal.value = false;
 };
 
 onMounted(() => {
@@ -88,6 +108,8 @@ const filteredNoNegociados = computed(() => {
 
 <template>
     <GuestLayout :title="`Dashboard | EDF`">
+        <AddPermutaModal v-if="showAddPermutaModal" @close="closeAddPermutaModal" />
+        <CatalogoModal v-if="showCatalogoModal" @close="closeCatalogoModal" />
         <template #header>
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div>
@@ -114,7 +136,6 @@ const filteredNoNegociados = computed(() => {
                 </div>
             </div>
         </template>
-        <AddPermutaModal />
         <div class="py-6">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="overflow-hidden p-4">
@@ -137,10 +158,11 @@ const filteredNoNegociados = computed(() => {
                             </div>
                         </div>
                         <div class="flex flex-row gap-4">
-                            <button class="bg-black text-white px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
+                            <button @click="openAddPermutaModal"
+                                class="bg-black text-white px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
                                 <i class="fa-solid fa-plus mr-2"></i>Ingresar permuta
                             </button>
-                            <button
+                            <button @click="openCatalogoModal"
                                 class="bg-white text-black border-2 border-black px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
                                 Ver catálogo EDF
                             </button>
@@ -155,7 +177,7 @@ const filteredNoNegociados = computed(() => {
                     <div class="pt-2 relative mx-auto text-gray-600 w-full">
                         <input
                             class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none w-full"
-                            type="search" name="search" placeholder="Buscar..." v-model="searchQuery">
+                            type="search" name="search" placeholder="Buscar" v-model="searchQuery">
                     </div>
                     <div class="flex gap-2 my-4">
                         <button class="px-4 py-1 text-sm rounded-full border-black border-2"
@@ -176,8 +198,8 @@ const filteredNoNegociados = computed(() => {
                             v-for="client in filteredClients">
                             <div class="flex-1 border-r border-gray-200">
                                 <div class="p-4">
-                                    <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i> {{
-        client.COD_CLIENTE }}
+                                    <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
+                                        {{ client.COD_CLIENTE }}
                                         - {{ client.CLIENTE }}</div>
                                     <div class="text-sm"><i class="fa-solid fa-location-dot"></i> {{ client.DIRECCIÓN }}
                                     </div>
@@ -200,7 +222,6 @@ const filteredNoNegociados = computed(() => {
                                         {{ client.CONDICION.charAt(0).toUpperCase() +
         client.CONDICION.slice(1).toLowerCase() }}
                                     </div>
-
                                     <a :href="`https://wa.link/ibba8o`" target="_blank"
                                         class="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-md">
                                         <i class="fa-brands fa-whatsapp"></i>
