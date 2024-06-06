@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
+import AddPermutaModal from './Permutas/AddPermutaModal.vue';
 
 const props = defineProps({
     ruta: String,
@@ -88,57 +89,65 @@ const filteredNoNegociados = computed(() => {
 <template>
     <GuestLayout :title="`Dashboard | EDF`">
         <template #header>
-            <div class="flex justify-between items-center">
-                <p>{{ new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}</p>
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    Hola, {{ props.gv }}!
-                </h2>
-                <select v-model="selectedDay"
-                    class="form-select block w-1/4 mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                    <option value="">TODOS</option>
-                    <option value="LUNES">LUNES</option>
-                    <option value="MARTES">MARTES</option>
-                    <option value="MIERCOLES">MIERCOLES</option>
-                    <option value="JUEVES">JUEVES</option>
-                    <option value="VIERNES">VIERNES</option>
-                    <option value="SABADO">SABADO</option>
-                    <option value="DOMINGO">DOMINGO</option>
-                </select>
+            <div class="grid grid-cols-2 gap-4 items-center">
+                <div>
+                    <p class="text-sm">{{ new Date().toLocaleDateString('es-ES', {
+        weekday: 'short', year: 'numeric',
+        month: 'short', day: 'numeric'
+    }).replace(/^\w/, c => c.toUpperCase()) }}</p>
+                    <h2 class="font-bold text-sm text-black leading-tight">
+                        ¡Hola, {{ props.gv }}!
+                    </h2>
+                </div>
+                <div>
+                    <select v-model="selectedDay"
+                        class="block w-full mt-1 border border-gray-100 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 font-bold">
+                        <option value="">TODOS</option>
+                        <option value="LUNES">Lunes</option>
+                        <option value="MARTES">Martes</option>
+                        <option value="MIERCOLES">Miércoles</option>
+                        <option value="JUEVES">Jueves</option>
+                        <option value="VIERNES">Viernes</option>
+                        <option value="SABADO">Sábado</option>
+                        <option value="DOMINGO">Domingo</option>
+                    </select>
+                </div>
             </div>
         </template>
-
+        <AddPermutaModal />
         <div class="py-6">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="p-2">
-                        <div class="flex flex-row justify-between items-center gap-4">
-                            <div class="bg-yellow-500 rounded-lg shadow-lg flex-1" style="background-color: #4E9814;">
-                                <div class="p-4 flex flex-col items-center justify-center">
-                                    <i class="fa-solid fa-users text-white text-xl"></i>
-                                    <h3 class="text-xl font-semibold text-white">Negociados</h3>
-                                    <p class="text-white text-2xl font-bold">{{ filteredNegociados }}</p>
+                <div class="overflow-hidden p-4">
+                    <div class="flex flex-col gap-4">
+                        <div class="flex flex-row gap-4 w-3/4">
+                            <div class="bg-green-600 rounded-lg flex-1 flex flex-col p-4">
+                                <div class="flex items-center justify-between w-full mb-2">
+                                    <i class="fa-solid fa-users text-white text-3xl"></i>
+                                    <span class="bg-white text-green-600 rounded-full px-2 font-bold">20%</span>
                                 </div>
+                                <h3 class="text-md text-white">Clientes negociados</h3>
+                                <p class="text-white text-3xl font-bold text-left w-full">{{ filteredNegociados }}</p>
                             </div>
-                            <div class="bg-yellow-500 rounded-lg shadow-lg flex-1" style="background-color: #C6372A;">
-                                <div class="p-4 flex flex-col items-center justify-center">
-                                    <i class="fa-solid fa-users text-white text-xl"></i>
-                                    <h3 class="text-xl font-semibold text-white">Pendientes</h3>
-                                    <p class="text-white text-2xl font-bold">{{ pending }}</p>
+                            <div class="bg-red-600 rounded-lg flex-1 flex flex-col p-4">
+                                <div class="flex items-center justify-start w-full mb-2">
+                                    <i class="fa-solid fa-users text-white text-3xl"></i>
                                 </div>
+                                <h3 class="text-md text-white text-left">Clientes pendientes</h3>
+                                <p class="text-white text-3xl font-bold text-left">{{ pending }}</p>
                             </div>
-
-                            <!-- 
-                                <div class="bg-yellow-500 rounded-lg shadow-lg flex-1" style="background-color: #C6372A;">
-                                    <div class="p-4 flex flex-col items-center justify-center">
-                                        <i class="fa-solid fa-users text-white text-xl"></i>
-                                        <h3 class="text-lg font-semibold text-white">No Negociados</h3>
-                                        <p class="text-white text-2xl font-bold">{{ filteredNoNegociados }}</p>
-                                    </div>
-                                </div>
-                            -->
+                        </div>
+                        <div class="flex flex-row gap-4">
+                            <button class="bg-black text-white px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
+                                <i class="fa-solid fa-plus mr-2"></i>Ingresar permuta
+                            </button>
+                            <button
+                                class="bg-white text-black border-2 border-black px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
+                                Ver catálogo EDF
+                            </button>
                         </div>
                     </div>
                 </div>
+
                 <div class="px-2">
                     <h1 class="p-2 font-bold">
                         Lista de oportunidad Clientes
@@ -149,15 +158,15 @@ const filteredNoNegociados = computed(() => {
                             type="search" name="search" placeholder="Buscar..." v-model="searchQuery">
                     </div>
                     <div class="flex gap-2 my-4">
-                        <button class="px-4 py-2 text-white rounded-full"
-                            :class="{ 'bg-black': selectedFilter === 'todos', 'bg-gray-500': selectedFilter !== 'todos' }"
-                            @click="selectedFilter = 'todos'">TODOS</button>
-                        <button class="px-4 py-2 text-white rounded-full"
-                            :class="{ 'bg-black': selectedFilter === 'pendientes', 'bg-gray-500': selectedFilter !== 'pendientes' }"
-                            @click="selectedFilter = 'pendientes'">NO NEGOCIADO</button>
-                        <button class="px-4 py-2 text-white rounded-full"
-                            :class="{ 'bg-black': selectedFilter === 'negociados', 'bg-gray-500': selectedFilter !== 'negociados' }"
-                            @click="selectedFilter = 'negociados'">NEGOCIADOS</button>
+                        <button class="px-4 py-1 text-sm rounded-full border-black border-2"
+                            :class="{ 'bg-black text-white': selectedFilter === 'todos', 'bg-white text-black': selectedFilter !== 'todos' }"
+                            @click="selectedFilter = 'todos'">Todos</button>
+                        <button class="px-4 py-1 text-sm rounded-full border-black border-2"
+                            :class="{ 'bg-black text-white': selectedFilter === 'pendientes', 'bg-white text-black': selectedFilter !== 'pendientes' }"
+                            @click="selectedFilter = 'pendientes'">No Negociados</button>
+                        <button class="px-4 py-1 text-sm rounded-full border-black border-2"
+                            :class="{ 'bg-black text-white': selectedFilter === 'negociados', 'bg-white text-black': selectedFilter !== 'negociados' }"
+                            @click="selectedFilter = 'negociados'">Negociados</button>
                     </div>
                 </div>
 
@@ -186,12 +195,12 @@ const filteredNoNegociados = computed(() => {
                             </div>
                             <div v-if="client.NEGOCIADO == 'PENDIENTE'" class="flex-1 text-left">
                                 <div class="p-4 text-left">
-                                    <div class="text-sm font-medium text-gray-500">Puedes negociar</div>
-                                    <div class="flex items-center mt-2">
-                                        <div class="text-sm font-semibold">EDF | {{ client.PUERTAS_A_NEGOCIAR }} Pts |
-                                            {{
-        client.CONDICION }}</div>
+                                    <div class="text-sm text-black font-bold">Puedes negociar</div>
+                                    <div class="text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR }} Puertas -
+                                        {{ client.CONDICION.charAt(0).toUpperCase() +
+        client.CONDICION.slice(1).toLowerCase() }}
                                     </div>
+
                                     <a :href="`https://wa.link/ibba8o`" target="_blank"
                                         class="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-md">
                                         <i class="fa-brands fa-whatsapp"></i>
@@ -201,11 +210,14 @@ const filteredNoNegociados = computed(() => {
                             </div>
                             <div v-else class="flex-1 text-left">
                                 <div class="p-4 text-left">
-                                    <div class="text-sm font-medium text-gray-500"><i
-                                            class="fa-solid fa-check-to-slot mr-2"></i>Haz Negociado</div>
+                                    <div class="text-sm font-medium text-black font-semibold">
+                                        <i class="fa-solid fa-circle-check mr-2"></i>Haz Negociado
+                                    </div>
                                     <div class="flex items-center mt-2">
-                                        <div class="text-sm font-semibold">EDF | {{ client.PUERTAS_A_NEGOCIAR }} Pts |
-                                            {{ client.CONDICION }}</div>
+                                        <div class="text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR }} Puertas -
+                                            {{ client.CONDICION.charAt(0).toUpperCase() +
+        client.CONDICION.slice(1).toLowerCase() }}
+                                        </div>
                                     </div>
                                     <ol class="flex items-center w-full">
                                         <li :class="{ 'text-green-500 dark:text-green-400': client.STATUS === 'NEGOCIADO', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'NEGOCIADO' }"
@@ -224,12 +236,12 @@ const filteredNoNegociados = computed(() => {
                                                 <i class="fa-solid fa-calendar text-xs"></i>
                                             </span>
                                         </li>
-                                        <li :class="{ 'text-green-500 dark:text-green-400': client.STATUS === 'EN RUTA', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'EN RUTA' }"
+                                        <li :class="{ 'text-white dark:text-green-400': client.STATUS === 'EN RUTA', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'EN RUTA' }"
                                             class="flex w-full items-center after:content-[''] after:w-full after:h-0.5 after:border-b after:border-gray-200 after:border-2 after:inline-block dark:after:border-gray-600">
                                             <span
                                                 class="flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0"
-                                                :class="{ 'bg-green-50 dark:bg-green-700': client.STATUS === 'EN RUTA', 'bg-gray-50 dark:bg-gray-600': client.STATUS !== 'EN RUTA' }">
-                                                <i class="fa-solid fa-truck text-xs"></i>
+                                                :class="{ 'bg-green-500 dark:bg-green-700': client.STATUS === 'EN RUTA', 'bg-gray-50 dark:bg-gray-600': client.STATUS !== 'EN RUTA' }">
+                                                <i class="fa-solid fa-arrows-rotate text-xs"></i>
                                             </span>
                                         </li>
                                         <li :class="{ 'text-green-500 dark:text-green-400': client.STATUS === 'ENTREGADO', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'ENTREGADO' }"
