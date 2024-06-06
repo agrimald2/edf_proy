@@ -25,7 +25,7 @@ class MainController extends Controller
         if ($pending < 0) {
             $pending = 0; // Ensure pending is not negative
         }
-        /*
+        
         return Inertia::render('EDF/InfoByRuta', [
                 'ruta' => $ruta,
                 'clients' => $clients,
@@ -35,7 +35,19 @@ class MainController extends Controller
                 'cuota' => $cuota, 
                 'pending' => $pending,
         ]); 
-        */
+    } 
+
+    public function getInfoByRuta2($ruta){
+        $cuota = Main::where('RUTA', $ruta)->first()->CUOTA ?? 'N/A' ;
+        $clients = Main::where('RUTA', $ruta)->get();
+        $negociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->count();
+        $noNegociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'PENDIENTE')->count();
+        $gv = Main::where('RUTA', $ruta)->first()->GV ?? 'N/A';
+        $pending = $cuota - $negociados;
+        if ($pending < 0) {
+            $pending = 0; // Ensure pending is not negative
+        }
+
         return Inertia::render('EDF/MVP2/InfoByRuta', [
             'ruta' => $ruta,
             'clients' => $clients,
@@ -44,7 +56,7 @@ class MainController extends Controller
             'gv' => $gv,
             'cuota' => $cuota, 
             'pending' => $pending,
-    ]); 
+        ]); 
     } 
 
     public function replaceDataFromExcel(Request $request){
