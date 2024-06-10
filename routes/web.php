@@ -16,7 +16,7 @@ use App\Http\Controllers\MainController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', [MainController::class, 'searchByRuta']);
+Route::get('/', [MainController::class, 'search']);
 
 Route::middleware([
     'auth:sanctum',
@@ -29,7 +29,7 @@ Route::middleware([
 });
 
 Route::get('/{ruta}/info', [MainController::class, 'getInfoByRuta'])->name('infoByRuta');
-Route::get('/searchByRoute', [MainController::class, 'searchByRuta'])->name('searchByRuta');
+Route::get('/searchByRoute', [MainController::class, 'search'])->name('search');
 Route::post('/upload-excel', [MainController::class, 'replaceDataFromExcel'])->name('upload.excel');
 
 

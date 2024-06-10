@@ -3,9 +3,11 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { ref } from 'vue';
 
 const ruta = ref('');
+const selectedTab = ref('ruta');
 
-const searchByRuta = () => {
-    window.location.href = `/${ruta.value}/info`;
+const search = () => {
+    const baseUrl = selectedTab.value === 'ruta' ? `/${ruta.value}/info` : `/mesa/${ruta.value}/info`;
+    window.location.href = baseUrl;
 };
 </script>
 
@@ -13,22 +15,30 @@ const searchByRuta = () => {
     <GuestLayout title="Buscar | EDF">
         <div class="flex items-center justify-center h-screen">
             <div class="w-full max-w-xs">
-                <form @submit.prevent="searchByRuta" class="bg-white shadow-md rounded-lg px-8 pt-6 pb-4 mb-4">
+                <form @submit.prevent="search" class="bg-white shadow-md rounded-lg px-8 pt-6 pb-4 mb-4">
                     <div class="text-center flex justify-center my-4">
                         <img src="https://i.ibb.co/PzsS6Sq/Imagen1-2.png" alt="" style="width: 25%;">
                     </div>
                     <div class="text-center mb-2">
-                        <h1 class="text-4xl font-bold">
-                            NEF
-                        </h1>
+                        <h1 class="text-4xl font-bold">NEF</h1>
                     </div>
                     <div class="mb-4">
-                        <label class="block text-gray-500 text-sm mb-2" for="ruta">
-                            Buscar por Ruta
-                        </label>
+                        <label class="block text-gray-500 text-sm text-center">Buscar por:</label>
+                        <div class="flex justify-center mb-6 text-center">
+                            <button
+                                :class="['py-2', selectedTab === 'ruta' ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-500']"
+                                @click.prevent="selectedTab = 'ruta'">
+                                RUTA
+                            </button>
+                            <button
+                                :class="['py-2 ml-4', selectedTab === 'mesa' ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-500']"
+                                @click.prevent="selectedTab = 'mesa'">
+                                MESA
+                            </button>
+                        </div>
                         <input v-model="ruta"
                             class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-300"
-                            id="ruta" type="text" placeholder="Ingrese la ruta">
+                            :placeholder="selectedTab === 'ruta' ? 'Ingrese la ruta' : 'Ingrese la mesa'">
                     </div>
                     <button
                         class="w-full bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-lg flex items-center justify-center focus:outline-none focus:shadow-outline"

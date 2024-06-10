@@ -11,8 +11,8 @@ use App\Imports\MainImport;
 
 class MainController extends Controller
 {
-    public function searchByRuta(){
-        return Inertia::render('EDF/SearchByRuta');
+    public function search(){
+        return Inertia::render('EDF/Search');
     }
 
     public function getInfoByRuta($ruta){
