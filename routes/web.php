@@ -34,3 +34,5 @@ Route::post('/upload-excel', [MainController::class, 'replaceDataFromExcel'])->n
 
 
 Route::get('/test/{ruta}/info', [MainController::class, 'getInfoByRuta2'])->name('infoByRuta2');
+Route::get('/test/mesa/{mesa}/info', [MainController::class, 'getInfoByMesa'])->name('infoByMesa');
+

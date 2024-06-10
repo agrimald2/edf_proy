@@ -9,6 +9,7 @@
                 <p>Ingresa los datos solicitados</p>
             </div>
             <div>
+                <div v-if="errorMessage" class="text-red-500 text-center mb-4">{{ errorMessage }}</div>
                 <form class="space-y-4" @submit.prevent="submitForm">
                     <p class="font-semibold mb-2">Información del cliente</p>
                     <div class="grid grid-cols-2 gap-4">
@@ -31,51 +32,52 @@
                                 class="w-full inputs_permutas">
                         </div>
                     </div>
-                    <div class="mt-4 mb-2">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="flex items-center">
-                                <p class="mb-2 text-left text-gray-800">¿Cuenta con EDF?</p>
-                            </div>
-                            <div class="flex justify-center items-center space-x-6">
-                                <label class="flex items-center">
-                                    <input v-model="formData.edf" type="radio" name="edf" value="yes"
-                                        class="form-radio h-5 w-5 border-2 border-gray-400">
-                                    <span class="ml-2">Sí</span>
-                                </label>
-                                <label class="flex items-center">
-                                    <input v-model="formData.edf" type="radio" name="edf" value="no"
-                                        class="form-radio h-5 w-5 border-2 border-gray-400">
-                                    <span class="ml-2">No</span>
-                                </label>
-                            </div>
+                    <div class="grid grid-cols-1 gap-4 mt-4">
+                        <div>
+                            <input v-model="formData.subcanal" type="text" placeholder="Subcanal"
+                                class="w-full inputs_permutas">
                         </div>
                     </div>
                     <p class="font-semibold">EDF a solicitar</p>
-                    <div class="grid grid-cols-2 gap-4 mt-4">
+                    <div class="mt-4 mb-2">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="flex items-center">
+                                <div class="w-full">
+                                    <select v-model="formData.haveEdf" class="w-full inputs_permutas">
+                                        <option value="" disabled selected>¿Cueta con EDF?</option>
+                                        <option value=true>SI</option>
+                                        <option value=false>NO</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex items-center ">
+                                <div class="w-full">
+                                    <select v-model="formData.condition" class="w-full inputs_permutas">
+                                        <option value="" disabled selected>Condición</option>
+                                        <option value="Nuevo">Nuevo</option>
+                                        <option value="Repotenciado">Repotenciado</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 gap-4 mt-4">
                         <div>
                             <input v-model="formData.doorsToNegotiate" type="text" placeholder="Puertas a negociar"
                                 class="w-full inputs_permutas">
                         </div>
-                        <div>
-                            <select v-model="formData.condition" class="w-full inputs_permutas">
-                                <option value="" disabled selected>Condición</option>
-                                <option value="Nuevo">Nuevo</option>
-                                <option value="Repotenciado">Repotenciado</option>
+                    </div>
+                    <div class="mt-4">
+                        <div class="w-full">
+                            <select v-model="formData.reason" class="w-full inputs_permutas">
+                                <option value="" disabled selected>Motivo</option>
+                                <option v-for="reason in reasons" :key="reason.id" :value="reason.name">{{ reason.name}}</option>
                             </select>
                         </div>
                     </div>
-                    <div class="mt-4">
-                        <select v-model="formData.reason" class="w-full inputs_permutas">
-                            <option value="" disabled selected>Seleccionar motivo de permuta</option>
-                            <option value="1">Motivo 1</option>
-                            <option value="2">Motivo 2</option>
-                            <option value="3">Motivo 3</option>
-                            <!-- @TODO Motivos de Permuta DB -->
-                        </select>
-                    </div>
-                    <div class="mt-10 pt-10">
-                        <button :disabled="!isFormComplete" @click="submitForm"
-                            :class="['w-full py-3 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50', isFormComplete ? 'bg-black text-white hover:bg-gray-800 focus:ring-gray-400' : 'bg-gray-300 text-gray-500 hover:bg-blue-700 focus:ring-blue-400']">
+                    <div class="mt-2 pt-2">
+                        <button :disabled="!isFormComplete || isSubmitting" @click="submitForm"
+                            :class="['w-full py-3 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50', isFormComplete && !isSubmitting ? 'bg-black text-white hover:bg-gray-800 focus:ring-gray-400' : 'bg-gray-300 text-gray-500 hover:bg-blue-700 focus:ring-blue-400']">
                             Enviar permuta
                         </button>
                     </div>
@@ -126,44 +128,66 @@ export default {
                 volumeCU: '',
                 location: '',
                 route: '',
-                edf: '',
+                subcanal: '',
+                haveEdf: false,
                 doorsToNegotiate: '',
                 condition: '',
                 reason: ''
             },
-            sentPermutaViewModal: false
+            reasons: [],
+            sentPermutaViewModal: false,
+            errorMessage: '',
+            isSubmitting: false
         };
+    },
+    mounted() {
+        fetch('/api/permuta-reasons')
+            .then(response => response.json())
+            .then(data => {
+                this.reasons = data;
+            })
+            .catch(error => {
+                console.error('Error fetching reasons:', error);
+            });
     },
     computed: {
         isFormComplete() {
-            return this.formData.clientCode && this.formData.volumeCU && this.formData.location && this.formData.route && this.formData.edf && this.formData.doorsToNegotiate && this.formData.condition && this.formData.reason;
+            return this.formData.clientCode && this.formData.volumeCU && this.formData.location && this.formData.route && this.formData.haveEdf !== '' && this.formData.doorsToNegotiate && this.formData.condition && this.formData.reason;
         }
     },
     methods: {
         closeModal() {
-            console.log("Hoolaa");
             this.$emit('close');
         },
         submitForm() {
-            if (this.isFormComplete) {
-                this.showSentPermutaView();
-                /* Send the data to the POST route
-                fetch('/your-post-route', {
+            if (this.isFormComplete && !this.isSubmitting) {
+                this.isSubmitting = true;
+                fetch('/api/permutas', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(this.formData)
+                    body: JSON.stringify(this.formData),
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         console.log('Success:', data);
-                        this.closeModal();
+                        this.showSentPermutaView();
                     })
                     .catch((error) => {
                         console.error('Error:', error);
+                        this.errorMessage = 'Failed to submit permuta. Please try again.';
+                    })
+                    .finally(() => {
+                        this.isSubmitting = false;
                     });
-                */
+            } else {
+                this.errorMessage = 'Please complete all fields before submitting.';
             }
         },
         showSentPermutaView() {

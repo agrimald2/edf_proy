@@ -104,6 +104,10 @@ const filteredNoNegociados = computed(() => {
     });
     return count;
 });
+const todaysDate = new Date().toLocaleDateString('es-ES', {
+    weekday: 'short', year: 'numeric',
+    month: 'short', day: 'numeric'
+}).replace(/^\w/, c => c.toUpperCase())
 </script>
 
 <template>
@@ -113,10 +117,7 @@ const filteredNoNegociados = computed(() => {
         <template #header>
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div>
-                    <p class="text-sm">{{ new Date().toLocaleDateString('es-ES', {
-        weekday: 'short', year: 'numeric',
-        month: 'short', day: 'numeric'
-    }).replace(/^\w/, c => c.toUpperCase()) }}</p>
+                    <p class="text-sm">{{ todaysDate }}2</p>
                     <h2 class="font-bold text-sm text-black leading-tight">
                         ¡Hola, {{ props.gv }}!
                     </h2>
@@ -247,14 +248,6 @@ const filteredNoNegociados = computed(() => {
                                                 class="flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0"
                                                 :class="{ 'bg-green-50 dark:bg-green-700': client.STATUS === 'NEGOCIADO', 'bg-gray-50 dark:bg-gray-600': client.STATUS !== 'NEGOCIADO' }">
                                                 <i class="fa-solid fa-handshake text-xs"></i>
-                                            </span>
-                                        </li>
-                                        <li :class="{ 'text-green-500 dark:text-green-400': client.STATUS === 'PROGRAMADO', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'PROGRAMADO' }"
-                                            class="flex w-full items-center after:content-[''] after:w-full after:h-0.5 after:border-b after:border-gray-200 after:border-2 after:inline-block dark:after:border-gray-600">
-                                            <span
-                                                class="flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0"
-                                                :class="{ 'bg-green-50 dark:bg-green-700': client.STATUS === 'PROGRAMADO', 'bg-gray-50 dark:bg-gray-600': client.STATUS !== 'PROGRAMADO' }">
-                                                <i class="fa-solid fa-calendar text-xs"></i>
                                             </span>
                                         </li>
                                         <li :class="{ 'text-white dark:text-green-400': client.STATUS === 'EN RUTA', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'EN RUTA' }"

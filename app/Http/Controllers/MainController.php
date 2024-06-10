@@ -70,4 +70,14 @@ class MainController extends Controller
     
         return back()->with('success', 'Data has been replaced successfully.');
     }
+
+    public function getInfoByMesa($mesa){     
+        # Nombre de Supervisor campo en DB
+        # 
+        
+           
+        return Inertia::render('Supervisor/InfoByMesa', [
+                'supervisor' => 'Alonso',
+        ]); 
+    } 
 }
