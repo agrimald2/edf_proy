@@ -66,9 +66,12 @@ class MainController extends Controller
     
         DB::table('mains')->truncate(); // Empty the Main table
     
-        Excel::import(new MainImport, $request->file('excel')); // Import the data
-    
-        return back()->with('success', 'Data has been replaced successfully.');
+        try {
+            Excel::import(new MainImport, $request->file('excel')); // Import the data
+            return back()->with('success', 'Data has been replaced successfully.');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 
     public function getInfoByMesa($mesa){     

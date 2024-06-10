@@ -15,7 +15,7 @@ class MainImport implements ToModel, WithHeadingRow
             'RUTA' => $row['ruta'] ?? null,
             'FREC_VISITA' => $row['frec_visita'] ?? null,
             'CLIENTE' => $row['cliente'] ?? null,
-            'DIRECCIÓN' => $row['dirección'] ?? null,
+            'DIRECCION' => $row['direccion'] ?? null,
             'SV' => $row['sv'] ?? null,
             'GV' => $row['gv'] ?? null,
             'SEGMENTO' => $row['segmento'] ?? null,

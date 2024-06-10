@@ -28,11 +28,12 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get('/{ruta}/info', [MainController::class, 'getInfoByRuta'])->name('infoByRuta');
-Route::get('/searchByRoute', [MainController::class, 'search'])->name('search');
+Route::get('/search', [MainController::class, 'search'])->name('search');
+
 Route::post('/upload-excel', [MainController::class, 'replaceDataFromExcel'])->name('upload.excel');
 
-
 Route::get('/test/{ruta}/info', [MainController::class, 'getInfoByRuta2'])->name('infoByRuta2');
-Route::get('/test/mesa/{mesa}/info', [MainController::class, 'getInfoByMesa'])->name('infoByMesa');
 
+
+Route::get('/ruta/{ruta}/info', [MainController::class, 'getInfoByRuta'])->name('infoByRuta');
+Route::get('/mesa/{mesa}/info', [MainController::class, 'getInfoByMesa'])->name('infoByMesa');

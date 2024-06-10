@@ -202,7 +202,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                     <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
                                         {{ client.COD_CLIENTE }}
                                         - {{ client.CLIENTE }}</div>
-                                    <div class="text-sm"><i class="fa-solid fa-location-dot"></i> {{ client.DIRECCIÓN }}
+                                    <div class="text-sm"><i class="fa-solid fa-location-dot"></i> {{ client.DIRECCION }}
                                     </div>
                                     <div class="mt-2">
                                         <span v-if="client.N_EDF == 0"

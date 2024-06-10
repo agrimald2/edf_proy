@@ -38,7 +38,7 @@ const uploadFile = async () => {
             }
         } catch (error) {
             isProcessing.value = false;
-            uploadStatus.value = 'Upload failed';
+            uploadStatus.value = error.response.data.message || 'Upload failed';
         }
     }
 };
@@ -68,7 +68,8 @@ const isUploading = computed(() => uploadStatus.value === 'File selected' || isP
                                     <p v-if="isUploading" class="text-xs text-gray-500">
                                         {{ uploadStatus }}: {{ fileName }}
                                     </p>
-                                    <p v-else-if="uploadStatus === 'THE DATA HAVE BEEN SUCCESSFULLY UPLOADED'" class="text-xs text-green-500">
+                                    <p v-else-if="uploadStatus === 'THE DATA HAVE BEEN SUCCESSFULLY UPLOADED'"
+                                        class="text-xs text-green-500">
                                         {{ uploadStatus }}
                                     </p>
                                     <p v-else-if="uploadStatus === 'Upload failed'" class="text-xs text-red-500">

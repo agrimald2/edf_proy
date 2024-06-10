@@ -6,7 +6,7 @@ const ruta = ref('');
 const selectedTab = ref('ruta');
 
 const search = () => {
-    const baseUrl = selectedTab.value === 'ruta' ? `/${ruta.value}/info` : `/mesa/${ruta.value}/info`;
+    const baseUrl = selectedTab.value === 'ruta' ? `/ruta/${ruta.value}/info` : `/mesa/${ruta.value}/info`;
     window.location.href = baseUrl;
 };
 </script>

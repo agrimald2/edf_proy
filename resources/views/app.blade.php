@@ -8,8 +8,26 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
+        <!-- Primary Meta Tags -->
+        <meta name="title" content="NEF - Negociación Equipos de Frío" />
+        <meta name="description" content="Negociación Equipos de Frío Arca Continental Lindley" />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="NEF - Negociación Equipos de Frío" />
+        <meta property="og:description" content="Negociación Equipos de Frío Arca Continental Lindley" />
+        <meta property="og:image" content="https://i.ibb.co/PzsS6Sq/Imagen1-2.png" />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:title" content="NEF - Negociación Equipos de Frío" />
+        <meta property="twitter:description" content="Negociación Equipos de Frío Arca Continental Lindley" />
+        <meta property="twitter:image" content="https://i.ibb.co/PzsS6Sq/Imagen1-2.png" />
         <meta name="description" content="Proyecto EDF">
-        <meta name="author" content="Salvador Palacios">
+        <meta name="author" content="Latech">
+
+        <!-- Favicon -->
+        <link rel="icon" href="https://i.ibb.co/PzsS6Sq/Imagen1-2.png" type="image/png">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

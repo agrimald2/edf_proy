@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('RUTA', 512)->default('-');
             $table->string('FREC_VISITA', 512)->default('-');
             $table->string('CLIENTE', 512)->default('-');
-            $table->string('DIRECCIÓN', 512)->default('-');
+            $table->string('DIRECCION', 512)->default('-');
             $table->string('SV', 512)->default('-');
             $table->string('GV', 512)->default('-');
             $table->string('SEGMENTO', 512)->default('-');
@@ -28,11 +28,14 @@ return new class extends Migration
             $table->string('PROMEDIO_CU_3M', 512)->default('-');
             $table->string('N_EDF', 512)->default('-');
             $table->string('N_PUERTAS', 512)->default('-');
-            $table->string('SEGMENTO_EJECUCIÓN', 512)->default('-');
+            $table->string('SEGMENTO_EJECUCION', 512)->default('-');
             $table->string('POTENCIAL', 512)->default('-');
             $table->string('CONDICION', 512)->default('-');
             $table->string('PUERTAS_A_NEGOCIAR', 512)->default('-');
             $table->string('NEGOCIADO', 512)->default('NEGOCIADO');
+            $table->string('CUOTA', 512)->default('-');
+            $table->string('STATUS')->nullable();
+            $table->date('FECHA_PROGRAMACION')->format('d/m/Y')->nullable();
         });
     }
 
