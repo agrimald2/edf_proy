@@ -37,8 +37,10 @@ const uploadFile = async () => {
                 uploadStatus.value = 'Upload failed';
             }
         } catch (error) {
+            console.log("HOLA");
+            console.dir(error.response.data.message);
             isProcessing.value = false;
-            uploadStatus.value = error.response.data.message || 'Upload failed';
+            uploadStatus.value = `Upload Failed: ${error.response.data.message || error.response.data.message}`;
         }
     }
 };
@@ -72,7 +74,7 @@ const isUploading = computed(() => uploadStatus.value === 'File selected' || isP
                                         class="text-xs text-green-500">
                                         {{ uploadStatus }}
                                     </p>
-                                    <p v-else-if="uploadStatus === 'Upload failed'" class="text-xs text-red-500">
+                                    <p v-else-if="uploadStatus.includes('Upload Failed')" class="text-xs text-red-500">
                                         {{ uploadStatus }}
                                     </p>
 
