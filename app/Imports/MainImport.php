@@ -8,6 +8,9 @@ use App\Models\Main;
 
 class MainImport implements ToModel, WithHeadingRow
 {
+    /**
+     * @TODO | Optimize this using chunks of 1000 | Fix Insert to DB review Model Main
+     */
     public function model(array $row)
     {
         return new Main([
