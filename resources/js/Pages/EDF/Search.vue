@@ -28,17 +28,17 @@ const search = () => {
                             <button
                                 :class="['py-2', selectedTab === 'ruta' ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-500']"
                                 @click.prevent="selectedTab = 'ruta'">
-                                RUTA
+                                GESTOR
                             </button>
                             <button
                                 :class="['py-2 ml-4', selectedTab === 'mesa' ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-500']"
                                 @click.prevent="selectedTab = 'mesa'">
-                                MESA
+                                SUPERVISOR
                             </button>
                         </div>
                         <input v-model="ruta"
                             class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-300"
-                            :placeholder="selectedTab === 'ruta' ? 'Ingrese la ruta' : 'Ingrese la mesa'">
+                            :placeholder="selectedTab === 'ruta' ? 'Ingrese tu ruta' : 'Ingrese tu código'">
                     </div>
                     <button
                         class="w-full bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-lg flex items-center justify-center focus:outline-none focus:shadow-outline"

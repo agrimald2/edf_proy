@@ -83,4 +83,9 @@ class MainController extends Controller
                 'supervisor' => 'Alonso',
         ]); 
     } 
+
+
+    public function showPermutasAdmin(){
+        return Inertia::render('Admin/Permutas/Index');
+    }
 }

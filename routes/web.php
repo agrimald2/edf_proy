@@ -4,6 +4,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\SupervisorController;
+use App\Http\Controllers\GerenteController;
 
 
 /*
@@ -23,9 +25,8 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', function () { return Inertia::render('Dashboard'); })->name('dashboard');
+    Route::get('/admin/permutas', [MainController::class, 'showPermutasAdmin'])->name('permutas');
 });
 
 Route::get('/search', [MainController::class, 'search'])->name('search');
@@ -37,3 +38,10 @@ Route::get('/test/{ruta}/info', [MainController::class, 'getInfoByRuta2'])->name
 
 Route::get('/ruta/{ruta}/info', [MainController::class, 'getInfoByRuta'])->name('infoByRuta');
 Route::get('/mesa/{mesa}/info', [MainController::class, 'getInfoByMesa'])->name('infoByMesa');
+
+Route::get('/supervisor/dashboard', [SupervisorController::class, 'getInfoByMesa'])->name('supervisor.dashboard');
+Route::get('/supervisor/dashboard/permutas', [SupervisorController::class, 'showPermutasList'])->name('supervisor.permutas.list');
+
+
+Route::get('/gerente/dashboard', [GerenteController::class, 'showPermutasList'])->name('gerente.dashboard');
+
