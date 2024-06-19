@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('condition');
             $table->integer('doors_to_negotiate');
             $table->text('reason');
+            $table->enum('status', ['Pending', 'Rejected', 'Approved']);
             $table->timestamps();
             $table->softDeletes();
         });

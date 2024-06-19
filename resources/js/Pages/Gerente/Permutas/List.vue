@@ -34,7 +34,7 @@
                             <span class="font-bold">
                                 Cantidad:
                             </span>
-                            3
+                            {{ approvedCount }}
                         </div>
                     </div>
                 </div>
@@ -44,13 +44,12 @@
                             Restantes
                         </div>
                         <div class="text-xs mt-1 font-medium text-gray-500">
-                            Cantidad: 5
+                            Cantidad: {{ pendingCount }}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="px-2">
             <div class="relative mx-auto text-gray-600 w-full">
                 <h2 class="font-bold text-sm text-black leading-tight pt-4 pb-2">
@@ -66,138 +65,69 @@
                 :class="{ 'bg-black text-white': selectedFilter === 'todos', 'bg-white text-black': selectedFilter !== 'todos' }"
                 @click="selectedFilter = 'todos'">Todos</button>
             <button class="px-3 py-1 text-sm rounded-full border-black border-2"
-                :class="{ 'bg-black text-white': selectedFilter === 'aprobadas', 'bg-white text-black': selectedFilter !== 'aprobadas' }"
-                @click="selectedFilter = 'aprobadas'">Aprobadas</button>
+                :class="{ 'bg-black text-white': selectedFilter === 'approved', 'bg-white text-black': selectedFilter !== 'approved' }"
+                @click="selectedFilter = 'approved'">Aprobadas</button>
             <button class="px-3 py-1 text-sm rounded-full border-black border-2"
-                :class="{ 'bg-black text-white': selectedFilter === 'rechazadas', 'bg-white text-black': selectedFilter !== 'rechazadas' }"
-                @click="selectedFilter = 'rechazadas'">Rechazadas</button>
+                :class="{ 'bg-black text-white': selectedFilter === 'rejected', 'bg-white text-black': selectedFilter !== 'rejected' }"
+                @click="selectedFilter = 'rejected'">Rechazadas</button>
             <button class="px-3 py-1 text-sm rounded-full border-black border-2"
-                :class="{ 'bg-black text-white': selectedFilter === 'pendientes', 'bg-white text-black': selectedFilter !== 'pendientes' }"
-                @click="selectedFilter = 'pendientes'">Pendientes</button>
+                :class="{ 'bg-black text-white': selectedFilter === 'pending', 'bg-white text-black': selectedFilter !== 'pending' }"
+                @click="selectedFilter = 'pending'">Pendientes</button>
         </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="flex flex-col gap-4">
-                <div class="bg-white shadow-md rounded-lg overflow-hidden flex">
+                <div v-for="permuta in filteredPermutas" :key="permuta.id"
+                    class="bg-white shadow-md rounded-lg overflow-hidden flex">
                     <div class="w-3/5 border-r border-gray-200">
                         <div class="p-4">
                             <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
-                                9485839 - Luis Rosales
+                                {{ permuta.cod_cliente }} - {{ permuta.location }}
                             </div>
                             <div class="text-xs flex items-center justify-between">
                                 <div class="bg-gray-100 rounded pt-1 pl-2 pb-1 pr-2 flex-3/4">
                                     <i class="fa-brands fa-square-letterboxd mr-2"></i>
-                                    No cuenta con EDF
+                                    {{ permuta.have_edf ? 'Cuenta con EDF' : 'No cuenta con EDF' }}
                                 </div>
                                 <div class="flex-1/4 text-right">
-                                    50 CU
+                                    {{ permuta.volume }} CU
                                 </div>
                             </div>
                             <div class="mt-2">
-                                <span
-                                    class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-1 rounded dark:bg-red-200 dark:text-red-900">
-                                    <i class="fa-solid fa-x"></i> Permuta Rechazada
+                                <span :class="statusClass(permuta.status)"
+                                    class="text-xs font-semibold mr-2 px-2.5 py-1 rounded">
+                                    <i :class="statusIcon(permuta.status)"></i> {{ permuta.status }}
                                 </span>
                             </div>
                         </div>
                     </div>
                     <div class="w-2/5 text-left">
                         <div class="p-4 text-left">
-                            <div class="text-sm text-black font-bold">MESA</div>
+                            <div class="text-sm text-black font-bold">{{ permuta.subcanal }}</div>
                             <div class="text-xs mt-1 font-medium text-gray-500">
-                                Ruta 3948
+                                Ruta: {{ permuta.route }}
                             </div>
                             <div class="text-xs font-medium text-gray-500 mt-2">
-                                <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full">Ver
+                                <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full" @click="openDetailModal(permuta)">Ver
                                     más</button>
                             </div>
+                            <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
+                                @close="showDetailModal = false" />
                         </div>
                     </div>
                 </div>
-
-                <div class="bg-white shadow-md rounded-lg overflow-hidden flex">
-                    <div class="w-3/5 border-r border-gray-200">
-                        <div class="p-4">
-                            <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
-                                9485839 - Luis Rosales
-                            </div>
-                            <div class="text-xs flex items-center justify-between">
-                                <div class="bg-gray-100 rounded pt-1 pl-2 pb-1 pr-2 flex-3/4">
-                                    <i class=" fa-brands fa-square-letterboxd mr-2"></i>
-                                    No cuenta con EDF
-                                </div>
-                                <div class="flex-1/4 text-right">
-                                    50 CU
-                                </div>
-                            </div>
-                            <div class="mt-2">
-                                <span
-                                    class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-1 rounded dark:bg-green-200 dark:text-green-900">
-                                    <i class="fa-solid fa-check"></i> Permuta Aprobada
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-2/5 text-left">
-                        <div class="p-4 text-left">
-                            <div class="text-sm text-black font-bold">33 PACI VES</div>
-                            <div class="text-xs mt-1 font-medium text-gray-500">
-                                Ruta 3948
-                            </div>
-                            <div class="text-xs font-medium text-gray-500 mt-2">
-                                <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full">Ver
-                                    más</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white shadow-md rounded-lg overflow-hidden flex">
-                    <div class="w-3/5 border-r border-gray-200">
-                        <div class="p-4">
-                            <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
-                                9485839 - Luis Rosales
-                            </div>
-                            <div class="text-xs flex items-center justify-between">
-                                <div class="bg-gray-100 rounded pt-1 pl-2 pb-1 pr-2 flex-3/4">
-                                    <i class=" fa-brands fa-square-letterboxd mr-2"></i>
-                                    No cuenta con EDF
-                                </div>
-                                <div class="flex-1/4 text-right">
-                                    50 CU
-                                </div>
-                            </div>
-                            <div class="mt-2">
-                                <span
-                                    class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-1 rounded dark:bg-yellow-200 dark:text-yellow-900">
-                                    <i class="fa-solid fa-spinner"></i> Permuta Pendiente
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="w-2/5 text-left">
-                        <div class="p-4 text-left">
-                            <div class="text-sm text-black font-bold">33 PACI VES</div>
-                            <div class="text-xs mt-1 font-medium text-gray-500">
-                                Ruta 3948
-                            </div>
-                            <div class="text-xs font-medium text-gray-500 mt-2">
-                                <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full">Ver
-                                    más</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </GuestLayout>
 </template>
 <script>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
+import PermutaDetails from './PermutaDetails.vue';
+import axios from 'axios';
 
 export default {
     components: {
-        GuestLayout
+        GuestLayout,
+        PermutaDetails
     },
     props: ['supervisor'],
     data() {
@@ -206,8 +136,68 @@ export default {
                 weekday: 'short', year: 'numeric',
                 month: 'short', day: 'numeric'
             }).replace(/^\w/, c => c.toUpperCase()),
-            selectedFilter: 'todos'
+            selectedFilter: 'todos',
+            permutas: [],
+            searchQuery: '',
+            showDetailModal: false,
+            selectedPermuta: null
         };
+    },
+    computed: {
+        filteredPermutas() {
+            return this.permutas.filter(permuta => {
+                return this.selectedFilter === 'todos' || permuta.status.toLowerCase() === this.selectedFilter;
+            }).filter(permuta => {
+                return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.includes(this.searchQuery);
+            });
+        },
+        approvedCount() {
+            return this.permutas.filter(permuta => permuta.status.toLowerCase() === 'approved').length;
+        },
+        pendingCount() {
+            return this.permutas.filter(permuta => permuta.status.toLowerCase() === 'pending').length;
+        }
+    },
+    methods: {
+        async getPermutas() {
+            try {
+                const response = await axios.get('/api/permutas');
+                this.permutas = response.data;
+            } catch (error) {
+                console.error('Error fetching permutas:', error);
+            }
+        },
+        statusClass(status) {
+            switch (status.toLowerCase()) {
+                case 'approved':
+                    return 'bg-green-100 text-green-800';
+                case 'rejected':
+                    return 'bg-red-100 text-red-800';
+                case 'pending':
+                    return 'bg-yellow-100 text-yellow-800';
+                default:
+                    return 'bg-gray-100 text-gray-800';
+            }
+        },
+        statusIcon(status) {
+            switch (status.toLowerCase()) {
+                case 'approved':
+                    return 'fa-solid fa-check';
+                case 'rejected':
+                    return 'fa-solid fa-x';
+                case 'pending':
+                    return 'fa-solid fa-spinner';
+                default:
+                    return 'fa-solid fa-question';
+            }
+        },
+        openDetailModal(permuta) {
+            this.selectedPermuta = permuta;
+            this.showDetailModal = true;
+        }
+    },
+    mounted() {
+        this.getPermutas();
     }
 };
 </script>
