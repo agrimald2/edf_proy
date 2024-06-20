@@ -75,15 +75,26 @@ class MainController extends Controller
     }
 
     public function getInfoByMesa($mesa){     
-        # Nombre de Supervisor campo en DB
-        # 
-        
-           
+        $cuota = Main::where('SV', $mesa)->first()->CUOTA ?? 'N/A';
+        $clients = Main::where('SV', $mesa)->get();
+        $negociados = Main::where('SV', $mesa)->where('NEGOCIADO', 'NEGOCIADO')->count();
+        $noNegociados = Main::where('SV', $mesa)->where('NEGOCIADO', 'PENDIENTE')->count();
+        $gv = Main::where('SV', $mesa)->first()->GV ?? 'N/A';
+        $pending = is_numeric($cuota) ? $cuota - $negociados : 'N/A';
+        if (is_numeric($pending) && $pending < 0) {
+            $pending = 0; // Ensure pending is not negative
+        }
+
         return Inertia::render('Supervisor/InfoByMesa', [
-                'supervisor' => 'Alonso',
+            'mesa' => $mesa,
+            'clients' => $clients,
+            'negociados' => $negociados,
+            'noNegociados' => $noNegociados,
+            'gv' => $gv,
+            'cuota' => $cuota, 
+            'pending' => $pending,
         ]); 
     } 
-
 
     public function showPermutasAdmin(){
         return Inertia::render('Admin/Permutas/Index');

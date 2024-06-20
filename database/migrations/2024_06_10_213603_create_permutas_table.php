@@ -22,7 +22,28 @@ return new class extends Migration
             $table->string('condition');
             $table->integer('doors_to_negotiate');
             $table->text('reason');
-            $table->enum('status', ['Pending', 'Rejected', 'Approved']);
+            
+            $table->enum('instance_status', ['Supervisor', 'Gerente', 'Trade'])->default('Supervisor');
+            
+            $table->enum('supervisor_status', ['Pending', 'Rejected', 'Approved'])->default('Pending');
+            $table->string('supervisor_approved_by')->nullable();
+            $table->dateTime('supervisor_approved_at')->nullable();
+            $table->string('supervisor_rejected_reason')->nullable();
+            $table->string('supervsior_rejected_comments')->nullable();
+            
+            $table->enum('gerente_status', ['Pending', 'Rejected', 'Approved'])->default('Pending');
+            $table->string('gerente_approved_by')->nullable();
+            $table->dateTime('gerente_approved_at')->nullable();
+            $table->string('gerente_rejected_reason')->nullable();
+            $table->string('gerente_rejected_comments')->nullable();
+            
+            $table->enum('trade_status', ['Pending', 'Rejected', 'Approved'])->default('Pending');
+            $table->string('trade_approved_by')->nullable();
+            $table->dateTime('trade_approved_at')->nullable();
+            $table->string('trade_rejected_reason')->nullable();
+            $table->string('trade_rejected_comments')->nullable();
+            
+            
             $table->timestamps();
             $table->softDeletes();
         });

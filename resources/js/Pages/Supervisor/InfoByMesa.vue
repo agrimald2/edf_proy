@@ -42,7 +42,8 @@
             </div>
         </div>
         <div class="px-2 mb-4">
-            <button @click="$inertia.get(route('supervisor.permutas.list'))" class="bg-black text-white py-1 px-4 rounded-md flex items-center">
+            <button @click="$inertia.get(route('supervisor.permutas.list'))"
+                class="bg-black text-white py-1 px-4 rounded-md flex items-center">
                 <i class="fa-solid fa-book mr-2"></i>
                 Ver permutas
             </button>
@@ -67,46 +68,21 @@
         </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="flex flex-col gap-4">
-                <div class="bg-white shadow-md rounded-lg overflow-hidden flex">
-                    <div class="flex-1 border-r border-gray-200">
-                        <div class="p-4">
-                            <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
-                                IPH38 Andrea Vargas
-                            </div>
-                            <div class="text-xs pt-2 pl-4">
-                                <span class="font-bold">
-                                    Clientes Negociados:
-                                </span>
-                                3
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex-1 text-left">
-                        <div class="p-4 text-left">
-                            <div class="text-sm text-black font-bold">Puertas negociadas</div>
-                            <div class="text-xs mt-1 font-medium text-gray-500">
-                                Repotenciadas: 1
-                            </div>
-                            <div class="text-xs font-medium text-gray-500">
-                                Nuevas: 2
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-white shadow-md rounded-lg overflow-hidden flex border-red-500 border-2 relative">
-                    <div class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg">
+                <div v-for="client in clients" :key="client.id" style="position:relative"
+                     :class="['bg-white shadow-md rounded-lg overflow-hidden flex', { 'border-red-500 border-2': client.N_PUERTAS == 0 }]">
+                    <div v-if="client.N_PUERTAS == 0" class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-tr-lg">
                         !
                     </div>
                     <div class="flex-1 border-r border-gray-200">
                         <div class="p-4">
                             <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
-                                IPH38 Andrea Vargas
+                                {{ client.RUTA }} {{ client.CLIENTE }}
                             </div>
                             <div class="text-xs pt-2 pl-4">
                                 <span class="font-bold">
                                     Clientes Negociados:
                                 </span>
-                                3
+                                {{ client.N_PUERTAS }}
                             </div>
                         </div>
                     </div>
@@ -114,10 +90,10 @@
                         <div class="p-4 text-left">
                             <div class="text-sm text-black font-bold">Puertas negociadas</div>
                             <div class="text-xs mt-1 font-medium text-gray-500">
-                                Repotenciadas: 0
+                                Repotenciadas: {{ client.N_EDF }}
                             </div>
                             <div class="text-xs font-medium text-gray-500">
-                                Nuevas: 0
+                                Nuevas: {{ client.N_PUERTAS }}
                             </div>
                         </div>
                     </div>
@@ -130,17 +106,27 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 
 export default {
+    props: {
+        mesa: String,
+        clients: Array,
+        negociados: Number,
+        noNegociados: Number,
+        gv: String,
+        cuota: Number,
+        pending: Number,
+        supervisor: String // Moved supervisor prop here
+    },
     components: {
         GuestLayout
     },
-    props: ['supervisor'],
     data() {
         return {
             todaysDate: new Date().toLocaleDateString('es-ES', {
                 weekday: 'short', year: 'numeric',
                 month: 'short', day: 'numeric'
             }).replace(/^\w/, c => c.toUpperCase()),
-            selectedFilter: 'todos'
+            selectedFilter: 'todos',
+            searchQuery: '' // Added searchQuery to data
         };
     }
 };

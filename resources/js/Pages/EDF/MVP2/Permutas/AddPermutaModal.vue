@@ -38,18 +38,18 @@
                                 class="w-full inputs_permutas">
                         </div>
                     </div>
+                    <div class="flex items-center justify-center">
+                        <label class="mr-4">¿Cuenta con EDF?</label>
+                        <div class="flex items-center">
+                            <input type="radio" id="edfSi" value="true" v-model="formData.haveEdf" class="mr-1">
+                            <label for="edfSi" class="mr-4">SI</label>
+                            <input type="radio" id="edfNo" value="false" v-model="formData.haveEdf" class="mr-1">
+                            <label for="edfNo">NO</label>
+                        </div>
+                    </div>
                     <p class="font-semibold">EDF a solicitar</p>
                     <div class="mt-4 mb-2">
                         <div class="grid grid-cols-2 gap-2">
-                            <div class="flex items-center">
-                                <div class="w-full">
-                                    <select v-model="formData.haveEdf" class="w-full inputs_permutas">
-                                        <option value="" disabled selected>¿Cueta con EDF?</option>
-                                        <option value=true>SI</option>
-                                        <option value=false>NO</option>
-                                    </select>
-                                </div>
-                            </div>
                             <div class="flex items-center ">
                                 <div class="w-full">
                                     <select v-model="formData.condition" class="w-full inputs_permutas">
@@ -59,19 +59,19 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 gap-4 mt-4">
-                        <div>
-                            <input v-model="formData.doorsToNegotiate" type="text" placeholder="Puertas a negociar"
-                                class="w-full inputs_permutas">
+                            <div>
+                                <input v-model="formData.doorsToNegotiate" type="text" placeholder="Puertas a negociar"
+                                    class="w-full inputs_permutas">
+                            </div>
                         </div>
                     </div>
                     <div class="mt-4">
                         <div class="w-full">
                             <select v-model="formData.reason" class="w-full inputs_permutas">
                                 <option value="" disabled selected>Motivo</option>
-                                <option v-for="reason in reasons" :key="reason.id" :value="reason.name">{{ reason.name}}</option>
+                                <option v-for="reason in reasons" :key="reason.id" :value="reason.name">{{ reason.name
+                                    }}
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -129,7 +129,7 @@ export default {
                 location: '',
                 route: '',
                 subcanal: '',
-                haveEdf: false,
+                haveEdf: 0,
                 doorsToNegotiate: '',
                 condition: '',
                 reason: ''

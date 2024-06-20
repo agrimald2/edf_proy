@@ -53,6 +53,8 @@ const search = () => {
                     <div class="mt-4 text-center">
                         <a href="#" class="text-sm text-blue-300 hover:text-blue-500">¿Tienes alguna duda?
                             Contáctanos</a>
+                            <br>
+                        <a href="/login" class="text-sm text-gray-300 hover:text-blue-500">Login</a>
                     </div>
                 </form>
             </div>

@@ -30,7 +30,11 @@ class PermutaController extends Controller
      */
     public function store(Request $request)
     {
+        Log::debug($request);
+        
         $requestData = $request->all();
+        
+        Log::info($requestData);
 
         $validatedData = $request->validate([
             'clientCode' => 'required|string',
@@ -38,7 +42,7 @@ class PermutaController extends Controller
             'location' => 'required|string',
             'route' => 'required|string',
             'subcanal' => 'required|string',
-            'haveEdf' => 'required|boolean',
+            'haveEdf' => 'required',
             'condition' => 'required|string',
             'doorsToNegotiate' => 'required|integer',
             'reason' => 'required|string',
@@ -107,4 +111,137 @@ class PermutaController extends Controller
         $permuta->delete();
         return response()->json(null, 204);
     }
+
+    /**
+     * Get permutas with Supervisor instance status.
+     */
+    public function getSupervisorPermutas()
+    {
+        Log::debug("HOLA");
+        $permutas = Permuta::where('instance_status', 'Supervisor')->get();
+        return response()->json($permutas);
+    }
+
+    /**
+     * Get permutas with Gerente instance status.
+     */
+    public function getGerentePermutas()
+    {
+        $permutas = Permuta::where('instance_status', 'Gerente')->get();
+        return response()->json($permutas);
+    }
+
+    /**
+     * Get permutas with Trade instance status.
+     */
+    public function getTradePermutas()
+    {
+        $permutas = Permuta::where('instance_status', 'Trade')->get();
+        return response()->json($permutas);
+    }
+
+    /**
+     * Approve the specified permuta.
+     */
+    /**
+     * Approve the specified permuta by Supervisor.
+     */
+    public function approveBySupervisor(string $id)
+    {
+        $permuta = Permuta::findOrFail($id);
+        $permuta->supervisor_status = 'Approved';
+        $permuta->supervisor_approved_by = auth()->check() ? auth()->user()->name : 'Not Logged User';
+        $permuta->supervisor_approved_at = now();
+        $permuta->instance_status = 'Gerente';
+        $permuta->save();
+
+        return response()->json($permuta);
+    }
+
+    /**
+     * Reject the specified permuta by Supervisor.
+     */
+    public function rejectBySupervisor(Request $request, string $id)
+    {        
+        $validatedData = $request->validate([
+            'rejected_reason' => 'required|string',
+            'rejected_comments' => 'nullable|string',
+        ]);
+
+        $permuta = Permuta::findOrFail($id);
+        $permuta->supervisor_status = 'Rejected';
+        $permuta->supervisor_rejected_reason = $validatedData['rejected_reason'];
+        $permuta->supervsior_rejected_comments = $validatedData['rejected_comments'];
+        $permuta->save();
+
+        return response()->json($permuta);
+    }
+
+    /**
+     * Approve the specified permuta by Gerente.
+     */
+    public function approveByGerente(string $id)
+    {
+        $permuta = Permuta::findOrFail($id);
+        $permuta->gerente_status = 'Approved';
+        $permuta->gerente_approved_by = auth()->check() ? auth()->user()->name : 'Not Logged User';
+        $permuta->gerente_approved_at = now();
+        $permuta->instance_status = 'Trade';
+        $permuta->save();
+
+        return response()->json($permuta);
+    }
+
+    /**
+     * Reject the specified permuta by Gerente.
+     */
+    public function rejectByGerente(Request $request, string $id)
+    {        
+        $validatedData = $request->validate([
+            'rejected_reason' => 'required|string',
+            'rejected_comments' => 'nullable|string',
+        ]);
+
+        $permuta = Permuta::findOrFail($id);
+        $permuta->gerente_status = 'Rejected';
+        $permuta->gerente_rejected_reason = $validatedData['rejected_reason'];
+        $permuta->gerente_rejected_comments = $validatedData['rejected_comments'];
+        $permuta->save();
+
+        return response()->json($permuta);
+    }
+
+    /**
+     * Approve the specified permuta by Trade.
+     */
+    public function approveByTrade(string $id)
+    {
+        $permuta = Permuta::findOrFail($id);
+        $permuta->trade_status = 'Approved';
+        $permuta->trade_approved_by = auth()->check() ? auth()->user()->name : 'Not Logged User';
+        $permuta->trade_approved_at = now();
+        $permuta->save();
+
+        return response()->json($permuta);
+    }
+
+    /**
+     * Reject the specified permuta by Trade.
+     */
+    public function rejectByTrade(Request $request, string $id)
+    {        
+        $validatedData = $request->validate([
+            'rejected_reason' => 'required|string',
+            'rejected_comments' => 'nullable|string',
+        ]);
+
+        $permuta = Permuta::findOrFail($id);
+        $permuta->trade_status = 'Rejected';
+        $permuta->trade_rejected_reason = $validatedData['rejected_reason'];
+        $permuta->trade_rejected_comments = $validatedData['rejected_comments'];
+        $permuta->save();
+
+        return response()->json($permuta);
+    }
+    
 }

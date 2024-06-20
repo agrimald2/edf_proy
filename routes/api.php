@@ -23,3 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::resource('permutas', PermutaController::class);
 Route::resource('permuta-reasons', PermutaReasonController::class);
+
+Route::post('permutas/{id}/approve', [PermutaController::class, 'approve'])->name('permutas.approve');
+Route::post('permutas/{id}/reject', [PermutaController::class, 'reject'])->name('permutas.reject');
+
+Route::get('permutas/supervisor', [PermutaController::class, 'getSupervisorPermutas'])->name('permutas.supervisor');
+Route::get('permutas/gerente', [PermutaController::class, 'getGerentePermutas'])->name('permutas.gerente');
+Route::get('permutas/trade', [PermutaController::class, 'getTradePermutas'])->name('permutas.trade');

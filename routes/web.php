@@ -6,7 +6,9 @@ use Inertia\Inertia;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\GerenteController;
-
+use App\Http\Controllers\TradeController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\PermutaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,21 +29,23 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', function () { return Inertia::render('Dashboard'); })->name('dashboard');
     Route::get('/admin/permutas', [MainController::class, 'showPermutasAdmin'])->name('permutas');
+    Route::get('/admin/dashboard', function () { return Inertia::render('Dashboard'); })->name('admin.dashboard');
+    Route::get('/supervisor/dashboard', [SupervisorController::class, 'index'])->name('supervisor.dashboard');
+    Route::get('/gerente/dashboard', [GerenteController::class, 'index'])->name('gerente.dashboard');
+    Route::get('/trade/dashboard', [TradeController::class, 'index'])->name('trade.dashboard');
 });
 
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::get('/search', [MainController::class, 'search'])->name('search');
-
 Route::post('/upload-excel', [MainController::class, 'replaceDataFromExcel'])->name('upload.excel');
 
+Route::get('/ruta/{ruta}/info', [MainController::class, 'getInfoByRuta2'])->name('infoByRuta');
+
+
+
+
 Route::get('/test/{ruta}/info', [MainController::class, 'getInfoByRuta2'])->name('infoByRuta2');
-
-
-Route::get('/ruta/{ruta}/info', [MainController::class, 'getInfoByRuta'])->name('infoByRuta');
-Route::get('/mesa/{mesa}/info', [MainController::class, 'getInfoByMesa'])->name('infoByMesa');
-
-Route::get('/supervisor/dashboard', [SupervisorController::class, 'getInfoByMesa'])->name('supervisor.dashboard');
 Route::get('/supervisor/dashboard/permutas', [SupervisorController::class, 'showPermutasList'])->name('supervisor.permutas.list');
 
-
-Route::get('/gerente/dashboard', [GerenteController::class, 'showPermutasList'])->name('gerente.dashboard');
+Route::get('/mesa/{mesa}/info', [MainController::class, 'getInfoByMesa'])->name('infoByMesa');
 

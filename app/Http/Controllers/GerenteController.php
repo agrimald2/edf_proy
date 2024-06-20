@@ -16,7 +16,7 @@ class GerenteController extends Controller
         ]); 
     } 
 
-    public function showPermutasList(){     
+    public function index(){     
         return Inertia::render('Gerente/Permutas/List', [
                 'supervisor' => 'Alonso',
         ]); 

@@ -4,9 +4,9 @@
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div>
                     <h2 class="font-bold text-sm text-black leading-tight">
-                        ¡Hola, Javier!
+                        ¡Hola, {{ $page.props.auth.user.name }}!
                     </h2>
-                    <p class="text-sm">Gerente de sala</p>
+                    <p class="text-sm">Gerente de Sala</p>
                 </div>
                 <div class="flex items-center" style="margin-left: auto">
                     <span class="text-xs font-bold">Frecuencia:</span>
