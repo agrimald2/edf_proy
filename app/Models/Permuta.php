@@ -11,6 +11,7 @@ class Permuta extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'sv',
         'cod_cliente',
         'volume',
         'location',

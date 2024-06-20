@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="px-2 mb-4">
-            <button @click="$inertia.get(route('supervisor.permutas.list'))"
+            <button @click="$inertia.get(route('supervisor.permutas.list', { mesa }))"
                 class="bg-black text-white py-1 px-4 rounded-md flex items-center">
                 <i class="fa-solid fa-book mr-2"></i>
                 Ver permutas

@@ -45,7 +45,7 @@ export default {
     methods: {
         confirmApproval() {
             console.log(this.permutaId);
-            fetch(`/api/permutas/${this.permutaId}/approve`, {
+            fetch(`/api/permutas/${this.permutaId}/approve/trade`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

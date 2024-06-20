@@ -4,9 +4,9 @@
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div>
                     <h2 class="font-bold text-sm text-black leading-tight">
-                        ¡Hola!
+                        ¡Hola! {{ mesa }}
                     </h2>
-                    <p class="text-sm">Gerente de Sala</p>
+                    <p class="text-sm">Supervisor</p>
                 </div>
                 <div class="flex items-center" style="margin-left: auto">
                     <span class="text-xs font-bold">Frecuencia:</span>
@@ -95,7 +95,8 @@
                             <div class="mt-2">
                                 <span :class="statusClass(permuta.supervisor_status)"
                                     class="text-xs font-semibold mr-2 px-2.5 py-1 rounded">
-                                    <i :class="statusIcon(permuta.supervisor_status)"></i> {{ permuta.supervisor_status }}
+                                    <i :class="statusIcon(permuta.supervisor_status)"></i> {{ permuta.supervisor_status
+                                    }}
                                 </span>
                             </div>
                         </div>
@@ -107,7 +108,8 @@
                                 Ruta: {{ permuta.route }}
                             </div>
                             <div class="text-xs font-medium text-gray-500 mt-2">
-                                <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full" @click="openDetailModal(permuta)">Ver
+                                <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full"
+                                    @click="openDetailModal(permuta)">Ver
                                     más</button>
                             </div>
                             <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
@@ -129,7 +131,11 @@ export default {
         GuestLayout,
         PermutaDetails
     },
-    props: ['supervisor'],
+    props: {
+        mesa: {
+            type: String,
+        }
+    },
     data() {
         return {
             todaysDate: new Date().toLocaleDateString('es-ES', {
@@ -161,7 +167,8 @@ export default {
     methods: {
         async getPermutas() {
             try {
-                const response = await axios.get('/api/permutas/supervisor');                this.permutas = response.data;
+                const response = await axios.get(`/api/supervisor/${this.mesa}/permutas`);
+                this.permutas = response.data;
             } catch (error) {
                 console.error('Error fetching permutas:', error);
             }

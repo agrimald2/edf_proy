@@ -5,6 +5,7 @@ import AddPermutaModal from './Permutas/AddPermutaModal.vue';
 import CatalogoModal from './Catalogo/CatalogoModal.vue';
 
 const props = defineProps({
+    sv: String,
     ruta: String,
     clients: Array,
     negociados: Number,
@@ -112,12 +113,12 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
 
 <template>
     <GuestLayout :title="`Dashboard | EDF`">
-        <AddPermutaModal v-if="showAddPermutaModal" @close="closeAddPermutaModal" />
+        <AddPermutaModal v-if="showAddPermutaModal" @close="closeAddPermutaModal" :sv="sv" :ruta="ruta"/>
         <CatalogoModal v-if="showCatalogoModal" @close="closeCatalogoModal" />
         <template #header>
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div>
-                    <p class="text-sm">{{ todaysDate }}2</p>
+                    <p class="text-sm">{{ todaysDate }}</p>
                     <h2 class="font-bold text-sm text-black leading-tight">
                         ¡Hola, {{ props.gv }}!
                     </h2>

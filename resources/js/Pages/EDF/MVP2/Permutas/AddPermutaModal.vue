@@ -41,9 +41,9 @@
                     <div class="flex items-center justify-center">
                         <label class="mr-4">¿Cuenta con EDF?</label>
                         <div class="flex items-center">
-                            <input type="radio" id="edfSi" value="true" v-model="formData.haveEdf" class="mr-1">
+                            <input type="radio" id="edfSi" value="1" v-model="formData.haveEdf" class="mr-1">
                             <label for="edfSi" class="mr-4">SI</label>
-                            <input type="radio" id="edfNo" value="false" v-model="formData.haveEdf" class="mr-1">
+                            <input type="radio" id="edfNo" value="0" v-model="formData.haveEdf" class="mr-1">
                             <label for="edfNo">NO</label>
                         </div>
                     </div>
@@ -120,6 +120,12 @@ export default {
             type: Boolean,
             default: false,
         },
+        sv:{
+            type: String
+        },
+        ruta:{
+            type: String
+        }
     },
     data() {
         return {
@@ -127,12 +133,13 @@ export default {
                 clientCode: '',
                 volumeCU: '',
                 location: '',
-                route: '',
+                route: this.ruta,
                 subcanal: '',
                 haveEdf: 0,
                 doorsToNegotiate: '',
                 condition: '',
-                reason: ''
+                reason: '',
+                sv: this.sv
             },
             reasons: [],
             sentPermutaViewModal: false,

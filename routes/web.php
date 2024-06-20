@@ -45,7 +45,7 @@ Route::get('/ruta/{ruta}/info', [MainController::class, 'getInfoByRuta2'])->name
 
 
 Route::get('/test/{ruta}/info', [MainController::class, 'getInfoByRuta2'])->name('infoByRuta2');
-Route::get('/supervisor/dashboard/permutas', [SupervisorController::class, 'showPermutasList'])->name('supervisor.permutas.list');
+Route::get('/supervisor/{mesa}/dashboard/permutas', [SupervisorController::class, 'showPermutasList'])->name('supervisor.permutas.list');
 
 Route::get('/mesa/{mesa}/info', [MainController::class, 'getInfoByMesa'])->name('infoByMesa');
 

@@ -15,7 +15,7 @@
         </div>
         <div>
             <div class="mt-2 text-center bg-black border rounded-lg py-2 border-black font-medium">
-                <button @click="closeModal" class=" text-white hover:underline focus:outline-none
+                <button @click="reloadPage" class=" text-white hover:underline focus:outline-none
                         rounded-full">Aceptar</button>
             </div>
         </div>
@@ -31,6 +31,11 @@ export default {
                 rejected_reason: 0,
                 comments: null
             }
+        }
+    },
+    methods: {
+        reloadPage() {
+            window.location.reload();
         }
     }
 }

@@ -30,13 +30,16 @@ class PermutaController extends Controller
      */
     public function store(Request $request)
     {
-        Log::debug($request);
+        /**
+         * Enviar el "SV" al entrar a la ruta
+         */
         
         $requestData = $request->all();
         
         Log::info($requestData);
 
         $validatedData = $request->validate([
+            'sv' => 'string',
             'clientCode' => 'required|string',
             'volumeCU' => 'required|string',
             'location' => 'required|string',
@@ -50,6 +53,7 @@ class PermutaController extends Controller
 
 
         $permuta = Permuta::create([
+            'sv' => $validatedData['sv'],
             'cod_cliente' => $validatedData['clientCode'],
             'volume' => $validatedData['volumeCU'],
             'location' => $validatedData['location'],
@@ -115,10 +119,12 @@ class PermutaController extends Controller
     /**
      * Get permutas with Supervisor instance status.
      */
-    public function getSupervisorPermutas()
+    public function getSupervisorPermutas($sv)
     {
-        Log::debug("HOLA");
-        $permutas = Permuta::where('instance_status', 'Supervisor')->get();
+        /**
+         * @TODO - Cada Permuta debe tener un código de supervisor "SV" - Para poder filtrar las rutas por código de supervisor
+         */
+        $permutas = Permuta::where('instance_status', 'Supervisor')->where('sv', $sv)->get();
         return response()->json($permutas);
     }
 
@@ -127,7 +133,7 @@ class PermutaController extends Controller
      */
     public function getGerentePermutas()
     {
-        $permutas = Permuta::where('instance_status', 'Gerente')->get();
+        $permutas = Permuta::whereIn('instance_status', ['Gerente', 'Trade'])->get();
         return response()->json($permutas);
     }
 

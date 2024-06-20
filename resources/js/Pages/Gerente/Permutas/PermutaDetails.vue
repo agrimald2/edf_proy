@@ -24,7 +24,7 @@
                             <p><span class="font-medium">Puertas a negociar:</span> {{ formData.doorsToNegotiate }}</p>
                             <p><span class="font-medium">Motivo:</span> {{ formData.reason }}</p>
                         </div>
-                        <div v-if="permuta.status == 'Pending'" class="mt-2 pt-2 flex justify-between">
+                        <div v-if="permuta.gerente_status == 'Pending'" class="mt-2 pt-2 flex justify-between">
                             <button @click="approvePermuta"
                                 class="w-1/2 py-3 font-medium rounded-md bg-green-500 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 mr-2">
                                 APROBAR

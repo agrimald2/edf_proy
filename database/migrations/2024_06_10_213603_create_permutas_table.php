@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('permutas', function (Blueprint $table) {
             $table->id();
+            $table->string('sv');
             $table->string('cod_cliente');
             $table->string('volume');
             $table->string('location');

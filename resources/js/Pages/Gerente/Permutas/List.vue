@@ -20,6 +20,10 @@
                         <option value="sábado">Sábado</option>
                         <option value="domingo">Domingo</option>
                     </select>
+                    <button @click="logout"
+                        class="absolute top-2 right-0 ml-4 flex items-center text-sm font-bold text-red-600">
+                        <i class="fa-solid fa-sign-out-alt mr-2"></i>
+                    </button>
                 </div>
             </div>
         </template>
@@ -93,9 +97,9 @@
                                 </div>
                             </div>
                             <div class="mt-2">
-                                <span :class="statusClass(permuta.status)"
+                                <span :class="statusClass(permuta.gerente_status)"
                                     class="text-xs font-semibold mr-2 px-2.5 py-1 rounded">
-                                    <i :class="statusIcon(permuta.status)"></i> {{ permuta.status }}
+                                    <i :class="statusIcon(permuta.gerente_status)"></i> {{ permuta.gerente_status }}
                                 </span>
                             </div>
                         </div>
@@ -107,7 +111,8 @@
                                 Ruta: {{ permuta.route }}
                             </div>
                             <div class="text-xs font-medium text-gray-500 mt-2">
-                                <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full" @click="openDetailModal(permuta)">Ver
+                                <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full"
+                                    @click="openDetailModal(permuta)">Ver
                                     más</button>
                             </div>
                             <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
@@ -146,29 +151,29 @@ export default {
     computed: {
         filteredPermutas() {
             return this.permutas.filter(permuta => {
-                return this.selectedFilter === 'todos' || permuta.status.toLowerCase() === this.selectedFilter;
+                return this.selectedFilter === 'todos' || permuta.gerente_status.toLowerCase() === this.selectedFilter;
             }).filter(permuta => {
                 return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.includes(this.searchQuery);
             });
         },
         approvedCount() {
-            return this.permutas.filter(permuta => permuta.status.toLowerCase() === 'approved').length;
+            return this.permutas.filter(permuta => permuta.gerente_status.toLowerCase() === 'approved').length;
         },
         pendingCount() {
-            return this.permutas.filter(permuta => permuta.status.toLowerCase() === 'pending').length;
+            return this.permutas.filter(permuta => permuta.gerente_status.toLowerCase() === 'pending').length;
         }
     },
     methods: {
         async getPermutas() {
             try {
-                const response = await axios.get('/api/permutas');
+                const response = await axios.get('/api/gerente/permutas');
                 this.permutas = response.data;
             } catch (error) {
                 console.error('Error fetching permutas:', error);
             }
         },
-        statusClass(status) {
-            switch (status.toLowerCase()) {
+        statusClass(gerente_status) {
+            switch (gerente_status.toLowerCase()) {
                 case 'approved':
                     return 'bg-green-100 text-green-800';
                 case 'rejected':
@@ -179,8 +184,8 @@ export default {
                     return 'bg-gray-100 text-gray-800';
             }
         },
-        statusIcon(status) {
-            switch (status.toLowerCase()) {
+        statusIcon(gerente_status) {
+            switch (gerente_status.toLowerCase()) {
                 case 'approved':
                     return 'fa-solid fa-check';
                 case 'rejected':
@@ -194,6 +199,15 @@ export default {
         openDetailModal(permuta) {
             this.selectedPermuta = permuta;
             this.showDetailModal = true;
+        },
+        logout() {
+            axios.post('/logout')
+                .then(response => {
+                    window.location.href = '/login';
+                })
+                .catch(error => {
+                    console.error('Error during logout:', error);
+                });
         }
     },
     mounted() {

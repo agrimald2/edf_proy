@@ -16,9 +16,10 @@ class SupervisorController extends Controller
         ]); 
     } 
 
-    public function showPermutasList(){     
+    public function showPermutasList($mesa){     
         return Inertia::render('Supervisor/Permutas/List', [
                 'supervisor' => 'Alonso',
+                'mesa' => $mesa,
         ]); 
     } 
 }

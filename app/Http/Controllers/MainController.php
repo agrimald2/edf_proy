@@ -43,12 +43,14 @@ class MainController extends Controller
         $negociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->count();
         $noNegociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'PENDIENTE')->count();
         $gv = Main::where('RUTA', $ruta)->first()->GV ?? 'N/A';
+        $sv = Main::where('RUTA', $ruta)->first()->SV ?? 'N/A';
         $pending = is_numeric($cuota) ? $cuota - $negociados : 'N/A';
         if (is_numeric($pending) && $pending < 0) {
             $pending = 0; // Ensure pending is not negative
         }
 
         return Inertia::render('EDF/MVP2/InfoByRuta', [
+            'sv' => $sv,
             'ruta' => $ruta,
             'clients' => $clients,
             'negociados' => $negociados,

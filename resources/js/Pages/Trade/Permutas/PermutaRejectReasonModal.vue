@@ -52,7 +52,7 @@ export default {
     },
     methods: {
         submitForm() {
-            fetch(`/api/permutas/${this.permutaId}/reject`, {
+            fetch(`/api/permutas/${this.permutaId}/reject/trade`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
