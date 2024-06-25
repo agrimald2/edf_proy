@@ -24,7 +24,7 @@ class MainImport implements ToModel, WithHeadingRow
             'SEGMENTO' => $row['segmento'] ?? null,
             'COD_SUBCANAL' => $row['cod_subcanal'] ?? null,
             'NOMBRE_SUBCANAL' => $row['nombre_subcanal'] ?? null,
-            'TAMANO' => $row['tamano'] ?? null,
+            'TAMAÑO' => $row['tamano'] ?? null,
             'SALA' => $row['sala'] ?? null,
             'PROMEDIO_CU_3M' => $row['promedio_cu_3m'] ?? null,
             'N_EDF' => $row['n_edf'] ?? null,
