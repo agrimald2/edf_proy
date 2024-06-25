@@ -3,7 +3,6 @@
         <h2 class="text-lg font-bold">Rechazar Permuta</h2>
         <p>Ingresa el motivo del rechazo</p>
     </div>
-    {{ reasons }}
     <div>
         <form class="space-y-4" @submit.prevent="submitForm">
             <div class="grid grid-cols-1 gap-4">
