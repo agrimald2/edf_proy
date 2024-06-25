@@ -9,7 +9,7 @@
                 <div>
                     <select v-model="formData.rejected_reason" class="w-full inputs_permutas">
                         <option value="0" disabled selected>Selecciona Motivo de rechazo</option>
-                        <option v-for="reason in reasons" :key="reason" :value="reason">{{ reason }}</option>
+                        <option v-for="reason in reasons" :key="reason" :value="reason.name">{{ reason.name }}</option>
                     </select>
                 </div>
                 <div>
@@ -44,11 +44,11 @@ export default {
                 rejected_reason: 0,
                 rejected_comments: null
             },
-            reasons: ['Reason 1', 'Reason 2']
+            reasons: []
         }
     },
     mounted() {
-
+        this.getReasons();
     },
     methods: {
         submitForm() {
@@ -76,7 +76,7 @@ export default {
             this.$emit('show-details-modal');
         },
         getReasons() {
-            fetch('/api/permuta-reasons')
+            fetch('/api/permuta-rejected-reasons')
                 .then(response => response.json())
                 .then(data => {
                     this.reasons = data;

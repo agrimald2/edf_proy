@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PermutaController;
 use App\Http\Controllers\PermutaReasonController;
+use App\Http\Controllers\PermutaRejectedReasonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +38,5 @@ Route::post('permutas/{id}/reject/gerente', [PermutaController::class, 'rejectBy
 
 Route::post('permutas/{id}/approve/trade', [PermutaController::class, 'approveByTrade'])->name('permutas.approve.trade');
 Route::post('permutas/{id}/reject/trade', [PermutaController::class, 'rejectByTrade'])->name('permutas.reject.trade');
+
+Route::get('permuta-rejected-reasons', [PermutaRejectedReasonController::class, 'index']);
