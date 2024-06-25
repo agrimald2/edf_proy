@@ -25,7 +25,8 @@
                             <p><span class="font-medium">Motivo:</span> {{ formData.reason }}</p>
                             <p><span class="font-medium">Justificación:</span> {{ formData.justification }}</p>
                         </div>
-                        <div v-if="permuta.supervisor_status == 'Pending'" class="mt-2 pt-2 flex justify-between">
+                        <div v-if="permuta.supervisor_status == 'Pending' && haveAvailableLimit"
+                            class="mt-2 pt-2 flex justify-between">
                             <button @click="approvePermuta"
                                 class="w-1/2 py-3 font-medium rounded-md bg-green-500 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 mr-2">
                                 APROBAR
@@ -48,7 +49,7 @@
                 @close="showRejectReasonModal = false" />
             <PermutaRejectedModal v-if="showRejectedModal" :permuta-id="permuta.id"
                 @close="showRejectedModal = false" />
-            <PermutaApproveConfirmationModal v-if="showApproveConfirmationModal" :permuta-id="permuta.id"
+            <PermutaApproveConfirmationModal v-if="showApproveConfirmationModal" :permuta-id="permuta.id" :sv="sv"
                 @show-details-modal="detailsModal" @close="showApproveConfirmationModal = false"
                 @show-approved-modal="showApprovedModal = true" />
             <PermutaApprovedModal v-if="showApprovedModal" :permuta-id="permuta.id"
@@ -92,6 +93,13 @@ export default {
         permuta: {
             type: Object,
             required: true
+        },
+        haveAvailableLimit: {
+            type: Boolean,
+            default: true
+        },
+        sv: {
+            type: String,
         }
     },
     data() {

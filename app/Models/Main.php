@@ -33,6 +33,7 @@ class Main extends Model
         'CONDICION',
         'PUERTAS_A_NEGOCIAR',
         'STATUS',
+        'SV_LIMIT',
         'CUOTA',
         'FECHA_PROGRAMACION',
     ];

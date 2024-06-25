@@ -130,6 +130,7 @@ class PermutaController extends Controller
         return response()->json($permutas);
     }
 
+
     /**
      * Get permutas with Gerente instance status.
      */
@@ -154,11 +155,12 @@ class PermutaController extends Controller
     /**
      * Approve the specified permuta by Supervisor.
      */
-    public function approveBySupervisor(string $id)
+    public function approveBySupervisor(string $id, string $sv)
     {
+        Log::debug($sv);
         $permuta = Permuta::findOrFail($id);
         $permuta->supervisor_status = 'Approved';
-        $permuta->supervisor_approved_by = auth()->check() ? auth()->user()->name : 'Not Logged User';
+        $permuta->supervisor_approved_by = $sv;
         $permuta->supervisor_approved_at = now();
         $permuta->instance_status = 'Gerente';
         $permuta->save();

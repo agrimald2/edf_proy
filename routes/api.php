@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PermutaController;
 use App\Http\Controllers\PermutaReasonController;
 use App\Http\Controllers\PermutaRejectedReasonController;
+use App\Http\Controllers\SupervisorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +31,7 @@ Route::get('supervisor/{sv}/permutas', [PermutaController::class, 'getSupervisor
 Route::get('gerente/permutas', [PermutaController::class, 'getGerentePermutas'])->name('permutas.gerente');
 Route::get('trade/permutas', [PermutaController::class, 'getTradePermutas'])->name('permutas.trade');
 
-Route::post('permutas/{id}/approve/supervisor', [PermutaController::class, 'approveBySupervisor'])->name('permutas.approve.supervisor');
+Route::post('permutas/{id}/approve/supervisor/{sv}', [PermutaController::class, 'approveBySupervisor'])->name('permutas.approve.supervisor');
 Route::post('permutas/{id}/reject/supervisor', [PermutaController::class, 'rejectBySupervisor'])->name('permutas.reject.supervisor');
 
 Route::post('permutas/{id}/approve/gerente', [PermutaController::class, 'approveByGerente'])->name('permutas.approve.gerente');
@@ -40,3 +41,6 @@ Route::post('permutas/{id}/approve/trade', [PermutaController::class, 'approveBy
 Route::post('permutas/{id}/reject/trade', [PermutaController::class, 'rejectByTrade'])->name('permutas.reject.trade');
 
 Route::get('permuta-rejected-reasons', [PermutaRejectedReasonController::class, 'index']);
+
+
+Route::get('supervisor/{sv}/limit', [SupervisorController::class, 'getSupervisorLimit'])->name('limit.supervisor');

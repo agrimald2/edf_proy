@@ -16,35 +16,17 @@ class MainController extends Controller
     }
 
     public function getInfoByRuta($ruta){
-        $cuota = Main::where('RUTA', $ruta)->first()->CUOTA ?? 0 ;
-        $clients = Main::where('RUTA', $ruta)->get();
-        $negociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->count();
-        $noNegociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'PENDIENTE')->count();
-        $gv = Main::where('RUTA', $ruta)->first()->GV ?? 'N/A';
-        $pending = $cuota - $negociados;
-        if ($pending < 0) {
-            $pending = 0; // Ensure pending is not negative
-        }
         
-        return Inertia::render('EDF/InfoByRuta', [
-                'ruta' => $ruta,
-                'clients' => $clients,
-                'negociados' => $negociados,
-                'noNegociados' => $noNegociados,
-                'gv' => $gv,
-                'cuota' => $cuota, 
-                'pending' => $pending,
-        ]); 
-    } 
-
-    public function getInfoByRuta2($ruta){
         $cuota = Main::where('RUTA', $ruta)->first()->CUOTA ?? 'N/A' ;
         $clients = Main::where('RUTA', $ruta)->get();
         $negociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->count();
         $noNegociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'PENDIENTE')->count();
         $gv = Main::where('RUTA', $ruta)->first()->GV ?? 'N/A';
         $sv = Main::where('RUTA', $ruta)->first()->SV ?? 'N/A';
-        $pending = is_numeric($cuota) ? $cuota - $negociados : 'N/A';
+
+        $negociated_by_sv = Main::where('SV', $sv)->where('NEGOCIADO', 'NEGOCIADO')->count();;
+
+        $pending = is_numeric($cuota) ? $cuota - $negociated_by_sv : 'N/A';
         if (is_numeric($pending) && $pending < 0) {
             $pending = 0; // Ensure pending is not negative
         }
