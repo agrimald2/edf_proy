@@ -13,5 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(PermutaReasonSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(GerentesSeeder::class);
+        $this->call(LocationsSeeder::class);
     }
 }
