@@ -4,9 +4,9 @@
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div>
                     <h2 class="font-bold text-sm text-black leading-tight">
-                        ¡Hola! {{ mesa }}
+                        ¡Hola!
                     </h2>
-                    <p class="text-sm">Supervisor </p>
+                    <p class="text-sm">Gestor</p>
                 </div>
                 <div class="flex items-center" style="margin-left: auto">
                     <span class="text-xs font-bold">Frecuencia:</span>
@@ -20,6 +20,10 @@
                         <option value="sábado">Sábado</option>
                         <option value="domingo">Domingo</option>
                     </select>
+                    <button @click="logout"
+                        class="absolute top-2 right-0 ml-4 flex items-center text-sm font-bold text-red-600">
+                        <i class="fa-solid fa-sign-out-alt mr-2"></i>
+                    </button>
                 </div>
             </div>
         </template>
@@ -77,8 +81,8 @@
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="flex flex-col gap-4">
                 <div v-for="permuta in filteredPermutas" :key="permuta.id"
-                    class="bg-white shadow-md rounded-lg overflow-hidden flex">
-                    <div class="w-3/5 border-r border-gray-200">
+                    class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col md:flex-row">
+                    <div class="w-full md:w-3/5 border-r border-gray-200">
                         <div class="p-4">
                             <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
                                 {{ permuta.cod_cliente }} - {{ permuta.location.name }}
@@ -92,16 +96,30 @@
                                     {{ permuta.volume }} CU
                                 </div>
                             </div>
+                            <hr>
                             <div class="mt-2">
-                                <span :class="statusClass(permuta.supervisor_status)"
-                                    class="text-xs font-semibold mr-2 px-2.5 py-1 rounded">
-                                    <i :class="statusIcon(permuta.supervisor_status)"></i> {{ permuta.supervisor_status
-                                    }}
-                                </span>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full bg-white">
+                                        <thead>
+                                            <tr>
+                                                <th class="py-2 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider" :class="{ 'bg-gray-100': permuta.instance_status === 'Supervisor' }">Supervisor</th>
+                                                <th class="py-2 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider" :class="{ 'bg-gray-100': permuta.instance_status === 'Gerente' }">Gerente</th>
+                                                <th class="py-2 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider" :class="{ 'bg-gray-100': permuta.instance_status === 'Trade' }">Trade</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="py-2 px-4 border-b border-gray-200 text-sm" :class="{ 'font-bold': permuta.instance_status === 'Supervisor' }">{{ permuta.supervisor_status }}</td>
+                                                <td class="py-2 px-4 border-b border-gray-200 text-sm" :class="{ 'font-bold': permuta.instance_status === 'Gerente' }">{{ permuta.gerente_status }}</td>
+                                                <td class="py-2 px-4 border-b border-gray-200 text-sm" :class="{ 'font-bold': permuta.instance_status === 'Trade' }">{{ permuta.trade_status }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="w-2/5 text-left">
+                    <div class="w-full md:w-2/5 text-left">
                         <div class="p-4 text-left">
                             <div class="text-sm text-black font-bold">{{ permuta.subcanal }}</div>
                             <div class="text-xs mt-1 font-medium text-gray-500">
@@ -113,7 +131,7 @@
                                     más</button>
                             </div>
                             <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
-                                :haveAvailableLimit="haveAvailableLimit" :sv="mesa" @close="showDetailModal = false" />
+                                @close="showDetailModal = false" />
                         </div>
                     </div>
                 </div>
@@ -131,14 +149,7 @@ export default {
         GuestLayout,
         PermutaDetails
     },
-    props: {
-        mesa: {
-            type: String,
-        },
-        haveAvailableLimit: {
-            type: Boolean
-        }
-    },
+    props: ['supervisor', 'route'],
     data() {
         return {
             todaysDate: new Date().toLocaleDateString('es-ES', {
@@ -155,29 +166,29 @@ export default {
     computed: {
         filteredPermutas() {
             return this.permutas.filter(permuta => {
-                return this.selectedFilter === 'todos' || permuta.supervisor_status.toLowerCase() === this.selectedFilter;
+                return this.selectedFilter === 'todos' || permuta.gerente_status.toLowerCase() === this.selectedFilter;
             }).filter(permuta => {
                 return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery);
             });
         },
         approvedCount() {
-            return this.permutas.filter(permuta => permuta.supervisor_status.toLowerCase() === 'approved').length;
+            return this.permutas.filter(permuta => permuta.gerente_status.toLowerCase() === 'approved').length;
         },
         pendingCount() {
-            return this.permutas.filter(permuta => permuta.supervisor_status.toLowerCase() === 'pending').length;
+            return this.permutas.filter(permuta => permuta.gerente_status.toLowerCase() === 'pending').length;
         }
     },
     methods: {
         async getPermutas() {
             try {
-                const response = await axios.get(`/api/supervisor/${this.mesa}/permutas`);
+                const response = await axios.get(`/api/gestor/${this.route}/permutas`);
                 this.permutas = response.data;
             } catch (error) {
                 console.error('Error fetching permutas:', error);
             }
         },
-        statusClass(supervisor_status) {
-            switch (supervisor_status.toLowerCase()) {
+        statusClass(gerente_status) {
+            switch (gerente_status.toLowerCase()) {
                 case 'approved':
                     return 'bg-green-100 text-green-800';
                 case 'rejected':
@@ -188,8 +199,8 @@ export default {
                     return 'bg-gray-100 text-gray-800';
             }
         },
-        statusIcon(supervisor_status) {
-            switch (supervisor_status.toLowerCase()) {
+        statusIcon(gerente_status) {
+            switch (gerente_status.toLowerCase()) {
                 case 'approved':
                     return 'fa-solid fa-check';
                 case 'rejected':
@@ -203,6 +214,15 @@ export default {
         openDetailModal(permuta) {
             this.selectedPermuta = permuta;
             this.showDetailModal = true;
+        },
+        logout() {
+            axios.post('/logout')
+                .then(response => {
+                    window.location.href = '/login';
+                })
+                .catch(error => {
+                    console.error('Error during logout:', error);
+                });
         }
     },
     mounted() {

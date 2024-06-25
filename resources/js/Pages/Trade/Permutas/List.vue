@@ -85,7 +85,7 @@
                     <div class="w-3/5 border-r border-gray-200">
                         <div class="p-4">
                             <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
-                                {{ permuta.cod_cliente }} - {{ permuta.location }}
+                                {{ permuta.cod_cliente }} - {{ permuta.location.name }}
                             </div>
                             <div class="text-xs flex items-center justify-between">
                                 <div class="bg-gray-100 rounded pt-1 pl-2 pb-1 pr-2 flex-3/4">
@@ -153,7 +153,7 @@ export default {
             return this.permutas.filter(permuta => {
                 return this.selectedFilter === 'todos' || permuta.trade_status.toLowerCase() === this.selectedFilter;
             }).filter(permuta => {
-                return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.includes(this.searchQuery);
+                return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery);
             });
         },
         approvedCount() {

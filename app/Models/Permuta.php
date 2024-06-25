@@ -14,7 +14,7 @@ class Permuta extends Model
         'sv',
         'cod_cliente',
         'volume',
-        'location',
+        'location_id',
         'route',
         'subcanal',
         'justification',
@@ -39,4 +39,9 @@ class Permuta extends Model
         'trade_rejected_reason',
         'trade_rejected_comments',
     ];
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
+    }
 }

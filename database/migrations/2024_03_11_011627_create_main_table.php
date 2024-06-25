@@ -36,6 +36,7 @@ return new class extends Migration
             $table->string('CUOTA', 512)->default('-');
             $table->string('STATUS')->nullable();
             $table->string('SV_LIMIT')->nullable();
+            $table->string('LOCACION')->nullable();
             $table->date('FECHA_PROGRAMACION')->format('d/m/Y')->nullable();
         });
     }

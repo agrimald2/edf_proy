@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('sv');
             $table->string('cod_cliente');
             $table->string('volume');
-            $table->string('location');
+            $table->unsignedBigInteger('location_id');
             $table->string('route');
             $table->string('subcanal');
             $table->boolean('have_edf');

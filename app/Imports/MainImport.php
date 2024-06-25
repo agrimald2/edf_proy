@@ -35,6 +35,8 @@ class MainImport implements ToModel, WithHeadingRow
             'PUERTAS_A_NEGOCIAR' => $row['puertas_a_negociar'] ?? null,
             'NEGOCIADO' => $row['negociado_status'] ?? null,
             'CUOTA' => $row['cuota'] ?? null,
+            'SV_LIMIT' => $row['sv_limit'] ?? null,
+            'LOCACION' => $row['locacion'] ?? null,
         ]);
     }
 }

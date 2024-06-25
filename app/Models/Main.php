@@ -34,6 +34,7 @@ class Main extends Model
         'PUERTAS_A_NEGOCIAR',
         'STATUS',
         'SV_LIMIT',
+        'LOCACION',
         'CUOTA',
         'FECHA_PROGRAMACION',
     ];

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Permuta;
 use Log;
+use Illuminate\Support\Facades\Auth;
 
 class PermutaController extends Controller
 {
@@ -36,35 +37,32 @@ class PermutaController extends Controller
         
         $requestData = $request->all();
         
-        Log::info($requestData);
-
         $validatedData = $request->validate([
             'sv' => 'string',
             'clientCode' => 'required|string',
             'volumeCU' => 'required|string',
-            'location' => 'required|string',
+            'location_id' => 'required|integer',
             'route' => 'required|string',
             'subcanal' => 'required|string',
-            'haveEdf' => 'required',
+            'haveEdf' => 'required|boolean',
             'condition' => 'required|string',
             'doorsToNegotiate' => 'required|integer',
             'reason' => 'required|string',
-            'justification' => 'string',
+            'justification' => 'string|nullable',
         ]);
-
 
         $permuta = Permuta::create([
             'sv' => $validatedData['sv'],
             'cod_cliente' => $validatedData['clientCode'],
             'volume' => $validatedData['volumeCU'],
-            'location' => $validatedData['location'],
+            'location_id' => $validatedData['location_id'],
             'route' => $validatedData['route'],
             'subcanal' => $validatedData['subcanal'],
             'have_edf' => $validatedData['haveEdf'],
             'condition' => $validatedData['condition'],
             'doors_to_negotiate' => $validatedData['doorsToNegotiate'],
             'reason' => $validatedData['reason'],
-            'justification' => $validatedData['justification'],
+            'justification' => $validatedData['justification'] ?? null,
         ]);
 
         return response()->json($permuta, 201);
@@ -121,12 +119,29 @@ class PermutaController extends Controller
     /**
      * Get permutas with Supervisor instance status.
      */
+    public function getGestorPermutas($route)
+    {
+        /**
+         * @TODO - Cada Permuta debe tener un código de supervisor "SV" - Para poder filtrar las rutas por código de supervisor
+         */
+        $permutas = Permuta::where('route', $route)
+                            ->with('location')
+                            ->get();
+        return response()->json($permutas);
+    }
+
+    /**
+     * Get permutas with Supervisor instance status.
+     */
     public function getSupervisorPermutas($sv)
     {
         /**
          * @TODO - Cada Permuta debe tener un código de supervisor "SV" - Para poder filtrar las rutas por código de supervisor
          */
-        $permutas = Permuta::where('instance_status', 'Supervisor')->where('sv', $sv)->get();
+        $permutas = Permuta::where('instance_status', 'Supervisor')
+                            ->where('sv', $sv)
+                            ->with('location')
+                            ->get();
         return response()->json($permutas);
     }
 
@@ -136,16 +151,23 @@ class PermutaController extends Controller
      */
     public function getGerentePermutas()
     {
-        $permutas = Permuta::whereIn('instance_status', ['Gerente', 'Trade'])->get();
+        $user = Auth::user();
+
+        $permutas = Permuta::whereIn('instance_status', ['Gerente', 'Trade'])
+                            ->with('location')
+                            ->whereHas('location', function ($query) use ($user) {
+                                $query->where('user_id', $user->id);
+                            })
+                            ->get();
+        
         return response()->json($permutas);
     }
-
     /**
      * Get permutas with Trade instance status.
      */
     public function getTradePermutas()
     {
-        $permutas = Permuta::where('instance_status', 'Trade')->get();
+        $permutas = Permuta::where('instance_status', 'Trade')->with('location')->get();
         return response()->json($permutas);
     }
 

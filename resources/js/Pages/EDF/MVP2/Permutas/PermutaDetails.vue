@@ -25,17 +25,6 @@
                             <p><span class="font-medium">Motivo:</span> {{ formData.reason }}</p>
                             <p><span class="font-medium">Justificación:</span> {{ formData.justification }}</p>
                         </div>
-                        <div v-if="permuta.supervisor_status == 'Pending' && haveAvailableLimit"
-                            class="mt-2 pt-2 flex justify-between">
-                            <button @click="approvePermuta"
-                                class="w-1/2 py-3 font-medium rounded-md bg-green-500 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 mr-2">
-                                APROBAR
-                            </button>
-                            <button @click="rejectPermuta"
-                                class="w-1/2 py-3 font-medium rounded-md bg-red-500 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50 ml-2">
-                                RECHAZAR
-                            </button>
-                        </div>
                     </div>
                     <div class="mt-2 text-center bg-white border rounded-lg py-2 border-black font-medium">
                         <button @click="closeModal" class=" text-black hover:underline focus:outline-none
@@ -43,17 +32,6 @@
                     </div>
                 </div>
             </div>
-
-            <PermutaRejectReasonModal v-if="showRejectReasonModal" :permuta-id="permuta.id"
-                @show-details-modal="detailsModal" @show-rejected-modal="showRejectedModal = true"
-                @close="showRejectReasonModal = false" />
-            <PermutaRejectedModal v-if="showRejectedModal" :permuta-id="permuta.id"
-                @close="showRejectedModal = false" />
-            <PermutaApproveConfirmationModal v-if="showApproveConfirmationModal" :permuta-id="permuta.id" :sv="sv"
-                @show-details-modal="detailsModal" @close="showApproveConfirmationModal = false"
-                @show-approved-modal="showApprovedModal = true" />
-            <PermutaApprovedModal v-if="showApprovedModal" :permuta-id="permuta.id"
-                @close="showApprovedModal = false" />
         </div>
     </div>
 </template>
@@ -74,17 +52,7 @@
 </style>
 
 <script>
-import PermutaRejectReasonModal from './PermutaRejectReasonModal.vue';
-import PermutaApproveConfirmationModal from './PermutaApproveConfirmationModal.vue';
-import PermutaApprovedModal from './PermutaApprovedModal.vue';
-import PermutaRejectedModal from './PermutaRejectedModal.vue';
 export default {
-    components: {
-        PermutaRejectReasonModal,
-        PermutaApproveConfirmationModal,
-        PermutaApprovedModal,
-        PermutaRejectedModal
-    },
     props: {
         show: {
             type: Boolean,
@@ -120,13 +88,7 @@ export default {
             sentPermutaViewModal: false,
             errorMessage: '',
             isSubmitting: false,
-            errorMessage: '',
-            isSubmitting: false,
-            showDetails: true,
-            showRejectReasonModal: false,
-            showRejectedModal: false,
-            showApproveConfirmationModal: false,
-            showApprovedModal: false
+            showDetails: true
         };
     },
     mounted() {
@@ -140,21 +102,9 @@ export default {
             });
     },
     methods: {
-        approvePermuta() {
-            this.showDetails = false;
-            this.showApproveConfirmationModal = true;
-        },
-        rejectPermuta() {
-            this.showDetails = false;
-            this.showRejectReasonModal = true;
-        },
         detailsModal() {
             console.log("A");
             this.showDetails = true;
-            this.showRejectReasonModal = false;
-            this.showRejectedModal = false;
-            this.showApproveConfirmationModal = false;
-            this.showApprovedModal = false;
         },
         closeModal() {
             this.$emit('close');

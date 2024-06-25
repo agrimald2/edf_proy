@@ -85,7 +85,7 @@
                     <div class="w-3/5 border-r border-gray-200">
                         <div class="p-4">
                             <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
-                                {{ permuta.cod_cliente }} - {{ permuta.location }}
+                                {{ permuta.cod_cliente }} - {{ permuta.location.name }}
                             </div>
                             <div class="text-xs flex items-center justify-between">
                                 <div class="bg-gray-100 rounded pt-1 pl-2 pb-1 pr-2 flex-3/4">
@@ -166,7 +166,7 @@ export default {
     methods: {
         async getPermutas() {
             try {
-                const response = await axios.get('/api/gerente/permutas');
+                const response = await axios.get('/gerente/permutas');
                 this.permutas = response.data;
             } catch (error) {
                 console.error('Error fetching permutas:', error);

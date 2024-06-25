@@ -99,7 +99,7 @@ export default {
             formData: {
                 clientCode: this.permuta.cod_cliente,
                 volumeCU: this.permuta.volume,
-                location: this.permuta.location,
+                location: this.permuta.location.name,
                 route: this.permuta.route,
                 subcanal: this.permuta.subcanal,
                 haveEdf: this.permuta.have_edf,

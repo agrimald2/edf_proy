@@ -44,6 +44,9 @@ const closeCatalogoModal = () => {
     showCatalogoModal.value = false;
 };
 
+const seePermutas = () => {
+    window.location.href = `/gestor/${props.ruta}/permutas`;
+}
 onMounted(() => {
     selectedDay.value = getCurrentDayOfWeek();
 });
@@ -113,7 +116,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
 
 <template>
     <GuestLayout :title="`Dashboard | EDF`">
-        <AddPermutaModal v-if="showAddPermutaModal" @close="closeAddPermutaModal" :sv="sv" :ruta="ruta"/>
+        <AddPermutaModal v-if="showAddPermutaModal" @close="closeAddPermutaModal" :sv="sv" :ruta="ruta" />
         <CatalogoModal v-if="showCatalogoModal" @close="closeCatalogoModal" />
         <template #header>
             <div class="grid grid-cols-2 gap-4 items-center">
@@ -163,6 +166,10 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                             <button @click="openAddPermutaModal"
                                 class="bg-black text-white px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
                                 <i class="fa-solid fa-plus mr-2"></i>Ingresar permuta
+                            </button>
+                            <button @click="seePermutas"
+                                class="bg-gray-400 text-white px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
+                                <i class="fa-solid fa-eye mr-2"></i>Ver permutas
                             </button>
                             <button @click="openCatalogoModal"
                                 class="bg-white text-black border-2 border-black px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
