@@ -32,6 +32,9 @@ export default {
         permutaId: {
             type: Number,
             required: true
+        },
+        sv: {
+            type: String
         }
     },
     data() {
@@ -45,7 +48,7 @@ export default {
     methods: {
         confirmApproval() {
             console.log(this.permutaId);
-            fetch(`/api/permutas/${this.permutaId}/approve/supervisor`, {
+            fetch(`/api/permutas/${this.permutaId}/approve/supervisor/${this.sv}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
