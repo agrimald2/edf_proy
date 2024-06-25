@@ -49,6 +49,7 @@ class PermutaController extends Controller
             'condition' => 'required|string',
             'doorsToNegotiate' => 'required|integer',
             'reason' => 'required|string',
+            'justification' => 'string',
         ]);
 
 
@@ -63,6 +64,7 @@ class PermutaController extends Controller
             'condition' => $validatedData['condition'],
             'doors_to_negotiate' => $validatedData['doorsToNegotiate'],
             'reason' => $validatedData['reason'],
+            'justification' => $validatedData['justification'],
         ]);
 
         return response()->json($permuta, 201);

@@ -17,6 +17,7 @@ class Permuta extends Model
         'location',
         'route',
         'subcanal',
+        'justification',
         'have_edf',
         'condition',
         'doors_to_negotiate',

@@ -23,6 +23,7 @@
                             <p><span class="font-medium">Condición:</span> {{ formData.condition }}</p>
                             <p><span class="font-medium">Puertas a negociar:</span> {{ formData.doorsToNegotiate }}</p>
                             <p><span class="font-medium">Motivo:</span> {{ formData.reason }}</p>
+                            <p><span class="font-medium">Justificación:</span> {{ formData.justification }}</p>
                         </div>
                         <div v-if="permuta.supervisor_status == 'Pending'" class="mt-2 pt-2 flex justify-between">
                             <button @click="approvePermuta"
@@ -104,7 +105,8 @@ export default {
                 haveEdf: this.permuta.have_edf,
                 doorsToNegotiate: this.permuta.doors_to_negotiate,
                 condition: this.permuta.condition,
-                reason: this.permuta.reason
+                reason: this.permuta.reason,
+                justification: this.permuta.justification
             },
             reasons: [],
             sentPermutaViewModal: false,

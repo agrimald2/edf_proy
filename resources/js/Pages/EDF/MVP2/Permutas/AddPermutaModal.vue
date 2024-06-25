@@ -74,6 +74,12 @@
                                 </option>
                             </select>
                         </div>
+                        <div class="grid grid-cols-1 gap-4 mt-4">
+                            <div>
+                                <input v-model="formData.justification" type="text" placeholder="Justificación"
+                                    class="w-full inputs_permutas">
+                            </div>
+                        </div>
                     </div>
                     <div class="mt-2 pt-2">
                         <button :disabled="!isFormComplete || isSubmitting" @click="submitForm"
@@ -120,10 +126,10 @@ export default {
             type: Boolean,
             default: false,
         },
-        sv:{
+        sv: {
             type: String
         },
-        ruta:{
+        ruta: {
             type: String
         }
     },
@@ -139,6 +145,7 @@ export default {
                 doorsToNegotiate: '',
                 condition: '',
                 reason: '',
+                justification: '',
                 sv: this.sv
             },
             reasons: [],
