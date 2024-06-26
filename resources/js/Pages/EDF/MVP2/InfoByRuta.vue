@@ -249,7 +249,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
         client.CONDICION.slice(1).toLowerCase() }}
                                         </div>
                                     </div>
-                                    <ol class="flex items-center w-full">
+                                    <ol class="flex items-center w-full mt-4">
                                         <li :class="{ 'text-green-500 dark:text-green-400': client.STATUS === 'NEGOCIADO', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'NEGOCIADO' }"
                                             class="flex w-full items-center after:content-[''] after:w-full after:h-0.5 after:border-b after:border-gray-200 after:border-2 after:inline-block dark:after:border-gray-600">
                                             <span
@@ -275,6 +275,11 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                             </span>
                                         </li>
                                     </ol>
+                                    <div class="text-xs text-gray-700 mt-1">
+                                        <strong>
+                                            <span class="text-green-500 text-sm">3 días</span>
+                                        </strong>
+                                    </div>
                                     <div class="text-xs text-gray-700 mt-1" v-if="client.FECHA_PROGRAMACION">
                                         <strong>
                                             F.E: {{ client.FECHA_PROGRAMACION }}

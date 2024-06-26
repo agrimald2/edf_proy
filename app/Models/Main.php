@@ -22,7 +22,7 @@ class Main extends Model
         'SEGMENTO',
         'COD_SUBCANAL',
         'NOMBRE_SUBCANAL',
-        'TAMAÑO',
+        'TAMANO',
         'SALA',
         'PROMEDIO_CU_3M',
         'N_EDF',

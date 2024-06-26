@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('SEGMENTO', 512)->default('-');
             $table->string('COD_SUBCANAL', 512)->default('-');
             $table->string('NOMBRE_SUBCANAL', 512)->default('-');
-            $table->string('TAMAÑO', 512)->default('-');
+            $table->string('TAMANO', 512)->default('-');
             $table->string('SALA', 512)->default('-');
             $table->string('PROMEDIO_CU_3M', 512)->default('-');
             $table->string('N_EDF', 512)->default('-');

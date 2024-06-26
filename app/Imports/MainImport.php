@@ -2,42 +2,65 @@
 
 namespace App\Imports;
 
-use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use App\Models\Main;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 
-class MainImport implements ToModel, WithHeadingRow
+class MainImport implements ToCollection, WithHeadingRow, WithChunkReading
 {
     /**
-     * @TODO | Optimize this using chunks of 1000 | Fix Insert to DB review Model Main
+     * Optimize this using chunks of 1000
      */
-    public function model(array $row)
+    public function collection(Collection $rows)
     {
-        return new Main([
-            'COD_CLIENTE' => $row['cod_cliente'] ?? null,
-            'RUTA' => $row['ruta'] ?? null,
-            'FREC_VISITA' => $row['frec_visita'] ?? null,
-            'CLIENTE' => $row['cliente'] ?? null,
-            'DIRECCION' => $row['direccion'] ?? null,
-            'SV' => $row['sv'] ?? null,
-            'GV' => $row['gv'] ?? null,
-            'SEGMENTO' => $row['segmento'] ?? null,
-            'COD_SUBCANAL' => $row['cod_subcanal'] ?? null,
-            'NOMBRE_SUBCANAL' => $row['nombre_subcanal'] ?? null,
-            'TAMANO' => $row['tamano'] ?? null,
-            'SALA' => $row['sala'] ?? null,
-            'PROMEDIO_CU_3M' => $row['promedio_cu_3m'] ?? null,
-            'N_EDF' => $row['n_edf'] ?? null,
-            'N_PUERTAS' => $row['n_puertas'] ?? null,
-            'SEGMENTO_EJECUCION' => $row['segmento_ejecucion'] ?? null,
-            'POTENCIAL' => $row['potencial'] ?? null,
-            'CONDICION' => $row['condicion'] ?? null,
-            'PUERTAS_A_NEGOCIAR' => $row['puertas_a_negociar'] ?? null,
-            'NEGOCIADO' => $row['negociado_status'] ?? null,
-            'CUOTA' => $row['cuota'] ?? null,
-            'SV_LIMIT' => $row['sv_limit'] ?? null,
-            'LOCACION' => $row['locacion'] ?? null,
-        ]);
+        $data = [];
+
+        foreach ($rows as $row) {
+            $data[] = [
+                'COD_CLIENTE' => $row['cod_cliente'] ?? null,
+                'RUTA' => $row['ruta'] ?? null,
+                'FREC_VISITA' => $row['frec_visita'] ?? null,
+                'CLIENTE' => $row['cliente'] ?? null,
+                'DIRECCION' => $row['direccion'] ?? null,
+                'SV' => $row['sv'] ?? null,
+                'GV' => $row['gv'] ?? null,
+                'SEGMENTO' => $row['segmento'] ?? null,
+                'COD_SUBCANAL' => $row['cod_subcanal'] ?? null,
+                'NOMBRE_SUBCANAL' => $row['nombre_subcanal'] ?? null,
+                'TAMANO' => $row['tamano'] ?? null,
+                'SALA' => $row['sala'] ?? null,
+                'PROMEDIO_CU_3M' => $row['promedio_cu_3m'] ?? null,
+                'N_EDF' => $row['n_edf'] ?? null,
+                'N_PUERTAS' => $row['n_puertas'] ?? null,
+                'SEGMENTO_EJECUCION' => $row['segmento_ejecucion'] ?? null,
+                'POTENCIAL' => $row['potencial'] ?? null,
+                'CONDICION' => $row['condicion'] ?? null,
+                'PUERTAS_A_NEGOCIAR' => $row['puertas_a_negociar'] ?? null,
+                'NEGOCIADO' => $row['negociado_status'] ?? null,
+                'STATUS' => $row['status'] ?? null,
+                'SV_LIMIT' => $row['sv_limit'] ?? null,
+                'CUOTA' => $row['cuota'] ?? null,
+                'LOCACION' => $row['locacion'] ?? null,
+            ];
+        }
+
+        try {
+            DB::table('mains')->insert($data);
+        } catch (\Exception $e) {
+            Log::error('Error processing rows: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Specify the chunk size for reading
+     */
+    public function chunkSize(): int
+    {
+        return 1000;
     }
 }
 
