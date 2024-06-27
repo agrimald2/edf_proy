@@ -43,7 +43,7 @@ class MainImport implements ToCollection, WithHeadingRow, WithChunkReading
                 'STATUS' => $row['status'] ?? null,
                 'SV_LIMIT' => $row['sv_limit'] ?? null,
                 'CUOTA' => $row['cuota'] ?? null,
-                'TALLER' => $row['TALLER'] ?? null,
+                'TALLER' => $row['taller'] ?? null,
                 'LOCACION' => $row['locacion'] ?? null,
             ];
         }

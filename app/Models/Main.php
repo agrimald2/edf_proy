@@ -35,7 +35,7 @@ class Main extends Model
         'SV_LIMIT',
         'LOCACION',
         'CUOTA',
-        'FECHA_PROGRAMACION',
         'TALLER'
+        'FECHA_PROGRAMACION',
     ];
 }
