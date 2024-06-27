@@ -45,6 +45,10 @@ const uploadFile = async () => {
     }
 };
 
+const downloadTemplate = () => {
+    window.location.href = '/nedfac_template.xlsx';
+};
+
 const isUploading = computed(() => uploadStatus.value === 'File selected' || isProcessing.value);
 </script>
 <template>
@@ -55,6 +59,7 @@ const isUploading = computed(() => uploadStatus.value === 'File selected' || isP
             </h2>
         </template>
 
+
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-8">
@@ -63,6 +68,12 @@ const isUploading = computed(() => uploadStatus.value === 'File selected' || isP
                             <label for="file-upload" class="block text-sm font-medium text-gray-700">
                                 Excel document
                             </label>
+                            <div class="my-1">
+                                <button @click="downloadTemplate"
+                                    class="inline-flex justify-center py-1 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                    Descarga Excel Template
+                                </button>
+                            </div>
                             <div
                                 class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                                 <div class="space-y-1 text-center">
@@ -86,13 +97,13 @@ const isUploading = computed(() => uploadStatus.value === 'File selected' || isP
                                     <div class="flex text-sm text-gray-600">
                                         <label for="file-upload"
                                             class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                            <span v-if="!isUploading">Upload a file</span>
+                                            <span v-if="!isUploading">Selecciona un Archivo</span>
                                             <input id="file-upload" name="file-upload" type="file" class="sr-only"
                                                 accept=".xlsx, .xls" @change="onFileChange">
                                         </label>
                                     </div>
                                     <p class="text-xs text-gray-500">
-                                        XLS, XLSX up to 10MB
+                                        XLS, XLSX up to 100MB
                                     </p>
                                 </div>
                             </div>
@@ -101,7 +112,7 @@ const isUploading = computed(() => uploadStatus.value === 'File selected' || isP
                         <div>
                             <button type="submit"
                                 class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                Upload
+                                Cargar Data
                             </button>
                         </div>
                     </form>
