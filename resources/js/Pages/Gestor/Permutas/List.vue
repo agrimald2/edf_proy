@@ -1,12 +1,13 @@
 <template>
     <GuestLayout :title="`Permutas | EDF`">
+        <AddPermutaModal v-if="showAddPermutaModal" @close="closeAddPermutaModal" :sv="sv" :ruta="route" />
         <template #header>
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div>
                     <h2 class="font-bold text-sm text-black leading-tight">
                         ¡Hola!
                     </h2>
-                    <p class="text-sm">Gestor</p>
+                    <p>Gestor <span v-if="gv !== 'N/A'" class="text-sm"> {{ gv }}</span></p>
                 </div>
                 <div class="flex items-center" style="margin-left: auto">
                     <span class="text-xs font-bold">Frecuencia:</span>
@@ -53,6 +54,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="px-2 my-2">
+            <button @click="openAddPermutaModal"
+                class="bg-black text-white px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
+                <i class="fa-solid fa-plus mr-2"></i>Ingresar permuta
+            </button>
         </div>
         <div class="px-2">
             <div class="relative mx-auto text-gray-600 w-full">
@@ -102,16 +109,29 @@
                                     <table class="min-w-full bg-white">
                                         <thead>
                                             <tr>
-                                                <th class="py-2 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider" :class="{ 'bg-gray-100': permuta.instance_status === 'Supervisor' }">Supervisor</th>
-                                                <th class="py-2 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider" :class="{ 'bg-gray-100': permuta.instance_status === 'Gerente' }">Gerente</th>
-                                                <th class="py-2 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider" :class="{ 'bg-gray-100': permuta.instance_status === 'Trade' }">Trade</th>
+                                                <th class="py-2 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                                                    :class="{ 'bg-gray-100': permuta.instance_status === 'Supervisor' }">
+                                                    Supervisor</th>
+                                                <th class="py-2 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                                                    :class="{ 'bg-gray-100': permuta.instance_status === 'Gerente' }">
+                                                    Gerente
+                                                </th>
+                                                <th class="py-2 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                                                    :class="{ 'bg-gray-100': permuta.instance_status === 'Trade' }">
+                                                    Trade</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td class="py-2 px-4 border-b border-gray-200 text-sm" :class="{ 'font-bold': permuta.instance_status === 'Supervisor' }">{{ permuta.supervisor_status }}</td>
-                                                <td class="py-2 px-4 border-b border-gray-200 text-sm" :class="{ 'font-bold': permuta.instance_status === 'Gerente' }">{{ permuta.gerente_status }}</td>
-                                                <td class="py-2 px-4 border-b border-gray-200 text-sm" :class="{ 'font-bold': permuta.instance_status === 'Trade' }">{{ permuta.trade_status }}</td>
+                                                <td class="py-2 px-4 border-b border-gray-200 text-sm"
+                                                    :class="{ 'font-bold': permuta.instance_status === 'Supervisor' }">
+                                                    {{ permuta.supervisor_status === 'Pending' ? 'Pendiente' : permuta.supervisor_status === 'Rejected' ? 'Rechazado' : permuta.supervisor_status === 'Approved' ? 'Aprobado' : permuta.supervisor_status }}</td>
+                                                <td class="py-2 px-4 border-b border-gray-200 text-sm"
+                                                    :class="{ 'font-bold': permuta.instance_status === 'Gerente' }">
+                                                    {{ permuta.gerente_status === 'Pending' ? 'Pendiente' : permuta.gerente_status === 'Rejected' ? 'Rechazado' : permuta.gerente_status === 'Approved' ? 'Aprobado' : permuta.gerente_status }}</td>
+                                                <td class="py-2 px-4 border-b border-gray-200 text-sm"
+                                                    :class="{ 'font-bold': permuta.instance_status === 'Trade' }">
+                                                    {{ permuta.trade_status === 'Pending' ? 'Pendiente' : permuta.trade_status === 'Rejected' ? 'Rechazado' : permuta.trade_status === 'Approved' ? 'Aprobado' : permuta.trade_status }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -120,12 +140,12 @@
                         </div>
                     </div>
                     <div class="w-full md:w-2/5 text-left">
-                        <div class="p-4 text-left">
-                            <div class="text-sm text-black font-bold">{{ permuta.subcanal }}</div>
+                        <div class="pb-2 px-4 text-left">
+                            <div class="text-sm text-black font-bold">{{ permuta.condition }} - {{ permuta.doors_to_negotiate }} {{ permuta.doors_to_negotiate === 1 ? 'Puerta' : 'Puertas' }} </div>
                             <div class="text-xs mt-1 font-medium text-gray-500">
                                 Ruta: {{ permuta.route }}
                             </div>
-                            <div class="text-xs font-medium text-gray-500 mt-2">
+                            <div class="text-xs font-medium text-gray-500 mt-4">
                                 <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full"
                                     @click="openDetailModal(permuta)">Ver
                                     más</button>
@@ -143,13 +163,15 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import PermutaDetails from './PermutaDetails.vue';
 import axios from 'axios';
+import AddPermutaModal from './AddPermutaModal.vue';
 
 export default {
     components: {
         GuestLayout,
-        PermutaDetails
+        PermutaDetails,
+        AddPermutaModal
     },
-    props: ['supervisor', 'route'],
+    props: ['supervisor', 'route', 'sv', 'gv'],
     data() {
         return {
             todaysDate: new Date().toLocaleDateString('es-ES', {
@@ -160,7 +182,8 @@ export default {
             permutas: [],
             searchQuery: '',
             showDetailModal: false,
-            selectedPermuta: null
+            selectedPermuta: null,
+            showAddPermutaModal: false,
         };
     },
     computed: {
@@ -223,6 +246,12 @@ export default {
                 .catch(error => {
                     console.error('Error during logout:', error);
                 });
+        },
+        openAddPermutaModal() {
+            this.showAddPermutaModal = true;
+        },
+        closeAddPermutaModal() {
+            this.showAddPermutaModal = false;
         }
     },
     mounted() {

@@ -62,8 +62,9 @@
                                 </div>
                             </div>
                             <div>
-                                <input v-model="formData.doorsToNegotiate" type="text" placeholder="Puertas a negociar"
-                                    class="w-full inputs_permutas">
+                                <select v-model="formData.doorsToNegotiate" class="w-full inputs_permutas">
+                                    <option v-for="option in doorsOptions" :key="option" :value="option">{{ option }}</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -71,9 +72,7 @@
                         <div class="w-full">
                             <select v-model="formData.reason" class="w-full inputs_permutas">
                                 <option value="" disabled selected>Motivo</option>
-                                <option v-for="reason in reasons" :key="reason.id" :value="reason.name">{{ reason.name
-                                    }}
-                                </option>
+                                <option v-for="reason in reasons" :key="reason.id" :value="reason.name">{{ reason.name }}</option>
                             </select>
                         </div>
                         <div class="grid grid-cols-1 gap-4 mt-4">
@@ -91,8 +90,7 @@
                     </div>
                 </form>
                 <div class="mt-2 text-center bg-white border rounded-lg py-2 border-black font-medium">
-                    <button @click="closeModal" class=" text-black hover:underline focus:outline-none
-                        rounded-full">Cerrar</button>
+                    <button @click="closeModal" class=" text-black hover:underline focus:outline-none rounded-full">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -101,6 +99,7 @@
         </div>
     </div>
 </template>
+
 <style>
 .inputs_permutas {
     border-radius: 0.375rem;
@@ -119,6 +118,7 @@
 
 <script>
 import PermutaSent from './PermutaSent.vue';
+
 export default {
     components: {
         PermutaSent
@@ -178,7 +178,40 @@ export default {
     },
     computed: {
         isFormComplete() {
-            return this.formData.clientCode && this.formData.volumeCU && this.formData.route && this.formData.haveEdf !== '' && this.formData.doorsToNegotiate && this.formData.condition && this.formData.reason;
+            return this.formData.location_id && this.formData.clientCode && this.formData.volumeCU && this.formData.route && this.formData.haveEdf !== '' && this.formData.doorsToNegotiate && this.formData.condition && this.formData.reason;
+        },
+        doorsOptions() {
+            const volumeCU = parseInt(this.formData.volumeCU);
+            const condition = this.formData.condition.toUpperCase();
+            let options = [];
+
+            if (volumeCU < 20) {
+                if (condition === 'REPOTENCIADO') {
+                    options = [0.5, 1];
+                }
+            } else if (volumeCU < 40) {
+                if (condition === 'REPOTENCIADO') {
+                    options = [0.5, 1, 2];
+                } else if (condition === 'NUEVO') {
+                    options = [0.5, 1];
+                }
+            } else if (volumeCU < 42) {
+                if (condition === 'REPOTENCIADO' || condition === 'NUEVO') {
+                    options = [0.5, 1, 2];
+                }
+            } else if (volumeCU < 60) {
+                if (condition === 'REPOTENCIADO') {
+                    options = [0.5, 1, 2, 3];
+                } else if (condition === 'NUEVO') {
+                    options = [0.5, 1, 2];
+                }
+            } else if (volumeCU >= 60) {
+                if (condition === 'REPOTENCIADO' || condition === 'NUEVO') {
+                    options = [0.5, 1, 2, 3];
+                }
+            }
+
+            return options;
         }
     },
     methods: {

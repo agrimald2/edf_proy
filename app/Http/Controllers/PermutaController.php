@@ -35,37 +35,44 @@ class PermutaController extends Controller
          * Enviar el "SV" al entrar a la ruta
          */
         
+        Log::debug($request);
+        
         $requestData = $request->all();
         
-        $validatedData = $request->validate([
-            'sv' => 'string',
-            'clientCode' => 'required|string',
-            'volumeCU' => 'required|string',
-            'location_id' => 'required|integer',
-            'route' => 'required|string',
-            'subcanal' => 'required|string',
-            'haveEdf' => 'required|boolean',
-            'condition' => 'required|string',
-            'doorsToNegotiate' => 'required|integer',
-            'reason' => 'required|string',
-            'justification' => 'string|nullable',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'sv' => 'string',
+                'clientCode' => 'required|string',
+                'volumeCU' => 'required|string',
+                'location_id' => 'required|integer',
+                'route' => 'required|string',
+                'subcanal' => 'required|string',
+                'haveEdf' => 'required|boolean',
+                'condition' => 'required|string',
+                'doorsToNegotiate' => 'required|integer',
+                'reason' => 'required|string',
+                'justification' => 'string|nullable',
+            ]);
 
-        $permuta = Permuta::create([
-            'sv' => $validatedData['sv'],
-            'cod_cliente' => $validatedData['clientCode'],
-            'volume' => $validatedData['volumeCU'],
-            'location_id' => $validatedData['location_id'],
-            'route' => $validatedData['route'],
-            'subcanal' => $validatedData['subcanal'],
-            'have_edf' => $validatedData['haveEdf'],
-            'condition' => $validatedData['condition'],
-            'doors_to_negotiate' => $validatedData['doorsToNegotiate'],
-            'reason' => $validatedData['reason'],
-            'justification' => $validatedData['justification'] ?? null,
-        ]);
+            $permuta = Permuta::create([
+                'sv' => $validatedData['sv'],
+                'cod_cliente' => $validatedData['clientCode'],
+                'volume' => $validatedData['volumeCU'],
+                'location_id' => $validatedData['location_id'],
+                'route' => $validatedData['route'],
+                'subcanal' => $validatedData['subcanal'],
+                'have_edf' => $validatedData['haveEdf'],
+                'condition' => $validatedData['condition'],
+                'doors_to_negotiate' => $validatedData['doorsToNegotiate'],
+                'reason' => $validatedData['reason'],
+                'justification' => $validatedData['justification'] ?? null,
+            ]);
 
-        return response()->json($permuta, 201);
+            return response()->json($permuta, 201);
+        } catch (\Exception $e) {
+            Log::error('Validation or creation failed: ' . $e->getMessage());
+            return response()->json(['error' => 'Validation or creation failed'], 400);
+        }
     }
     /**
      * Display the specified resource.
@@ -154,7 +161,7 @@ class PermutaController extends Controller
         $user = Auth::user();
 
         $permutas = Permuta::whereIn('instance_status', ['Gerente', 'Trade'])
-                            ->with('location')
+                            ->with(['location', 'location.subregion'])
                             ->whereHas('location', function ($query) use ($user) {
                                 $query->where('user_id', $user->id);
                             })

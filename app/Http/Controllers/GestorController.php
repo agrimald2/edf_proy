@@ -10,12 +10,17 @@ use Log;
 
 class GestorController extends Controller
 {
-    public function showPermutasList($route){                     
+    public function showPermutasList($route){     
+        $sv = Main::where('RUTA', $route)->first()->SV ?? 'N/A';
+        $gv = Main::where('RUTA', $route)->first()->GV ?? 'N/A';
+
         return Inertia::render('Gestor/Permutas/List', [
                 'supervisor' => 'Alonso',
                 'mesa' => 'A',
                 'route' => $route,
-                'haveAvailableLimit' => true
+                'haveAvailableLimit' => true,
+                'sv' => $sv,
+                'gv' => $gv
         ]); 
     } 
 }

@@ -3,10 +3,9 @@ import GuestLayout from '@/Layouts/GuestLayout.vue';
 import { ref } from 'vue';
 
 const ruta = ref('');
-const selectedTab = ref('ruta');
 
 const search = () => {
-    const baseUrl = selectedTab.value === 'ruta' ? `/ruta/${ruta.value}/info` : `/mesa/${ruta.value}/info`;
+    const baseUrl = `/login/${ruta.value}`;
     window.location.href = baseUrl;
 };
 </script>
@@ -22,23 +21,10 @@ const search = () => {
                     <div class="text-center mb-2">
                         <h1 class="text-4xl font-bold">AC Equipos</h1>
                     </div>
-                    <div class="mb-4">
-                        <label class="block text-gray-500 text-sm text-center">Buscar por:</label>
-                        <div class="flex justify-center mb-6 text-center">
-                            <button
-                                :class="['py-2', selectedTab === 'ruta' ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-500']"
-                                @click.prevent="selectedTab = 'ruta'">
-                                GESTOR
-                            </button>
-                            <button
-                                :class="['py-2 ml-4', selectedTab === 'mesa' ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-500']"
-                                @click.prevent="selectedTab = 'mesa'">
-                                SUPERVISOR
-                            </button>
-                        </div>
+                    <div class="mb-4 mt-6">
                         <input v-model="ruta"
                             class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:border-blue-300"
-                            :placeholder="selectedTab === 'ruta' ? 'Ingrese tu ruta' : 'Ingrese tu código'">
+                            placeholder="Ingresa tu código">
                     </div>
                     <button
                         class="w-full bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-lg flex items-center justify-center focus:outline-none focus:shadow-outline"

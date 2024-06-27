@@ -14,7 +14,6 @@ class PermutaReasonSeeder extends Seeder
     {
         $reasons = [
             'Cliente Nuevo',
-            'Cliente con Potencial',
             'Cliente fuera del listado',
             'Otro subcanal',
             'Cliente no llega al volumen mínimo'

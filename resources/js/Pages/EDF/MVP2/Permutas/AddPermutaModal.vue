@@ -178,7 +178,7 @@ export default {
     },
     computed: {
         isFormComplete() {
-            return this.formData.clientCode && this.formData.volumeCU && this.formData.route && this.formData.haveEdf !== '' && this.formData.doorsToNegotiate && this.formData.condition && this.formData.reason;
+            return this.formData.location_id && this.formData.clientCode && this.formData.volumeCU && this.formData.route && this.formData.haveEdf !== '' && this.formData.doorsToNegotiate && this.formData.condition && this.formData.reason;
         }
     },
     methods: {

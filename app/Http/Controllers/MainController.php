@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Main;
+use App\Models\Subregion;
+use App\Models\Location;
+use App\Models\Region;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\MainImport;
@@ -82,5 +85,30 @@ class MainController extends Controller
 
     public function showPermutasAdmin(){
         return Inertia::render('Admin/Permutas/Index');
+    }
+
+    public function loginByCode($code){
+        if (strpos($code, 'SV') !== false) {
+            // Supervisor
+            return redirect()->route('infoByMesa', ['mesa' => $code]);
+        } else {
+            // Ruta
+            return redirect()->route('infoByRuta', ['ruta' => $code]);
+        }
+    }
+
+    public function getSubRegions(){
+        $subregions = Subregion::all();
+        return response()->json($subregions);
+    }
+
+    public function getLocations(){
+        $locations = Location::all();
+        return response()->json($locations);
+    }
+
+    public function getRegions(){
+        $regions = Region::with(['subRegions', 'subRegions.locations'])->get();
+        return response()->json($regions);
     }
 }

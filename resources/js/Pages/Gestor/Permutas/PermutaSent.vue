@@ -24,7 +24,7 @@ export default {
     },
     methods: {
         accept() {
-            this.$emit('accept')
+            window.location.reload();
         }
     }
 }

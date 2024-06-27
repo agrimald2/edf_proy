@@ -78,6 +78,16 @@
                 :class="{ 'bg-black text-white': selectedFilter === 'pending', 'bg-white text-black': selectedFilter !== 'pending' }"
                 @click="selectedFilter = 'pending'">Pendientes</button>
         </div>
+        <div class="flex gap-2 my-4 px-2">
+            <select v-model="selectedSubregion" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <option value="">T. Subregiones</option>
+                <option v-for="subregion in subregions" :key="subregion.id" :value="subregion.name">{{ subregion.name }}</option>
+            </select>
+            <select v-model="selectedLocation" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <option value="">T. Localidades</option>
+                <option v-for="location in locations" :key="location.id" :value="location.name">{{ location.name }}</option>
+            </select>
+        </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="flex flex-col gap-4">
                 <div v-for="permuta in filteredPermutas" :key="permuta.id"
@@ -142,18 +152,24 @@ export default {
                 month: 'short', day: 'numeric'
             }).replace(/^\w/, c => c.toUpperCase()),
             selectedFilter: 'todos',
+            selectedSubregion: '',
+            selectedLocation: '',
             permutas: [],
             searchQuery: '',
             showDetailModal: false,
-            selectedPermuta: null
+            selectedPermuta: null,
+            subregions: [],
+            locations: []
         };
     },
     computed: {
         filteredPermutas() {
             return this.permutas.filter(permuta => {
-                return this.selectedFilter === 'todos' || permuta.gerente_status.toLowerCase() === this.selectedFilter;
+                return (this.selectedFilter === 'todos' || permuta.gerente_status.toLowerCase() === this.selectedFilter) &&
+                       (this.selectedSubregion === '' || permuta.location.subregion.name === this.selectedSubregion) &&
+                       (this.selectedLocation === '' || permuta.location.name === this.selectedLocation);
             }).filter(permuta => {
-                return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.includes(this.searchQuery);
+                return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery);
             });
         },
         approvedCount() {
@@ -170,6 +186,22 @@ export default {
                 this.permutas = response.data;
             } catch (error) {
                 console.error('Error fetching permutas:', error);
+            }
+        },
+        async getSubregions() {
+            try {
+                const response = await axios.get('/api/subregions/list');
+                this.subregions = response.data;
+            } catch (error) {
+                console.error('Error fetching subregions:', error);
+            }
+        },
+        async getLocations() {
+            try {
+                const response = await axios.get('/api/location/list');
+                this.locations = response.data;
+            } catch (error) {
+                console.error('Error fetching locations:', error);
             }
         },
         statusClass(gerente_status) {
@@ -212,6 +244,8 @@ export default {
     },
     mounted() {
         this.getPermutas();
+        this.getSubregions();
+        this.getLocations();
     }
 };
 </script>

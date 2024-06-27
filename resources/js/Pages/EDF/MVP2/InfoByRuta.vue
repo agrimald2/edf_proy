@@ -108,6 +108,13 @@ const filteredNoNegociados = computed(() => {
     });
     return count;
 });
+
+const negotiationPercentage = computed(() => {
+    const totalClients = props.clients.length;
+    const negotiatedClients = filteredNegociados.value;
+    return totalClients > 0 ? ((negotiatedClients / totalClients) * 100).toFixed(2) : 0;
+});
+
 const todaysDate = new Date().toLocaleDateString('es-ES', {
     weekday: 'short', year: 'numeric',
     month: 'short', day: 'numeric'
@@ -149,7 +156,9 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                             <div class="bg-green-600 rounded-lg flex-1 flex flex-col p-4">
                                 <div class="flex items-center justify-between w-full mb-2">
                                     <i class="fa-solid fa-users text-white text-3xl"></i>
-                                    <span class="bg-white text-green-600 rounded-full px-2 font-bold">20%</span>
+                                    <span class="bg-white text-green-600 rounded-full px-2 font-bold">{{
+        negotiationPercentage
+    }}%</span>
                                 </div>
                                 <h3 class="text-md text-white">Clientes negociados</h3>
                                 <p class="text-white text-3xl font-bold text-left w-full">{{ filteredNegociados }}</p>
@@ -163,10 +172,6 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                             </div>
                         </div>
                         <div class="flex flex-row gap-4">
-                            <button @click="openAddPermutaModal"
-                                class="bg-black text-white px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
-                                <i class="fa-solid fa-plus mr-2"></i>Ingresar permuta
-                            </button>
                             <button @click="seePermutas"
                                 class="bg-gray-400 text-white px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
                                 <i class="fa-solid fa-eye mr-2"></i>Ver permutas
@@ -275,9 +280,11 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                             </span>
                                         </li>
                                     </ol>
-                                    <div class="text-xs text-gray-700 mt-1">
+                                    <div class="text-xs text-gray-700 mt-1 text-center" v-if="client.STATUS === 'EN RUTA'">
                                         <strong>
-                                            <span class="text-green-500 text-sm">3 días</span>
+                                            <span class="text-green-500 text-sm">Faltan {{ [3, 5, 7,
+                                                9][Math.floor(Math.random() * 4)]
+                                                }} días</span>
                                         </strong>
                                     </div>
                                     <div class="text-xs text-gray-700 mt-1" v-if="client.FECHA_PROGRAMACION">

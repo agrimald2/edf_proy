@@ -23,7 +23,6 @@ class Main extends Model
         'COD_SUBCANAL',
         'NOMBRE_SUBCANAL',
         'TAMANO',
-        'SALA',
         'PROMEDIO_CU_3M',
         'N_EDF',
         'N_PUERTAS',
@@ -37,5 +36,6 @@ class Main extends Model
         'LOCACION',
         'CUOTA',
         'FECHA_PROGRAMACION',
+        'TALLER'
     ];
 }

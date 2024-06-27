@@ -32,7 +32,6 @@ class MainImport implements ToCollection, WithHeadingRow, WithChunkReading
                 'COD_SUBCANAL' => $row['cod_subcanal'] ?? null,
                 'NOMBRE_SUBCANAL' => $row['nombre_subcanal'] ?? null,
                 'TAMANO' => $row['tamano'] ?? null,
-                'SALA' => $row['sala'] ?? null,
                 'PROMEDIO_CU_3M' => $row['promedio_cu_3m'] ?? null,
                 'N_EDF' => $row['n_edf'] ?? null,
                 'N_PUERTAS' => $row['n_puertas'] ?? null,
@@ -44,6 +43,7 @@ class MainImport implements ToCollection, WithHeadingRow, WithChunkReading
                 'STATUS' => $row['status'] ?? null,
                 'SV_LIMIT' => $row['sv_limit'] ?? null,
                 'CUOTA' => $row['cuota'] ?? null,
+                'TALLER' => $row['TALLER'] ?? null,
                 'LOCACION' => $row['locacion'] ?? null,
             ];
         }

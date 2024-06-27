@@ -44,4 +44,10 @@ class Permuta extends Model
     {
         return $this->belongsTo(Location::class);
     }
+
+    public function subRegion()
+{
+    return $this->hasOneThrough(SubRegion::class, Location::class, 'id', 'id', 'location_id', 'sub_region_id');
+}
+    
 }

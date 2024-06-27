@@ -1,55 +1,55 @@
 <template>
-    <div class="z-20 fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-lg w-96 p-6 relative">
+    <div class="z-20 fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
             <button @click="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
                 <i class="fa-solid fa-circle-xmark text-gray-500"></i>
             </button>
             <div v-if="showDetails">
-                <div class="text-center mb-10 pt-2">
-                    <h2 class="text-lg font-bold">Detalles de Permuta</h2>
-                    <p>Revisa la información de la permuta</p>
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold">Detalles de Permuta</h2>
+                    <p class="text-gray-600">Revisa la información de la permuta</p>
                 </div>
                 <div>
                     <div v-if="errorMessage" class="text-red-500 text-center mb-4">{{ errorMessage }}</div>
-                    <div class="space-y-2">
-                        <p class="font-semibold mb-2">Información del cliente</p>
-                        <div class="space-y-2">
-                            <p><span class="font-medium">Código de cliente:</span> {{ formData.clientCode }}</p>
-                            <p><span class="font-medium">Volumen en CU:</span> {{ formData.volumeCU }}</p>
-                            <p><span class="font-medium">Locación:</span> {{ formData.location }}</p>
-                            <p><span class="font-medium">Ruta:</span> {{ formData.route }}</p>
-                            <p><span class="font-medium">Subcanal:</span> {{ formData.subcanal }}</p>
-                            <p class="font-semibold mt-4">EDF a solicitar</p>
-                            <p><span class="font-medium">Condición:</span> {{ formData.condition }}</p>
-                            <p><span class="font-medium">Puertas a negociar:</span> {{ formData.doorsToNegotiate }}</p>
-                            <p><span class="font-medium">Motivo:</span> {{ formData.reason }}</p>
-                            <p><span class="font-medium">Justificación:</span> {{ formData.justification }}</p>
+                    <div class="space-y-4">
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h3 class="font-bold mb-2 text-red-700">Información del cliente</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <p><span class="font-medium">Código de cliente:</span></p>
+                                <p>{{ formData.clientCode }}</p>
+                                <p><span class="font-medium">Volumen en CU:</span></p>
+                                <p>{{ formData.volumeCU }}</p>
+                                <p><span class="font-medium">Locación:</span></p>
+                                <p>{{ formData.location }}</p>
+                                <p><span class="font-medium">Ruta:</span></p>
+                                <p>{{ formData.route }}</p>
+                                <p><span class="font-medium">Subcanal:</span></p>
+                                <p>{{ formData.subcanal }}</p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h3 class="font-bold mb-2 text-red-700">EDF a solicitar</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <p><span class="font-medium">Condición:</span></p>
+                                <p>{{ formData.condition }}</p>
+                                <p><span class="font-medium">Puertas a negociar:</span></p>
+                                <p>{{ formData.doorsToNegotiate }}</p>
+                                <p><span class="font-medium">Motivo:</span></p>
+                                <p>{{ formData.reason }}</p>
+                                <p><span class="font-medium">Justificación:</span></p>
+                                <p>{{ formData.justification }}</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="mt-2 text-center bg-white border rounded-lg py-2 border-black font-medium">
-                        <button @click="closeModal" class=" text-black hover:underline focus:outline-none
-                        rounded-full">Cerrar</button>
+                    <div class="mt-6 text-center">
+                        <button @click="closeModal"
+                            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none">Cerrar</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
-<style>
-.inputs_permutas {
-    border-radius: 0.375rem;
-    background-color: #f8f8fc;
-    border: none;
-    padding: 15px 10px;
-    color: black;
-    /* Input text color */
-}
-
-.inputs_permutas::placeholder {
-    color: gray;
-    /* Placeholder text color */
-}
-</style>
 
 <script>
 export default {

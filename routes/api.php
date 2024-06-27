@@ -7,6 +7,7 @@ use App\Http\Controllers\PermutaReasonController;
 use App\Http\Controllers\PermutaRejectedReasonController;
 use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\MainController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,5 +46,8 @@ Route::post('permutas/{id}/reject/trade', [PermutaController::class, 'rejectByTr
 Route::get('permuta-rejected-reasons', [PermutaRejectedReasonController::class, 'index']);
 Route::get('locations', [LocationController::class, 'index']);
 
-
 Route::get('supervisor/{sv}/limit', [SupervisorController::class, 'getSupervisorLimit'])->name('limit.supervisor');
+
+Route::get('regions/list', [MainController::class, 'getRegions'])->name('regions.list');
+Route::get('subregions/list', [MainController::class, 'getSubRegions'])->name('subregions.list');
+Route::get('location/list', [MainController::class, 'getLocations'])->name('locations.list');

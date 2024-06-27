@@ -14,6 +14,9 @@ class DatabaseSeeder extends Seeder
         $this->call(PermutaReasonSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(GerentesSeeder::class);
+        $this->call(RegionsSeeder::class);
+        $this->call(SubRegionsSeeder::class);
         $this->call(LocationsSeeder::class);
+        $this->call(PermutaRejectedReasonsSeeder::class);
     }
 }
