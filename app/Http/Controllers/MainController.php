@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Main;
-use App\Models\Subregion;
+use App\Models\SubRegion;
 use App\Models\Location;
 use App\Models\Region;
 use DB;
@@ -98,7 +98,7 @@ class MainController extends Controller
     }
 
     public function getSubRegions(){
-        $subregions = Subregion::all();
+        $subregions = SubRegion::all();
         return response()->json($subregions);
     }
 
