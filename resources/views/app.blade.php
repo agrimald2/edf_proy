@@ -8,6 +8,15 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="application-name" content="AC Equipos" />
+        <meta name="apple-mobile-web-app-title" content="AC Equipos" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="red" />
+        <link rel="apple-touch-icon" href="https://i.ibb.co/PzsS6Sq/Imagen1-2.png" />
+
         <!-- Primary Meta Tags -->
         <meta name="title" content="NEF - Negociación Equipos de Frío" />
         <meta name="description" content="Negociación Equipos de Frío Arca Continental Lindley" />
