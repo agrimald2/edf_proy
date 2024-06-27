@@ -1,6 +1,8 @@
 <template>
     <div class="z-20 fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-        <div v-if="!sentPermutaViewModal" class="bg-white rounded-lg shadow-lg w-96 p-6 relative">
+        <div v-if="!sentPermutaViewModal"
+            class="bg-white rounded-lg shadow-lg w-96 p-6 relative max-h-[85vh] overflow-y-auto"
+            style="margin-left: auto; margin-right: auto; margin-top: 2rem;">
             <button @click="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
                 <i class="fa-solid fa-circle-xmark text-gray-500"></i>
             </button>
@@ -26,7 +28,8 @@
                         <div>
                             <select v-model="formData.location_id" class="w-full inputs_permutas">
                                 <option value="" disabled selected>Locación</option>
-                                <option v-for="location in locations" :key="location.id" :value="location.id">{{ location.name }}</option>
+                                <option v-for="location in locations" :key="location.id" :value="location.id">{{
+            location.name }}</option>
                             </select>
                         </div>
                         <div>
@@ -63,7 +66,8 @@
                             </div>
                             <div>
                                 <select v-model="formData.doorsToNegotiate" class="w-full inputs_permutas">
-                                    <option v-for="option in doorsOptions" :key="option" :value="option">{{ option }}</option>
+                                    <option v-for="option in doorsOptions" :key="option" :value="option">{{ option }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -72,7 +76,8 @@
                         <div class="w-full">
                             <select v-model="formData.reason" class="w-full inputs_permutas">
                                 <option value="" disabled selected>Motivo</option>
-                                <option v-for="reason in reasons" :key="reason.id" :value="reason.name">{{ reason.name }}</option>
+                                <option v-for="reason in reasons" :key="reason.id" :value="reason.name">{{ reason.name
+                                    }}</option>
                             </select>
                         </div>
                         <div class="grid grid-cols-1 gap-4 mt-4">
@@ -90,7 +95,8 @@
                     </div>
                 </form>
                 <div class="mt-2 text-center bg-white border rounded-lg py-2 border-black font-medium">
-                    <button @click="closeModal" class=" text-black hover:underline focus:outline-none rounded-full">Cerrar</button>
+                    <button @click="closeModal"
+                        class=" text-black hover:underline focus:outline-none rounded-full">Cerrar</button>
                 </div>
             </div>
         </div>

@@ -174,7 +174,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                         <div class="flex flex-row gap-4">
                             <button @click="seePermutas"
                                 class="bg-gray-400 text-white px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
-                                <i class="fa-solid fa-eye mr-2"></i>Ver permutas
+                                <i class="fa-solid fa-eye mr-2"></i>Permutas
                             </button>
                             <button @click="openCatalogoModal"
                                 class="bg-white text-black border-2 border-black px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">

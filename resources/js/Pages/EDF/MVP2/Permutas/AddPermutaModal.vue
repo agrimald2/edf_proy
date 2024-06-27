@@ -1,6 +1,7 @@
 <template>
     <div class="z-20 fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-        <div v-if="!sentPermutaViewModal" class="bg-white rounded-lg shadow-lg w-96 p-6 relative">
+        <div v-if="!sentPermutaViewModal"
+            class="bg-white rounded-lg shadow-lg w-96 p-6 relative max-h-[70vh] overflow-y-auto">
             <button @click="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
                 <i class="fa-solid fa-circle-xmark text-gray-500"></i>
             </button>
@@ -26,7 +27,8 @@
                         <div>
                             <select v-model="formData.location_id" class="w-full inputs_permutas">
                                 <option value="" disabled selected>Locación</option>
-                                <option v-for="location in locations" :key="location.id" :value="location.id">{{ location.name }}</option>
+                                <option v-for="location in locations" :key="location.id" :value="location.id">{{
+            location.name }}</option>
                             </select>
                         </div>
                         <div>
