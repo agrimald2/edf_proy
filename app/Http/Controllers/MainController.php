@@ -88,7 +88,7 @@ class MainController extends Controller
     }
 
     public function loginByCode($code){
-        if (strpos($code, 'SV') !== false) {
+        if (stripos($code, 'SV') !== false) {
             // Supervisor
             return redirect()->route('infoByMesa', ['mesa' => $code]);
         } else {
