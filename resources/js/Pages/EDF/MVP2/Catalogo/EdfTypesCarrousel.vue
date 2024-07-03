@@ -41,10 +41,9 @@ export default {
     data() {
         return {
             images: [
-                "/images/edf_1.png",
-                "/images/edf_2.png",
-                "/images/edf_3.png",
-                "/images/edf_4.png"
+                "/images/media.jpg",
+                "/images/1puerta.jpg",
+                "/images/2puertas.jpg"
             ],
             active: 0,
             startX: 0,
