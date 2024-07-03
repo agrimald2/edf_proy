@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Main;
-use DB;
+use App\Models\Location;
+use Illuminate\Support\Facades\Auth;
+use Log;
 
 class GerenteController extends Controller
 {
@@ -21,4 +23,15 @@ class GerenteController extends Controller
                 'supervisor' => 'Alonso',
         ]); 
     } 
+
+    public function getGerenteLocations() {
+        $user = Auth::user();
+        $userId = Auth::id();
+        $locations = Location::where('user_id', $userId)->get();
+
+        Log::debug($user);
+        Log::debug($userId);
+        Log::debug($locations);
+        return response()->json($locations);
+    }
 }

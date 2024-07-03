@@ -4,7 +4,7 @@
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div>
                     <h2 class="font-bold text-sm text-black leading-tight">
-                        ¡Hola, {{ $page.props.auth.user.name }}!
+                        ¡Hola, {{ $page.props.auth.user.name }} {{ $page.props.auth.user.id }} !
                     </h2>
                     <p class="text-sm">Gerente de Sala</p>
                 </div>
@@ -79,13 +79,17 @@
                 @click="selectedFilter = 'pending'">Pendientes</button>
         </div>
         <div class="flex gap-2 my-4 px-2">
+            <!--
             <select v-model="selectedSubregion" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 <option value="">T. Subregiones</option>
                 <option v-for="subregion in subregions" :key="subregion.id" :value="subregion.name">{{ subregion.name }}</option>
             </select>
-            <select v-model="selectedLocation" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            -->
+            <select v-model="selectedLocation"
+                class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 <option value="">T. Localidades</option>
-                <option v-for="location in locations" :key="location.id" :value="location.name">{{ location.name }}</option>
+                <option v-for="location in locations" :key="location.id" :value="location.name">{{ location.name }}
+                </option>
             </select>
         </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
@@ -166,8 +170,8 @@ export default {
         filteredPermutas() {
             return this.permutas.filter(permuta => {
                 return (this.selectedFilter === 'todos' || permuta.gerente_status.toLowerCase() === this.selectedFilter) &&
-                       (this.selectedSubregion === '' || permuta.location.subregion.name === this.selectedSubregion) &&
-                       (this.selectedLocation === '' || permuta.location.name === this.selectedLocation);
+                    (this.selectedSubregion === '' || permuta.location.subregion.name === this.selectedSubregion) &&
+                    (this.selectedLocation === '' || permuta.location.name === this.selectedLocation);
             }).filter(permuta => {
                 return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery);
             });
@@ -198,7 +202,7 @@ export default {
         },
         async getLocations() {
             try {
-                const response = await axios.get('/api/location/list');
+                const response = await axios.get('/gerente/locations');
                 this.locations = response.data;
             } catch (error) {
                 console.error('Error fetching locations:', error);

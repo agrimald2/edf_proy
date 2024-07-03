@@ -35,6 +35,8 @@ Route::middleware([
     Route::get('/gerente/dashboard', [GerenteController::class, 'index'])->name('gerente.dashboard');
     Route::get('/trade/dashboard', [TradeController::class, 'index'])->name('trade.dashboard');
     Route::get('/gerente/permutas', [PermutaController::class, 'getGerentePermutas'])->name('permutas.gerente');
+
+    Route::get('/gerente/locations', [GerenteController::class, 'getGerenteLocations'])->name('locations.gerente');
 });
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
@@ -50,3 +52,5 @@ Route::get('/supervisor/{mesa}/dashboard/permutas', [SupervisorController::class
 
 
 Route::get('/login/{code}', [MainController::class, 'loginByCode'])->name('loginByCode');
+
+
