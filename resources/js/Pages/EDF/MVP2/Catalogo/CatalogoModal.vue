@@ -13,11 +13,13 @@
                     @click="selectedTab = 'tipos'">
                     Tipos de EDF
                 </button>
+                <!-- 
                 <button
                     :class="['py-2 ml-4', selectedTab === 'condiciones' ? 'text-red-500 border-b-2 border-red-500' : 'text-gray-500']"
                     @click="selectedTab = 'condiciones'">
                     Condiciones de instalación
                 </button>
+                -->
             </div>
             <div v-if="selectedTab === 'tipos'">
                 <!-- Contenido para Tipos de EDF -->
