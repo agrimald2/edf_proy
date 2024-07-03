@@ -262,11 +262,11 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                         </div>
                                     </div>
                                     <ol class="flex items-center w-full mt-4">
-                                        <li :class="{ 'text-green-500 dark:text-green-400': client.STATUS === 'NEGOCIADO', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'NEGOCIADO' }"
+                                        <li :class="{ 'text-green-500 dark:text-green-400': client.NEGOCIADO === 'NEGOCIADO', 'text-gray-300 dark:text-gray-500': client.NEGOCIADO !== 'NEGOCIADO' }"
                                             class="flex w-full items-center after:content-[''] after:w-full after:h-0.5 after:border-b after:border-gray-200 after:border-2 after:inline-block dark:after:border-gray-600">
                                             <span
                                                 class="flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0"
-                                                :class="{ 'bg-green-50 dark:bg-green-700': client.STATUS === 'NEGOCIADO', 'bg-gray-50 dark:bg-gray-600': client.STATUS !== 'NEGOCIADO' }">
+                                                :class="{ 'bg-green-50 dark:bg-green-700': client.NEGOCIADO === 'NEGOCIADO', 'bg-gray-50 dark:bg-gray-600': client.NEGOCIADO !== 'NEGOCIADO' }">
                                                 <i class="fa-solid fa-handshake text-xs"></i>
                                             </span>
                                         </li>
@@ -287,20 +287,27 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                             </span>
                                         </li>
                                     </ol>
-                                    <div class="text-xs text-gray-700 mt-1 text-center"
-                                        v-if="client.STATUS === 'EN RUTA'">
-                                        <strong>
-                                            <span class="text-green-500 text-sm">Faltan {{ [3, 5, 7,
-        9][Math.floor(Math.random() * 4)]
-                                                }} días</span>
-                                        </strong>
-                                    </div>
-                                    <div class="text-xs text-gray-700 mt-1" v-if="client.FECHA_PROGRAMACION">
-                                        <strong>
-                                            F.E: {{ client.FECHA_PROGRAMACION }}
-                                            <span v-if="new Date(client.FECHA_PROGRAMACION) < new Date()"
-                                                class="text-red-500 text-lg">!</span>
-                                        </strong>
+                                    <div class="grid grid-cols-5 gap-1">
+                                        <div class="col-span-1"></div>
+                                        <div class="col-span-2 text-center text-sm font-medium text-gray-700">
+                                            <div v-if="client.STATUS === 'EN RUTA'">
+                                                <span class="text-green-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-900">
+                                                    En Ruta  
+                                                </span>
+                                                <div>
+                                                    <strong>
+                                                        <span class="text-gray-400 text-xs">Faltan {{ [3, 5, 7, 9][Math.floor(Math.random() * 4)] }} días</span>
+                                                    </strong>
+                                                </div>
+                                            </div>
+                                            <span v-else-if="client.STATUS === 'ENTREGADO'" class="text-green-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">
+                                                Entregado
+                                            </span>
+                                            <span v-else class="text-green-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-gray-200 dark:text-gray-900">
+                                                {{ client.STATUS.charAt(0).toUpperCase() + client.STATUS.slice(1).toLowerCase() }}
+                                            </span>
+                                        </div>
+                                        <div class="col-span-1"></div>
                                     </div>
                                 </div>
                             </div>

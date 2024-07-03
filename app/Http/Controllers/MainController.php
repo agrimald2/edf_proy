@@ -22,8 +22,10 @@ class MainController extends Controller
         
         $cuota = Main::where('RUTA', $ruta)->first()->CUOTA ?? 'N/A' ;
         $clients = Main::where('RUTA', $ruta)->get();
-        $negociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->count();
-        $noNegociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'PENDIENTE')->count();
+
+        $negociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->distinct('COD_CLIENTE')->count('COD_CLIENTE');
+        $noNegociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'PENDIENTE')->distinct('COD_CLIENTE')->count('COD_CLIENTE');
+
         $gv = Main::where('RUTA', $ruta)->first()->GV ?? 'N/A';
         $sv = Main::where('RUTA', $ruta)->first()->SV ?? 'N/A';
 
@@ -88,6 +90,8 @@ class MainController extends Controller
         
         $negociados = Main::where('SV', $mesa)->where('NEGOCIADO', 'NEGOCIADO')->count();
         $noNegociados = Main::where('SV', $mesa)->where('NEGOCIADO', 'PENDIENTE')->count();
+
+        
         $gv = Main::where('SV', $mesa)->first()->GV ?? 'N/A';
         $pending = is_numeric($cuota) ? $cuota - $negociados : 'N/A';
         if (is_numeric($pending) && $pending < 0) {
