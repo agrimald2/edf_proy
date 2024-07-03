@@ -111,7 +111,7 @@ const filteredNoNegociados = computed(() => {
 
 const negotiationPercentage = computed(() => {
     const totalClients = props.clients.length;
-    const negotiatedClients = filteredNegociados.value;
+    const negotiatedClients = props.negociados;
     const cuota = props.cuota;
 
     console.log("NEGOCIADOS:");
@@ -119,7 +119,7 @@ const negotiationPercentage = computed(() => {
     console.log("COUTA:");
     console.log(cuota);
 
-    return totalClients > 0 ? ((negotiatedClients / cuota) * 100).toFixed(2) : 0;
+    return totalClients > 0 ? Math.round((negotiatedClients / cuota) * 100) : 0;
 });
 
 const todaysDate = new Date().toLocaleDateString('es-ES', {

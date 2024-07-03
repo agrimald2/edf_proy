@@ -16,11 +16,11 @@
                     <p class="font-semibold mb-2">Información del cliente</p>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <input v-model="formData.clientCode" type="text" placeholder="Código de cliente"
+                            <input v-model="formData.clientCode" type="tel" placeholder="Código de cliente"
                                 class="w-full inputs_permutas">
                         </div>
                         <div>
-                            <input v-model="formData.volumeCU" type="text" placeholder="Volumen en CU"
+                            <input v-model="formData.volumeCU" type="tel" placeholder="Volumen en CU"
                                 class="w-full inputs_permutas">
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                             </select>
                         </div>
                         <div>
-                            <input v-model="formData.route" type="text" placeholder="Ruta"
+                            <input v-model="formData.route" type="text" placeholder="Ruta" disabled
                                 class="w-full inputs_permutas">
                         </div>
                     </div>
