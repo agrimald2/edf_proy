@@ -26,7 +26,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <select v-model="formData.location_id" class="w-full inputs_permutas">
+                            <select v-model="formData.location_id" class="w-full inputs_permutas" disabled>
                                 <option value="" disabled selected>Locación</option>
                                 <option v-for="location in locations" :key="location.id" :value="location.id">{{
             location.name }}</option>
@@ -139,6 +139,9 @@ export default {
         },
         ruta: {
             type: String
+        },
+        location_id: {
+            type: String
         }
     },
     data() {
@@ -146,7 +149,7 @@ export default {
             formData: {
                 clientCode: '',
                 volumeCU: '',
-                location_id: '',
+                location_id: this.location_id,
                 route: this.ruta,
                 subcanal: '',
                 haveEdf: 0,

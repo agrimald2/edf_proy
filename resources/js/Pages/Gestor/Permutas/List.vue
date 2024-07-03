@@ -1,6 +1,6 @@
 <template>
     <GuestLayout :title="`Permutas | EDF`">
-        <AddPermutaModal v-if="showAddPermutaModal" @close="closeAddPermutaModal" :sv="sv" :ruta="route" />
+        <AddPermutaModal v-if="showAddPermutaModal" @close="closeAddPermutaModal" :sv="sv" :ruta="route" :location_id="location_id"/>
         <template #header>
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div>
@@ -171,7 +171,7 @@ export default {
         PermutaDetails,
         AddPermutaModal
     },
-    props: ['supervisor', 'route', 'sv', 'gv'],
+    props: ['supervisor', 'route', 'sv', 'gv', 'location_id'],
     data() {
         return {
             todaysDate: new Date().toLocaleDateString('es-ES', {
