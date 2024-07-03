@@ -156,9 +156,10 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                             <div class="bg-green-600 rounded-lg flex-1 flex flex-col p-4">
                                 <div class="flex items-center justify-between w-full mb-2">
                                     <i class="fa-solid fa-users text-white text-3xl"></i>
+                                    <!-- 
                                     <span class="bg-white text-green-600 rounded-full px-2 font-bold">{{
         negotiationPercentage
-    }}%</span>
+    }}%</span>-->
                                 </div>
                                 <h3 class="text-md text-white">Clientes negociados</h3>
                                 <p class="text-white text-3xl font-bold text-left w-full">{{ filteredNegociados }}</p>
