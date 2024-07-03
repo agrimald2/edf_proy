@@ -257,32 +257,31 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                     </div>
                                     <div class="flex items-center mt-2">
                                         <div class="text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR }} Puertas -
-                                            {{ client.CONDICION.charAt(0).toUpperCase() +
-        client.CONDICION.slice(1).toLowerCase() }}
+                                            {{ client.CONDICION.charAt(0).toUpperCase() + client.CONDICION.slice(1).toLowerCase() }}
                                         </div>
                                     </div>
                                     <ol class="flex items-center w-full mt-4">
-                                        <li :class="{ 'text-green-500 dark:text-green-400': client.NEGOCIADO === 'NEGOCIADO', 'text-gray-300 dark:text-gray-500': client.NEGOCIADO !== 'NEGOCIADO' }"
+                                        <li :class="{ 'text-green-500': client.NEGOCIADO === 'NEGOCIADO', 'text-gray-300': client.NEGOCIADO !== 'NEGOCIADO' }"
                                             class="flex w-full items-center after:content-[''] after:w-full after:h-0.5 after:border-b after:border-gray-200 after:border-2 after:inline-block dark:after:border-gray-600">
                                             <span
                                                 class="flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0"
-                                                :class="{ 'bg-green-50 dark:bg-green-700': client.NEGOCIADO === 'NEGOCIADO', 'bg-gray-50 dark:bg-gray-600': client.NEGOCIADO !== 'NEGOCIADO' }">
+                                                :class="{ 'bg-green-50': client.NEGOCIADO === 'NEGOCIADO', 'bg-gray-50': client.NEGOCIADO !== 'NEGOCIADO' }">
                                                 <i class="fa-solid fa-handshake text-xs"></i>
                                             </span>
                                         </li>
-                                        <li :class="{ 'text-white dark:text-green-400': client.STATUS === 'EN RUTA', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'EN RUTA' }"
+                                        <li :class="{ 'text-white': client.STATUS === 'EN RUTA', 'text-gray-300': client.STATUS !== 'EN RUTA' }"
                                             class="flex w-full items-center after:content-[''] after:w-full after:h-0.5 after:border-b after:border-gray-200 after:border-2 after:inline-block dark:after:border-gray-600">
                                             <span
                                                 class="flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0"
-                                                :class="{ 'bg-green-500 dark:bg-green-700': client.STATUS === 'EN RUTA', 'bg-gray-50 dark:bg-gray-600': client.STATUS !== 'EN RUTA' }">
+                                                :class="{ 'bg-green-500': client.STATUS === 'EN RUTA', 'bg-gray-50': client.STATUS !== 'EN RUTA' }">
                                                 <i class="fa-solid fa-arrows-rotate text-xs"></i>
                                             </span>
                                         </li>
-                                        <li :class="{ 'text-green-500 dark:text-green-400': client.STATUS === 'ENTREGADO', 'text-gray-300 dark:text-gray-500': client.STATUS !== 'ENTREGADO' }"
+                                        <li :class="{ 'text-green-500': client.STATUS === 'ENTREGADO', 'text-gray-300': client.STATUS !== 'ENTREGADO' }"
                                             class="flex w-full items-center">
                                             <span
                                                 class="flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0"
-                                                :class="{ 'bg-green-50 dark:bg-green-700': client.STATUS === 'ENTREGADO', 'bg-gray-50 dark:bg-gray-600': client.STATUS !== 'ENTREGADO' }">
+                                                :class="{ 'bg-green-50': client.STATUS === 'ENTREGADO', 'bg-gray-50': client.STATUS !== 'ENTREGADO' }">
                                                 <i class="fa-solid fa-check text-xs"></i>
                                             </span>
                                         </li>
@@ -291,7 +290,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                         <div class="col-span-1"></div>
                                         <div class="col-span-2 text-center text-sm font-medium text-gray-700">
                                             <div v-if="client.STATUS === 'EN RUTA'">
-                                                <span class="text-green-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-900">
+                                                <span class="text-green-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">
                                                     En Ruta  
                                                 </span>
                                                 <div>
@@ -300,10 +299,10 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                                     </strong>
                                                 </div>
                                             </div>
-                                            <span v-else-if="client.STATUS === 'ENTREGADO'" class="text-green-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-900">
+                                            <span v-else-if="client.STATUS === 'ENTREGADO'" class="text-green-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">
                                                 Entregado
                                             </span>
-                                            <span v-else class="text-green-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-gray-200 dark:text-gray-900">
+                                            <span v-else class="text-green-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">
                                                 {{ client.STATUS.charAt(0).toUpperCase() + client.STATUS.slice(1).toLowerCase() }}
                                             </span>
                                         </div>
