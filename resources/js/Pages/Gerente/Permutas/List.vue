@@ -4,7 +4,7 @@
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div>
                     <h2 class="font-bold text-sm text-black leading-tight">
-                        ¡Hola, {{ $page.props.auth.user.name }} {{ $page.props.auth.user.id }} !
+                        ¡Hola, {{ $page.props.auth.user.name }} !
                     </h2>
                     <p class="text-sm">Gerente de Sala</p>
                 </div>
