@@ -8,6 +8,7 @@
                     </h2>
                     <p class="text-sm">Supervisor </p>
                 </div>
+                <!-- 
                 <div class="flex items-center" style="margin-left: auto">
                     <span class="text-xs font-bold">Frecuencia:</span>
                     <select style="padding-right: 2rem;"
@@ -21,6 +22,7 @@
                         <option value="domingo">Domingo</option>
                     </select>
                 </div>
+            -->
             </div>
         </template>
         <div class="flex flex-col gap-4">
@@ -50,12 +52,14 @@
                 </div>
             </div>
         </div>
+        <!-- 
         <div class="px-2 my-2">
             <button @click="openAddPermutaModal"
                 class="bg-black text-white px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
                 <i class="fa-solid fa-plus mr-2"></i>Ingresar permuta
             </button>
         </div>
+        -->
         <div class="px-2">
             <div class="relative mx-auto text-gray-600 w-full">
                 <h2 class="font-bold text-sm text-black leading-tight pt-4 pb-2">
