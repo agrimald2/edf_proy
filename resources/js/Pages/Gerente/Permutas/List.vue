@@ -199,18 +199,36 @@ export default {
     computed: {
         filteredPermutas() {
             return this.permutas.filter(permuta => {
-                return (this.selectedFilter === 'todos' || permuta.trade_status.toLowerCase() === this.selectedFilter) &&
-                    (this.selectedSubregion === '' || permuta.location.subregion.name === this.selectedSubregion) &&
-                    (this.selectedLocation === '' || permuta.location.name === this.selectedLocation);
+                if (this.selectedFilter === 'approved') {
+                    return permuta.supervisor_status.toLowerCase() === 'approved' &&
+                           permuta.gerente_status.toLowerCase() === 'approved' &&
+                           permuta.trade_status.toLowerCase() === 'approved';
+                } else if (this.selectedFilter === 'rejected') {
+                    return permuta.supervisor_status.toLowerCase() === 'rejected' ||
+                           permuta.gerente_status.toLowerCase() === 'rejected' ||
+                           permuta.trade_status.toLowerCase() === 'rejected';
+                } else if (this.selectedFilter === 'pending') {
+                    return permuta.supervisor_status.toLowerCase() === 'pending' ||
+                           permuta.gerente_status.toLowerCase() === 'pending' ||
+                           permuta.trade_status.toLowerCase() === 'pending';
+                } else {
+                    return true;
+                }
             }).filter(permuta => {
-                return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery);
+                return (this.selectedSubregion === '' || permuta.location.subregion.name === this.selectedSubregion) &&
+                       (this.selectedLocation === '' || permuta.location.name === this.selectedLocation) &&
+                       (permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery));
             });
         },
         approvedCount() {
-            return this.permutas.filter(permuta => permuta.trade_status.toLowerCase() === 'approved').length;
+            return this.permutas.filter(permuta => permuta.supervisor_status.toLowerCase() === 'approved' &&
+                                                   permuta.gerente_status.toLowerCase() === 'approved' &&
+                                                   permuta.trade_status.toLowerCase() === 'approved').length;
         },
         pendingCount() {
-            return this.permutas.filter(permuta => permuta.trade_status.toLowerCase() === 'pending').length;
+            return this.permutas.filter(permuta => permuta.supervisor_status.toLowerCase() === 'pending' ||
+                                                   permuta.gerente_status.toLowerCase() === 'pending' ||
+                                                   permuta.trade_status.toLowerCase() === 'pending').length;
         }
     },
     methods: {
