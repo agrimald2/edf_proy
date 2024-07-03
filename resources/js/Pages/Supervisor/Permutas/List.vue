@@ -4,7 +4,7 @@
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div>
                     <h2 class="font-bold text-sm text-black leading-tight">
-                        ¡Hola! {{ mesa }}
+                        ¡Hola Miguel! 
                     </h2>
                     <p class="text-sm">Supervisor </p>
                 </div>

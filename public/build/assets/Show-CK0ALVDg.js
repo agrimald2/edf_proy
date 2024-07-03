@@ -1,0 +1,1 @@
+import{_ as o}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{o as e,e as t,a as n}from"./app-OkOZdZGT.js";const s={name:"EmptyDivComponent"},a=n("h1",null," Hola ",-1),c=[a];function r(_,p,i,l,m,d){return e(),t("div",null,c)}const h=o(s,[["render",r]]);export{h as default};
