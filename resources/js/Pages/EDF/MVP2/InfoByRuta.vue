@@ -298,7 +298,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                         <div class="w-full items-center justify-left text-xs text-gray-500">
                                             <span v-if="client.STATUS === 'EN RUTA'" class="text-green-500">En Ruta</span> 
                                             <br />
-                                            <span v-if="client.STATUS === 'EN RUTA'" class="font-bold text-gray-400 text-xs text-center">Faltan <br /> {{ [3, 5, 7, 9][Math.floor(Math.random() * 4)] }} días</span>
+                                            <span v-if="client.STATUS === 'EN RUTA'" class="font-bold text-gray-400 text-xs text-center">Faltan <br /> 7 días</span>
                                         </div>
                                         <div class="flex w-full items-center justify-left text-xs text-gray-500">
                                             <span v-if="client.STATUS === 'ENTREGADO'" class="text-green-500">Entregado</span>
