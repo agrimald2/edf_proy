@@ -72,6 +72,10 @@ class MainController extends Controller
             $pending = 0; // Ensure pending is not negative
         }
 
+        // get progress percentage between $negociados and cuota
+
+        $progress = is_numeric($cuota) && $cuota > 0 ? ($negociados / $cuota) * 100 : 0;
+        
         return Inertia::render('Supervisor/InfoByMesa', [
             'mesa' => $mesa,
             'clients' => $clients,
@@ -80,6 +84,7 @@ class MainController extends Controller
             'gv' => $gv,
             'cuota' => $cuota, 
             'pending' => $pending,
+            'progress' => $progress
         ]); 
     } 
 

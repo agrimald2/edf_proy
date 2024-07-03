@@ -246,7 +246,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                             <div v-else class="flex-1 text-left">
                                 <div class="p-4 text-left">
                                     <div class="text-sm font-medium text-black font-semibold">
-                                        <i class="fa-solid fa-circle-check mr-2"></i>Haz Negociado
+                                        <i class="fa-solid fa-circle-check mr-2"></i>Has Negociado
                                     </div>
                                     <div class="flex items-center mt-2">
                                         <div class="text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR }} Puertas -

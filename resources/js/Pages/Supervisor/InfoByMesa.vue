@@ -31,10 +31,11 @@
                             <div class="bg-green-600 rounded-lg flex-1 flex flex-col p-4">
                                 <div class="flex items-center justify-between w-full mb-2">
                                     <i class="fa-solid fa-users text-white text-3xl"></i>
-                                    <span class="bg-white text-green-600 rounded px-2 font-bold">20%</span>
+                                    <span class="bg-white text-green-600 rounded px-2 font-bold">{{ progress }}%</span>
                                 </div>
                                 <h3 class="text-md text-white">Avance de Cuota</h3>
-                                <p class="text-white text-3xl font-bold text-left w-full"> 3/21</p>
+                                <p class="text-white text-3xl font-bold text-left w-full"> {{ negociados }}/{{ cuota }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -69,8 +70,9 @@
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="flex flex-col gap-4">
                 <div v-for="client in clients" :key="client.id" style="position:relative"
-                     :class="['bg-white shadow-md rounded-lg overflow-hidden flex', { 'border-red-500 border-2': client.N_PUERTAS == 0 }]">
-                    <div v-if="client.N_PUERTAS == 0" class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-tr-lg">
+                    :class="['bg-white shadow-md rounded-lg overflow-hidden flex', { 'border-red-500 border-2': client.N_PUERTAS == 0 }]">
+                    <div v-if="client.N_PUERTAS == 0"
+                        class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-tr-lg">
                         !
                     </div>
                     <div class="flex-1 border-r border-gray-200">
@@ -114,7 +116,8 @@ export default {
         gv: String,
         cuota: Number,
         pending: Number,
-        supervisor: String // Moved supervisor prop here
+        supervisor: String, // Moved supervisor prop here,
+        progress: String
     },
     components: {
         GuestLayout

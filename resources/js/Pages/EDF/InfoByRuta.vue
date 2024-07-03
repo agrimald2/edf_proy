@@ -201,7 +201,7 @@ const filteredNoNegociados = computed(() => {
                             <div v-else class="flex-1 text-left">
                                 <div class="p-4 text-left">
                                     <div class="text-sm font-medium text-gray-500"><i
-                                            class="fa-solid fa-check-to-slot mr-2"></i>Haz Negociado</div>
+                                            class="fa-solid fa-check-to-slot mr-2"></i>Has Negociado</div>
                                     <div class="flex items-center mt-2">
                                         <div class="text-sm font-semibold">EDF | {{ client.PUERTAS_A_NEGOCIAR }} Pts |
                                             {{ client.CONDICION }}</div>
