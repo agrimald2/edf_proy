@@ -8,6 +8,7 @@
                         ¡Hola, {{ supervisor }}!
                     </h2>
                 </div>
+                <!--
                 <div class="flex items-center" style="margin-left: auto">
                     <span class="text-xs font-bold">Frecuencia:</span>
                     <select style="padding-right: 2rem;"
@@ -21,6 +22,7 @@
                         <option value="domingo">Domingo</option>
                     </select>
                 </div>
+            -->
             </div>
         </template>
         <div class="py-6">
