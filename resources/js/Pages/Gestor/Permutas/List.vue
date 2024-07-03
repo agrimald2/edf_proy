@@ -46,7 +46,7 @@
                 <div class="flex-1 text-left">
                     <div class="p-4 text-left">
                         <div class="text-sm text-black font-bold"><i class="fa-solid fa-clock text-yellow-500"></i>
-                            Restantes
+                            Pendientes
                         </div>
                         <div class="text-xs mt-1 font-medium text-gray-500">
                             Cantidad: {{ pendingCount }}
@@ -189,16 +189,24 @@ export default {
     computed: {
         filteredPermutas() {
             return this.permutas.filter(permuta => {
-                return this.selectedFilter === 'todos' || permuta.gerente_status.toLowerCase() === this.selectedFilter;
+                if (this.selectedFilter === 'todos') {
+                    return true;
+                } else if (this.selectedFilter === 'rejected') {
+                    return permuta.trade_status.toLowerCase() === 'rejected' || permuta.supervisor_status.toLowerCase() === 'rejected' || permuta.gerente_status.toLowerCase() === 'rejected';
+                } else if (this.selectedFilter === 'pending') {
+                    return permuta.trade_status.toLowerCase() === 'pending' && permuta.supervisor_status.toLowerCase() !== 'rejected' && permuta.gerente_status.toLowerCase() !== 'rejected';
+                } else {
+                    return permuta.trade_status.toLowerCase() === this.selectedFilter;
+                }
             }).filter(permuta => {
                 return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery);
             });
         },
         approvedCount() {
-            return this.permutas.filter(permuta => permuta.gerente_status.toLowerCase() === 'approved').length;
+            return this.permutas.filter(permuta => permuta.trade_status.toLowerCase() === 'approved').length;
         },
         pendingCount() {
-            return this.permutas.filter(permuta => permuta.gerente_status.toLowerCase() === 'pending').length;
+            return this.permutas.filter(permuta => permuta.trade_status.toLowerCase() === 'pending' && permuta.supervisor_status.toLowerCase() !== 'rejected' && permuta.gerente_status.toLowerCase() !== 'rejected').length;
         }
     },
     methods: {

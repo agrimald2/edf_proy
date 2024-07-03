@@ -53,7 +53,7 @@
             <div class="relative mx-auto text-gray-600 w-full">
                 <input
                     class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none w-full"
-                    type="search" name="search" placeholder="Buscar" v-model="searchQuery">
+                    type="search" name="search" placeholder="Buscar por GV" v-model="searchQuery">
             </div>
         </div>
         <div class="flex gap-2 my-4 px-2">
@@ -62,14 +62,14 @@
                 @click="selectedFilter = 'todos'">Todos</button>
             <button class="px-4 py-1 text-sm rounded-full border-black border-2"
                 :class="{ 'bg-black text-white': selectedFilter === 'pendientes', 'bg-white text-black': selectedFilter !== 'pendientes' }"
-                @click="selectedFilter = 'pendientes'">No Negociados</button>
+                @click="selectedFilter = 'pendientes'"><i class="fa-solid fa-user-large-slash"></i></button>
             <button class="px-4 py-1 text-sm rounded-full border-black border-2"
                 :class="{ 'bg-black text-white': selectedFilter === 'negociados', 'bg-white text-black': selectedFilter !== 'negociados' }"
-                @click="selectedFilter = 'negociados'">Negociados</button>
+                @click="selectedFilter = 'negociados'"><i class="fa-solid fa-user-check"></i></button>
         </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="flex flex-col gap-4">
-                <div v-for="gestor in gestores" :key="gestor.ruta" style="position:relative"
+                <div v-for="gestor in filteredGestores" :key="gestor.ruta" style="position:relative"
                     :class="['bg-white shadow-md rounded-lg overflow-hidden flex', { 'border-red-500 border-2': gestor.total_negociados == 0 }]">
                     <div v-if="gestor.total_negociados == 0"
                         class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-tr-lg">
@@ -132,6 +132,19 @@ export default {
             selectedFilter: 'todos',
             searchQuery: '' // Added searchQuery to data
         };
+    },
+    computed: {
+        filteredGestores() {
+            return this.gestores.filter(gestor => {
+                const matchesSearch = gestor.gv.toLowerCase().includes(this.searchQuery.toLowerCase());
+                if (this.selectedFilter === 'pendientes') {
+                    return matchesSearch && gestor.total_negociados === 0;
+                } else if (this.selectedFilter === 'negociados') {
+                    return matchesSearch && gestor.total_negociados > 0;
+                }
+                return matchesSearch;
+            });
+        }
     }
 };
 </script>

@@ -17,11 +17,11 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <input v-model="formData.clientCode" type="tel" placeholder="Código de cliente"
-                                class="w-full inputs_permutas">
+                                :class="['w-full inputs_permutas', formData.clientCode === '' ? 'border-red-500' : '']">
                         </div>
                         <div>
                             <input v-model="formData.volumeCU" type="tel" placeholder="Volumen en CU"
-                                class="w-full inputs_permutas">
+                                :class="['w-full inputs_permutas', formData.volumeCU === '' ? 'border-red-500' : '']">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -40,7 +40,7 @@
                     <div class="grid grid-cols-1 gap-4 mt-4">
                         <div>
                             <input v-model="formData.subcanal" type="text" placeholder="Subcanal"
-                                class="w-full inputs_permutas">
+                                :class="['w-full inputs_permutas', formData.subcanal === '' ? 'border-red-500' : '']">
                         </div>
                     </div>
                     <div class="flex items-center justify-center">
@@ -83,7 +83,7 @@
                         <div class="grid grid-cols-1 gap-4 mt-4">
                             <div>
                                 <input v-model="formData.justification" type="text" placeholder="Justificación"
-                                    class="w-full inputs_permutas">
+                                    :class="['w-full inputs_permutas', formData.justification === '' ? 'border-red-500' : '']">
                             </div>
                         </div>
                     </div>
@@ -119,6 +119,10 @@
 .inputs_permutas::placeholder {
     color: gray;
     /* Placeholder text color */
+}
+
+.border-red-500 {
+    border: 1px solid red;
 }
 </style>
 

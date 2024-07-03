@@ -81,7 +81,9 @@ class MainController extends Controller
                     'n_puertas_negociadas_repotenciadas' => $n_puertas_negociadas_repotenciadas,
                     'n_puertas_negociadas_nuevas' => $n_puertas_negociadas_nuevas,
                 ];
-            });
+            })
+            ->sortBy('total_negociados')
+            ->values();
 
         
         $negociados = Main::where('SV', $mesa)->where('NEGOCIADO', 'NEGOCIADO')->count();

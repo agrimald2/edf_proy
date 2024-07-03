@@ -95,8 +95,8 @@
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="flex flex-col gap-4">
                 <div v-for="permuta in filteredPermutas" :key="permuta.id"
-                    class="bg-white shadow-md rounded-lg overflow-hidden flex">
-                    <div class="w-3/5 border-r border-gray-200">
+                    class="bg-white shadow-md rounded-lg overflow-hidden flex flex-col md:flex-row">
+                    <div class="w-full md:w-3/5 border-r border-gray-200">
                         <div class="p-4">
                             <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
                                 {{ permuta.cod_cliente }} - {{ permuta.location.name }}
@@ -110,27 +110,55 @@
                                     {{ permuta.volume }} CU
                                 </div>
                             </div>
+                            <hr>
                             <div class="mt-2">
-                                <span :class="statusClass(permuta.gerente_status)"
-                                    class="text-xs font-semibold mr-2 px-2.5 py-1 rounded">
-                                    <i :class="statusIcon(permuta.gerente_status)"></i> {{ permuta.gerente_status }}
-                                </span>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full bg-white">
+                                        <thead>
+                                            <tr>
+                                                <th class="py-2 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                                                    :class="{ 'bg-gray-100': permuta.instance_status === 'Supervisor' }">
+                                                    Supervisor</th>
+                                                <th class="py-2 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                                                    :class="{ 'bg-gray-100': permuta.instance_status === 'Gerente' }">
+                                                    Gerente
+                                                </th>
+                                                <th class="py-2 px-4 border-b border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                                                    :class="{ 'bg-gray-100': permuta.instance_status === 'Trade' }">
+                                                    Trade</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="py-2 px-4 border-b border-gray-200 text-sm"
+                                                    :class="{ 'font-bold': permuta.instance_status === 'Supervisor' }">
+                                                    {{ permuta.supervisor_status === 'Pending' ? 'Pendiente' : permuta.supervisor_status === 'Rejected' ? 'Rechazado' : permuta.supervisor_status === 'Approved' ? 'Aprobado' : permuta.supervisor_status }}</td>
+                                                <td class="py-2 px-4 border-b border-gray-200 text-sm"
+                                                    :class="{ 'font-bold': permuta.instance_status === 'Gerente' }">
+                                                    {{ permuta.gerente_status === 'Pending' ? 'Pendiente' : permuta.gerente_status === 'Rejected' ? 'Rechazado' : permuta.gerente_status === 'Approved' ? 'Aprobado' : permuta.gerente_status }}</td>
+                                                <td class="py-2 px-4 border-b border-gray-200 text-sm"
+                                                    :class="{ 'font-bold': permuta.instance_status === 'Trade' }">
+                                                    {{ permuta.trade_status === 'Pending' ? 'Pendiente' : permuta.trade_status === 'Rejected' ? 'Rechazado' : permuta.trade_status === 'Approved' ? 'Aprobado' : permuta.trade_status }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="w-2/5 text-left">
-                        <div class="p-4 text-left">
-                            <div class="text-sm text-black font-bold">{{ permuta.subcanal }}</div>
+                    <div class="w-full md:w-2/5 text-left">
+                        <div class="pb-2 px-4 text-left">
+                            <div class="text-sm text-black font-bold">{{ permuta.condition }} - {{ permuta.doors_to_negotiate }} {{ permuta.doors_to_negotiate === 1 ? 'Puerta' : 'Puertas' }} </div>
                             <div class="text-xs mt-1 font-medium text-gray-500">
                                 Ruta: {{ permuta.route }}
                             </div>
-                            <div class="text-xs font-medium text-gray-500 mt-2">
+                            <div class="text-xs font-medium text-gray-500 mt-4">
                                 <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full"
                                     @click="openDetailModal(permuta)">Ver
                                     más</button>
                             </div>
                             <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
-                                @close="showDetailModal = false" />
+                                :haveAvailableLimit="haveAvailableLimit" :sv="mesa" @close="showDetailModal = false" />
                         </div>
                     </div>
                 </div>
@@ -169,7 +197,7 @@ export default {
     computed: {
         filteredPermutas() {
             return this.permutas.filter(permuta => {
-                return (this.selectedFilter === 'todos' || permuta.gerente_status.toLowerCase() === this.selectedFilter) &&
+                return (this.selectedFilter === 'todos' || permuta.trade_status.toLowerCase() === this.selectedFilter) &&
                     (this.selectedSubregion === '' || permuta.location.subregion.name === this.selectedSubregion) &&
                     (this.selectedLocation === '' || permuta.location.name === this.selectedLocation);
             }).filter(permuta => {
@@ -177,10 +205,10 @@ export default {
             });
         },
         approvedCount() {
-            return this.permutas.filter(permuta => permuta.gerente_status.toLowerCase() === 'approved').length;
+            return this.permutas.filter(permuta => permuta.trade_status.toLowerCase() === 'approved').length;
         },
         pendingCount() {
-            return this.permutas.filter(permuta => permuta.gerente_status.toLowerCase() === 'pending').length;
+            return this.permutas.filter(permuta => permuta.trade_status.toLowerCase() === 'pending').length;
         }
     },
     methods: {
@@ -208,8 +236,8 @@ export default {
                 console.error('Error fetching locations:', error);
             }
         },
-        statusClass(gerente_status) {
-            switch (gerente_status.toLowerCase()) {
+        statusClass(trade_status) {
+            switch (trade_status.toLowerCase()) {
                 case 'approved':
                     return 'bg-green-100 text-green-800';
                 case 'rejected':
@@ -220,8 +248,8 @@ export default {
                     return 'bg-gray-100 text-gray-800';
             }
         },
-        statusIcon(gerente_status) {
-            switch (gerente_status.toLowerCase()) {
+        statusIcon(trade_status) {
+            switch (trade_status.toLowerCase()) {
                 case 'approved':
                     return 'fa-solid fa-check';
                 case 'rejected':

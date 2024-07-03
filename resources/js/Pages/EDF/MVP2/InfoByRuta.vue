@@ -168,7 +168,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
     }}%</span>
                                 </div>
                                 <h3 class="text-md text-white">Clientes negociados</h3>
-                                <p class="text-white text-3xl font-bold text-left w-full">{{ filteredNegociados }}</p>
+                                <p class="text-white text-3xl font-bold text-left w-full">{{ negociados }}</p>
                             </div>
                             <div class="bg-red-600 rounded-lg flex-1 flex flex-col p-4">
                                 <div class="flex items-center justify-start w-full mb-2">

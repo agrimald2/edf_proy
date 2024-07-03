@@ -145,8 +145,7 @@ class PermutaController extends Controller
         /**
          * @TODO - Cada Permuta debe tener un código de supervisor "SV" - Para poder filtrar las rutas por código de supervisor
          */
-        $permutas = Permuta::where('instance_status', 'Supervisor')
-                            ->where('sv', $sv)
+        $permutas = Permuta::where('sv', $sv)
                             ->with('location')
                             ->get();
         return response()->json($permutas);
