@@ -4,7 +4,7 @@
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div>
                     <h2 class="font-bold text-sm text-black leading-tight">
-                        ¡Hola, {{ $page.props.auth.user.name }}!
+                        ¡Hola, Carla Estrada!
                     </h2>
                     <p class="text-sm">Trade</p>
                 </div>
@@ -99,7 +99,8 @@
                             <div class="mt-2">
                                 <span :class="statusClass(permuta.trade_status)"
                                     class="text-xs font-semibold mr-2 px-2.5 py-1 rounded">
-                                    <i :class="statusIcon(permuta.trade_status)"></i> {{ permuta.trade_status }}
+                                    <i :class="statusIcon(permuta.trade_status)"></i> 
+                                    {{ permuta.trade_status === 'Approved' ? 'Aprobada' : permuta.trade_status === 'Rejected' ? 'Rechazada' : permuta.trade_status === 'Pending' ? 'Pendiente' : permuta.trade_status }}
                                 </span>
                             </div>
                         </div>
