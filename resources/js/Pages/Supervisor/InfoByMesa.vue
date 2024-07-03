@@ -69,22 +69,22 @@
         </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="flex flex-col gap-4">
-                <div v-for="client in clients" :key="client.id" style="position:relative"
-                    :class="['bg-white shadow-md rounded-lg overflow-hidden flex', { 'border-red-500 border-2': client.N_PUERTAS == 0 }]">
-                    <div v-if="client.N_PUERTAS == 0"
+                <div v-for="gestor in gestores" :key="gestor.ruta" style="position:relative"
+                    :class="['bg-white shadow-md rounded-lg overflow-hidden flex', { 'border-red-500 border-2': gestor.total_negociados == 0 }]">
+                    <div v-if="gestor.total_negociados == 0"
                         class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-tr-lg">
                         !
                     </div>
                     <div class="flex-1 border-r border-gray-200">
                         <div class="p-4">
                             <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
-                                {{ client.RUTA }} {{ client.CLIENTE }}
+                                {{ gestor.ruta }} {{ gestor.gv }}
                             </div>
                             <div class="text-xs pt-2 pl-4">
                                 <span class="font-bold">
                                     Clientes Negociados:
                                 </span>
-                                {{ client.N_PUERTAS }}
+                                {{ gestor.total_negociados }}
                             </div>
                         </div>
                     </div>
@@ -92,10 +92,10 @@
                         <div class="p-4 text-left">
                             <div class="text-sm text-black font-bold">Puertas negociadas</div>
                             <div class="text-xs mt-1 font-medium text-gray-500">
-                                Repotenciadas: {{ client.N_EDF }}
+                                Repotenciadas: {{ gestor.n_puertas_negociadas_repotenciadas }}
                             </div>
                             <div class="text-xs font-medium text-gray-500">
-                                Nuevas: {{ client.N_PUERTAS }}
+                                Nuevas: {{ gestor.n_puertas_negociadas_nuevas }}
                             </div>
                         </div>
                     </div>
@@ -117,7 +117,8 @@ export default {
         cuota: Number,
         pending: Number,
         supervisor: String, // Moved supervisor prop here,
-        progress: String
+        progress: String,
+        gestores: Array,
     },
     components: {
         GuestLayout

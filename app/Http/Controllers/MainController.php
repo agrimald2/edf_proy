@@ -60,10 +60,30 @@ class MainController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
-
     public function getInfoByMesa($mesa){     
         $cuota = Main::where('SV', $mesa)->first()->CUOTA ?? 'N/A';
         $clients = Main::where('SV', $mesa)->get();
+
+        $gestores = Main::select('RUTA', 'GV')
+            ->distinct()
+            ->get()
+            ->map(function($gestor) {
+                $ruta = $gestor->RUTA;
+                $gv = $gestor->GV;
+                $total_negociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->count();
+                $n_puertas_negociadas_repotenciadas = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->where('CONDICION', 'REPOTENCIADO')->sum('PUERTAS_A_NEGOCIAR');
+                $n_puertas_negociadas_nuevas = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->where('CONDICION', 'NUEVO')->sum('PUERTAS_A_NEGOCIAR');
+
+                return [
+                    'ruta' => $ruta,
+                    'gv' => $gv,
+                    'total_negociados' => $total_negociados,
+                    'n_puertas_negociadas_repotenciadas' => $n_puertas_negociadas_repotenciadas,
+                    'n_puertas_negociadas_nuevas' => $n_puertas_negociadas_nuevas,
+                ];
+            });
+
+        
         $negociados = Main::where('SV', $mesa)->where('NEGOCIADO', 'NEGOCIADO')->count();
         $noNegociados = Main::where('SV', $mesa)->where('NEGOCIADO', 'PENDIENTE')->count();
         $gv = Main::where('SV', $mesa)->first()->GV ?? 'N/A';
@@ -84,7 +104,8 @@ class MainController extends Controller
             'gv' => $gv,
             'cuota' => $cuota, 
             'pending' => $pending,
-            'progress' => $progress
+            'progress' => $progress,
+            'gestores' => $gestores
         ]); 
     } 
 
