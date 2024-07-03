@@ -208,9 +208,12 @@ export default {
                            permuta.gerente_status.toLowerCase() === 'rejected' ||
                            permuta.trade_status.toLowerCase() === 'rejected';
                 } else if (this.selectedFilter === 'pending') {
-                    return permuta.supervisor_status.toLowerCase() === 'pending' ||
-                           permuta.gerente_status.toLowerCase() === 'pending' ||
-                           permuta.trade_status.toLowerCase() === 'pending';
+                    return (permuta.supervisor_status.toLowerCase() === 'pending' ||
+                            permuta.gerente_status.toLowerCase() === 'pending' ||
+                            permuta.trade_status.toLowerCase() === 'pending') &&
+                           permuta.supervisor_status.toLowerCase() !== 'rejected' &&
+                           permuta.gerente_status.toLowerCase() !== 'rejected' &&
+                           permuta.trade_status.toLowerCase() !== 'rejected';
                 } else {
                     return true;
                 }
@@ -226,9 +229,12 @@ export default {
                                                    permuta.trade_status.toLowerCase() === 'approved').length;
         },
         pendingCount() {
-            return this.permutas.filter(permuta => permuta.supervisor_status.toLowerCase() === 'pending' ||
-                                                   permuta.gerente_status.toLowerCase() === 'pending' ||
-                                                   permuta.trade_status.toLowerCase() === 'pending').length;
+            return this.permutas.filter(permuta => (permuta.supervisor_status.toLowerCase() === 'pending' ||
+                                                    permuta.gerente_status.toLowerCase() === 'pending' ||
+                                                    permuta.trade_status.toLowerCase() === 'pending') &&
+                                                   permuta.supervisor_status.toLowerCase() !== 'rejected' &&
+                                                   permuta.gerente_status.toLowerCase() !== 'rejected' &&
+                                                   permuta.trade_status.toLowerCase() !== 'rejected').length;
         }
     },
     methods: {
