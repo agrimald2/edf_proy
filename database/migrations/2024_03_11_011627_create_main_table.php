@@ -27,8 +27,8 @@ return new class extends Migration
             $table->string('N_PUERTAS')->default('-');
             $table->string('CONDICION')->default('-');
             $table->string('PUERTAS_A_NEGOCIAR')->default('-');
-            $table->string('CONDICION_2')->default('-');
-            $table->string('PUERTAS_A_NEGOCIAR_2')->default('-');
+            $table->string('CONDICION_2')->nullable();
+            $table->string('PUERTAS_A_NEGOCIAR_2')->nullable();
             $table->string('NEGOCIADO')->default('NEGOCIADO');
             $table->string('STATUS')->nullable();
             $table->string('CUOTA')->default('0');
