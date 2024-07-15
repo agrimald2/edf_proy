@@ -16,10 +16,7 @@ const search = () => {
             <div class="w-full max-w-xs">
                 <form @submit.prevent="search" class="bg-white shadow-md rounded-lg px-8 pt-6 pb-4 mb-4">
                     <div class="text-center flex justify-center my-4">
-                        <img src="https://i.ibb.co/PzsS6Sq/Imagen1-2.png" alt="" style="width: 25%;">
-                    </div>
-                    <div class="text-center mb-2">
-                        <h1 class="text-4xl font-bold">AC Equipos</h1>
+                        <img src="/logo.png" alt="" style="width: 65%;">
                     </div>
                     <div class="mb-4 mt-6">
                         <input v-model="ruta"
