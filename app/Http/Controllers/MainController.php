@@ -105,10 +105,13 @@ class MainController extends Controller
         }
     }
     public function getInfoByMesa($mesa){     
+        $mesa = strtoupper($mesa);
         $cuota = Main::where('SV', $mesa)->first()->CUOTA ?? 'N/A';
+        $supervisor = Main::where('SV', $mesa)->first()->NOMBRE_SV ?? 'N/A';
         $clients = Main::where('SV', $mesa)->get();
-
+        
         $gestores = Main::select('RUTA', 'GV')
+            ->where('SV', 'LIKE', $mesa)
             ->distinct()
             ->get()
             ->map(function($gestor) {
@@ -153,7 +156,8 @@ class MainController extends Controller
             'cuota' => $cuota, 
             'pending' => $pending,
             'progress' => $progress,
-            'gestores' => $gestores
+            'gestores' => $gestores,
+            'supervisor' => $supervisor
         ]); 
     } 
 
