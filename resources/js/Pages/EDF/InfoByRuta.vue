@@ -186,10 +186,9 @@ const filteredNoNegociados = computed(() => {
                             <div v-if="client.NEGOCIADO == 'PENDIENTE'" class="flex-1 text-left">
                                 <div class="p-4 text-left">
                                     <div class="text-sm font-medium text-gray-500">Puedes negociar</div>
-                                    <div class="flex items-center mt-2">
-                                        <div class="text-sm font-semibold">EDF | {{ client.PUERTAS_A_NEGOCIAR }} Pts |
-                                            {{
-        client.CONDICION }}</div>
+                                    <div class="mb-2 flex items-center mt-2">
+                                        <div class="text-sm font-semibold">EDF | {{ client.PUERTAS_A_NEGOCIAR }} Pts | {{client.CONDICION }} </div>
+                                        <div v-if="client.PUERTAS_A_NEGOCIAR_2" class="text-sm font-semibold">EDF | {{ client.PUERTAS_A_NEGOCIAR_2 }} Pts | {{client.CONDICION_2 }} </div>
                                     </div>
                                     <a :href="`https://wa.link/ibba8o`" target="_blank"
                                         class="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-md">

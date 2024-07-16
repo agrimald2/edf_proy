@@ -204,7 +204,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                             @click="selectedFilter = 'todos'">Todos</button>
                         <button class="px-4 py-1 text-sm rounded-full border-black border-2"
                             :class="{ 'bg-black text-white': selectedFilter === 'pendientes', 'bg-white text-black': selectedFilter !== 'pendientes' }"
-                            @click="selectedFilter = 'pendientes'">No Negociados</button>
+                            @click="selectedFilter = 'pendientes'">Pendientes</button>
                         <button class="px-4 py-1 text-sm rounded-full border-black border-2"
                             :class="{ 'bg-black text-white': selectedFilter === 'negociados', 'bg-white text-black': selectedFilter !== 'negociados' }"
                             @click="selectedFilter = 'negociados'">Negociados</button>
@@ -213,15 +213,14 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
 
                 <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="flex flex-col gap-4">
-                        <div class="bg-white shadow-md rounded-lg overflow-hidden flex"
+                        <div class="bg-white shadow-md rounded-lg overflow-hidden flex border-2" :class="{ 'border-green-500': client.NEGOCIADO === 'NEGOCIADO', 'border-transparent': client.NEGOCIADO !== 'NEGOCIADO' }"
                             v-for="client in filteredClients">
                             <div class="flex-1 border-r border-gray-200">
                                 <div class="p-4">
-                                    <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
+                                    <div style="font-size:10px" class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
                                         {{ client.COD_CLIENTE }}
                                         - {{ client.CLIENTE }}</div>
-                                    <div class="text-sm"><i class="fa-solid fa-location-dot"></i> {{ client.DIRECCION }}
-                                    </div>
+                                    <div style="font-size:10px" class="text-sm">{{ client.DIRECCION.charAt(0).toUpperCase() + client.DIRECCION.slice(1).toLowerCase() }}</div>
                                     <div class="mt-2">
                                         <span v-if="client.N_EDF == 0"
                                             class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900">
@@ -230,6 +229,10 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                         <span v-else
                                             class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-200 dark:text-yellow-900">
                                             <i class="fa-solid fa-fax"></i> Cuenta con {{ client.N_EDF }} EDF
+                                        </span> <br />
+                                        <span v-if="client.STATUS === 'EN RUTA'"
+                                            class="text-green-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900">
+                                            <i class="fa-solid fa-calendar-days"></i> El EDF llega en 7 días
                                         </span>
                                     </div>
                                 </div>
@@ -237,12 +240,13 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                             <div v-if="client.NEGOCIADO == 'PENDIENTE'" class="flex-1 text-left">
                                 <div class="p-4 text-left">
                                     <div class="text-sm text-black font-bold">Puedes negociar</div>
-                                    <div class="text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR }} Puertas -
-                                        {{ client.CONDICION.charAt(0).toUpperCase() +
-        client.CONDICION.slice(1).toLowerCase() }}
-                                    </div>
+                                    <ul class="list-disc pl-3">
+                                        <li style="font-size:10px" class="text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR }} Puertas - {{ client.CONDICION.charAt(0).toUpperCase() + client.CONDICION.slice(1).toLowerCase() }}</li>
+                                        <li  v-if="client.PUERTAS_A_NEGOCIAR_2" style="font-size:10px" class="mb-2 text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR_2 }} Puertas - {{ client.CONDICION.charAt(0).toUpperCase() + client.CONDICION_2.slice(1).toLowerCase() }}</li>
+                                    </ul>
+                                    
                                     <a :href="`https://wa.link/ibba8o`" target="_blank"
-                                        class="ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-md">
+                                        class=" ml-auto bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-md">
                                         <i class="fa-brands fa-whatsapp"></i>
                                         Negociar EDF
                                     </a>
@@ -298,7 +302,6 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                         <div class="w-full items-center justify-left text-xs text-gray-500">
                                             <span v-if="client.STATUS === 'EN RUTA'" class="text-green-500">En Ruta</span> 
                                             <br />
-                                            <span v-if="client.STATUS === 'EN RUTA'" class="font-bold text-gray-400 text-xs text-center">Faltan <br /> 7 días</span>
                                         </div>
                                         <div class="flex w-full items-center justify-left text-xs text-gray-500">
                                             <span v-if="client.STATUS === 'ENTREGADO'" class="text-green-500">Entregado</span>
