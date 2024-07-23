@@ -151,6 +151,31 @@ class PermutaController extends Controller
         return response()->json($permutas);
     }
 
+    public function getSupervisorPendingPermutas($sv)
+    {
+        $permutas = Permuta::where('sv', $sv)
+                            ->where('instance_status', 'Supervisor')
+                            ->where('supervisor_status', 'Pending')
+                            ->with('location')
+                            ->get();
+        return response()->json($permutas);
+    }
+
+    public function getGerentePendingPermutas()
+    {
+        $user = Auth::user();
+
+        $permutas = Permuta::whereIn('instance_status', ['Gerente', 'Trade'])
+                            ->where('instance_status', 'Gerente')
+                            ->where('gerente_status', 'Pending')
+                            ->with(['location', 'location.subregion'])
+                            ->whereHas('location', function ($query) use ($user) {
+                                $query->where('user_id', $user->id);
+                            })
+                            ->get();
+        
+        return response()->json($permutas);
+    }
 
     /**
      * Get permutas with Gerente instance status.

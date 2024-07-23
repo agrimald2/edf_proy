@@ -31,6 +31,7 @@ Route::resource('permuta-reasons', PermutaReasonController::class);
 Route::get('gestor/{ruta}/permutas', [PermutaController::class, 'getGestorPermutas'])->name('permutas.gestor');
 
 Route::get('supervisor/{sv}/permutas', [PermutaController::class, 'getSupervisorPermutas'])->name('permutas.supervisor');
+Route::get('supervisor/{sv}/permutas/pending', [PermutaController::class, 'getSupervisorPendingPermutas'])->name('permutas.pending.supervisor');
 
 Route::get('trade/permutas', [PermutaController::class, 'getTradePermutas'])->name('permutas.trade');
 

@@ -10,6 +10,7 @@
                     </h2>
                     <p>Gestor <span v-if="gv !== 'N/A'" class="text-sm"> {{ gv }}</span></p>
                 </div>
+                <!-- 
                 <div class="flex items-center" style="margin-left: auto">
                     <span class="text-xs font-bold">Frecuencia:</span>
                     <select style="padding-right: 2rem;"
@@ -27,6 +28,7 @@
                         <i class="fa-solid fa-sign-out-alt mr-2"></i>
                     </button>
                 </div>
+                -->
             </div>
         </template>
         <div class="flex flex-col gap-4">

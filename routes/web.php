@@ -35,6 +35,8 @@ Route::middleware([
     Route::get('/gerente/dashboard', [GerenteController::class, 'index'])->name('gerente.dashboard');
     Route::get('/trade/dashboard', [TradeController::class, 'index'])->name('trade.dashboard');
     Route::get('/gerente/permutas', [PermutaController::class, 'getGerentePermutas'])->name('permutas.gerente');
+    Route::get('/gerente/permutas/pending', [GerenteController::class, 'showPermutasPendingList'])->name('permutas.pending.gerente');
+    Route::get('/gerente/permutas/pending/list', [PermutaController::class, 'getGerentePendingPermutas'])->name('permutas.pending.list.gerente');
 
     Route::get('/gerente/locations', [GerenteController::class, 'getGerenteLocations'])->name('locations.gerente');
 });
@@ -48,6 +50,7 @@ Route::get('/mesa/{mesa}/info', [MainController::class, 'getInfoByMesa'])->name(
 
 Route::get('/gestor/{ruta}/permutas', [GestorController::class, 'showPermutasList'])->name('gestor.permutas.list');
 Route::get('/supervisor/{mesa}/dashboard/permutas', [SupervisorController::class, 'showPermutasList'])->name('supervisor.permutas.list');
+Route::get('/supervisor/{mesa}/dashboard/permutas/pending', [SupervisorController::class, 'showPermutasPendingList'])->name('supervisor.permutas.pending.list');
 
 
 

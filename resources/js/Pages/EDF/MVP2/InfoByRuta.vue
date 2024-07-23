@@ -269,7 +269,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                             <span
                                                 :class="[
                                                     'flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0',
-                                                    client.STATUS === 'NEGOCIADO' ? 'bg-green-500 text-white' : client.STATUS === 'EN RUTA' || client.STATUS === 'ENTREGADO' ? 'bg-green-50 text-green-500' : 'bg-gray-50 text-gray-300'
+                                                    client.STATUS === 'NEGOCIADO' || client.STATUS === 'EN RUTA' || client.STATUS === 'ENTREGADO' ? 'bg-green-500 text-white' : 'bg-gray-50 text-gray-300'
                                                 ]">
                                                 <i class="fa-solid fa-handshake text-xs"></i>
                                             </span>
@@ -279,7 +279,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                             <span
                                                 :class="[
                                                     'flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0',
-                                                    client.STATUS === 'EN RUTA' ? 'bg-green-500 text-white' : client.STATUS === 'ENTREGADO' ? 'bg-green-50 text-green-500' : 'bg-gray-50 text-gray-300'
+                                                    client.STATUS === 'EN RUTA' || client.STATUS === 'ENTREGADO' ? 'bg-green-500 text-white' : 'bg-gray-50 text-gray-300'
                                                 ]">
                                                 <i class="fa-solid fa-arrows-rotate text-xs"></i>
                                             </span>
@@ -316,5 +316,3 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
         </div>
     </GuestLayout>
 </template>
-
-

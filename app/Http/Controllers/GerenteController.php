@@ -24,6 +24,12 @@ class GerenteController extends Controller
         ]); 
     } 
 
+    public function showPermutasPendingList(){     
+        return Inertia::render('Gerente/Permutas/PendingApproval', [
+                'supervisor' => 'Alonso',
+        ]); 
+    } 
+
     public function getGerenteLocations() {
         $user = Auth::user();
         $userId = Auth::id();
@@ -33,5 +39,19 @@ class GerenteController extends Controller
         Log::debug($userId);
         Log::debug($locations);
         return response()->json($locations);
+    }
+
+    public function getPermutasPendingList()
+    {
+        $user = Auth::user();
+
+        $permutas = Permuta::whereIn('instance_status', ['Gerente', 'Trade'])
+                            ->with(['location', 'location.subregion'])
+                            ->whereHas('location', function ($query) use ($user) {
+                                $query->where('user_id', $user->id);
+                            })
+                            ->get();
+        
+        return response()->json($permutas);
     }
 }
