@@ -256,6 +256,10 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                 <div class="p-4 text-left">
                                     <div class="text-sm font-medium text-black font-semibold">
                                         <i class="fa-solid fa-circle-check mr-2"></i>Has Negociado
+                                        <ul class="list-disc pl-3">
+                                            <li style="font-size:10px" class="text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR }} Puertas - {{ client.CONDICION.charAt(0).toUpperCase() + client.CONDICION.slice(1).toLowerCase() }}</li>
+                                            <li  v-if="client.PUERTAS_A_NEGOCIAR_2" style="font-size:10px" class="mb-2 text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR_2 }} Puertas - {{ client.CONDICION.charAt(0).toUpperCase() + client.CONDICION_2.slice(1).toLowerCase() }}</li>
+                                        </ul>
                                     </div>
                                     <div class="flex items-center mt-2">
                                         <div class="text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR }} Puertas -
