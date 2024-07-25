@@ -261,12 +261,6 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                             <li  v-if="client.PUERTAS_A_NEGOCIAR_2" style="font-size:10px" class="mb-2 text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR_2 }} Puertas - {{ client.CONDICION.charAt(0).toUpperCase() + client.CONDICION_2.slice(1).toLowerCase() }}</li>
                                         </ul>
                                     </div>
-                                    <div class="flex items-center mt-2">
-                                        <div class="text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR }} Puertas -
-                                            {{ client.CONDICION.charAt(0).toUpperCase() +
-        client.CONDICION.slice(1).toLowerCase() }}
-                                        </div>
-                                    </div>
                                     <ol class="flex items-center w-full mt-4">
                                         <!-- NEGOCIADO -->
                                         <li class="flex w-full items-center after:content-[''] after:w-full after:h-0.5 after:border-b after:border-gray-200 after:border-2 after:inline-block">
