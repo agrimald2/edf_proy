@@ -44,8 +44,8 @@ class SupervisorController extends Controller
                 $ruta = $gestor->RUTA;
                 $gv = $gestor->GV;
                 $total_negociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->count();
-                $n_puertas_negociadas_repotenciadas = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->where('CONDICION', 'REPOTENCIADO')->sum('PUERTAS_A_NEGOCIAR');
-                $n_puertas_negociadas_nuevas = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->where('CONDICION', 'NUEVO')->sum('PUERTAS_A_NEGOCIAR');
+                $n_puertas_negociadas_repotenciadas = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->where('CONDICION', 'REPOTENCIADO')->sum('N_PUERTAS');
+                $n_puertas_negociadas_nuevas = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->where('CONDICION', 'NUEVO')->sum('N_PUERTAS');
 
                 return [
                     'ruta' => $ruta,
