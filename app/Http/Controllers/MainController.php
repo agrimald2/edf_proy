@@ -117,9 +117,22 @@ class MainController extends Controller
             ->map(function($gestor) {
                 $ruta = $gestor->RUTA;
                 $gv = $gestor->GV;
-                $total_negociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->count();
-                $n_puertas_negociadas_repotenciadas = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->where('CONDICION', 'REPOTENCIADO')->sum('N_PUERTAS');
-                $n_puertas_negociadas_nuevas = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->where('CONDICION', 'NUEVO')->sum('N_PUERTAS');
+                $total_negociados = Main::where('RUTA', $ruta)
+                    ->where('NEGOCIADO', 'NEGOCIADO')
+                    ->distinct('COD_CLIENTE')
+                    ->count('COD_CLIENTE');
+            
+                    
+                $$n_puertas_negociadas_repotenciadas  = Main::where('RUTA', $ruta)
+                    ->where('NEGOCIADO', 'NEGOCIADO')
+                    ->distinct('COD_CLIENTE')
+                    ->sum('PUERTAS_A_NEGOCIAR');
+
+                $n_puertas_negociadas_nuevas = Main::where('RUTA', $ruta)
+                    ->where('NEGOCIADO', 'NEGOCIADO')
+                    ->distinct('COD_CLIENTE')
+                    ->sum('PUERTAS_A_NEGOCIAR_2');
+                
 
                 return [
                     'ruta' => $ruta,
