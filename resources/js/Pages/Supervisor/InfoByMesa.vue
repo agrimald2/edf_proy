@@ -63,10 +63,10 @@
                 @click="selectedFilter = 'todos'">Todos</button>
             <button class="px-3 py-1 text-xs rounded-full border-black border-2"
                 :class="{ 'bg-black text-white': selectedFilter === 'pendientes', 'bg-white text-black': selectedFilter !== 'pendientes' }"
-                @click="selectedFilter = 'pendientes'">Con avance</button>
+                @click="selectedFilter = 'pendientes'">Sin avance</button>
             <button class="px-3 py-1 text-xs rounded-full border-black border-2"
                 :class="{ 'bg-black text-white': selectedFilter === 'negociados', 'bg-white text-black': selectedFilter !== 'negociados' }"
-                @click="selectedFilter = 'negociados'">Sin avance</button>
+                @click="selectedFilter = 'negociados'">Con avance</button>
         </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="flex flex-col gap-4">
