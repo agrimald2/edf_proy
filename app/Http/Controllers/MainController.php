@@ -122,8 +122,8 @@ class MainController extends Controller
                     ->distinct('COD_CLIENTE')
                     ->count('COD_CLIENTE');
             
-                    
-                $$n_puertas_negociadas_repotenciadas  = Main::where('RUTA', $ruta)
+
+                $n_puertas_negociadas_repotenciadas  = Main::where('RUTA', $ruta)
                     ->where('NEGOCIADO', 'NEGOCIADO')
                     ->distinct('COD_CLIENTE')
                     ->sum('PUERTAS_A_NEGOCIAR');
