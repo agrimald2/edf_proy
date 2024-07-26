@@ -234,11 +234,8 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                             class="text-green-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900">
                                             <i class="fa-solid fa-calendar-days"></i>
                                             <span v-if="client.dias_restantes >= 0">
-                                                <span v-if="client.STATUS === 'EN RUTA'">
+                                                <span>
                                                     El EDF llega en {{client.dias_restantes}} días
-                                                </span>
-                                                <span v-else>
-                                                    El EDF llega en {{client.dias_restantes + 4}} días
                                                 </span>
                                             </span>
                                             <span v-else class="text-red-600">

@@ -42,36 +42,106 @@ class MainController extends Controller
                                 ->where('NEGOCIADO', 'NEGOCIADO')
                                 ->count();
 
+
         $clients = $clients->map(function($client) {
+            $condition = 'NUEVO';
+            $dias_restantes = 0;
+            
+            Log::debug($client->COD_CLIENTE);
+            
+            if($client->PUERTAS_A_NEGOCIAR > 0){
+                $condition = 'REPOTENCIADO';
+            } 
+            
+            log::debug("Locacion: " . $client->LOCACION);
+            log::debug("Taller: " . $client->TALLER);
+            log::debug("Condicion: " . $condition);
+
+            
             $delay_time = WorkshopLocationDay::where('LOCACION', $client->LOCACION)
                                              ->where('TALLER', $client->TALLER)
-                                             ->where('CONDICION', $client->CONDICION)
+                                             ->where('CONDICION', $condition)
                                              ->first();
-
-            if ($delay_time) {
-                $delay_time = $delay_time->TIEMPO;
-            } else {
-                $delay_time = 0;
+            if (!is_int($delay_time)) {
+                $delay_time = $delay_time->TIEMPO ?? 0;
             }
 
-            log::debug($delay_time);
+            if($client->NEGOCIADO == 'NEGOCIADO' && $client->STATUS == 'NEGOCIADO'){
+               $delay_time = WorkshopLocationDay::where('LOCACION', $client->LOCACION)
+                                                ->max('TIEMPO');
+                
+                if (!is_int($delay_time)) {
+                    $delay_time = $delay_time->TIEMPO ?? 0;
+                }
+            }
+
+            if($client->NEGOCIADO == 'NEGOCIADO' && $client->STATUS == 'EN RUTA'){
+                log::debug($delay_time);
+                if (!is_int($delay_time)) {
+                    $delay_time = $delay_time->TIEMPO ?? 0;
+                }
+            }
+            
+            if (!$delay_time) {
+                $delay_time = 0;
+            }
+            
+            if($client->NEGOCIADO == 'NEGOCIADO' && $client->STATUS == 'NEGOCIADO'){
+                $delay_time = $delay_time + 4;
+            }
+            
+            log::debug("Días a sumar: " . $delay_time);
 
             $fecha_negociado = $client->FECHA_NEGOCIADO;
 
             if ($fecha_negociado) {
                 $fecha_negociado_date = \Carbon\Carbon::createFromFormat('Y-m-d', $fecha_negociado);
+                Log::debug("Fecha Negociado: " . $fecha_negociado_date);
                 $fecha_actual = \Carbon\Carbon::now();
-                $dias_pasados = $fecha_actual->diffInDays($fecha_negociado_date);
-            } else {
-                $dias_pasados = 0;
+                Log::debug("Fecha Actual " . $fecha_actual);
+                
+                $fecha_estimada = $fecha_negociado_date->copy();
+                $dias_habiles_sumados = 0;
+
+                while ($dias_habiles_sumados < $delay_time) {
+                    $fecha_estimada->addDay();
+                    if (!$fecha_estimada->isWeekend()) {
+                        $dias_habiles_sumados++;
+                    }
+                }
+
+                Log::debug("Fecha Estimada: " . $fecha_estimada);
+
+                // Calculate remaining business days
+                $dias_restantes = 0;
+                $temp_date = $fecha_actual->copy();
+
+                while ($temp_date->lessThan($fecha_estimada)) {
+                    if (!$temp_date->isWeekend()) {
+                        $dias_restantes++;
+                    }
+                    $temp_date->addDay();
+                }
+
+                // If the estimated date is in the past, calculate negative business days
+                if ($fecha_actual->greaterThan($fecha_estimada)) {
+                    $dias_restantes = 0;
+                    $temp_date = $fecha_estimada->copy();
+
+                    while ($temp_date->lessThan($fecha_actual)) {
+                        if (!$temp_date->isWeekend()) {
+                            $dias_restantes--;
+                        }
+                        $temp_date->addDay();
+                    }
+                }
             }
+            
+            $dias_restantes = $dias_restantes+1;
 
-            $dias_restantes = $delay_time - $dias_pasados;
             log::debug("Días restantes: " . $dias_restantes);
-
-            $client->delay_time = $delay_time;
-            $client->dias_pasados = $dias_pasados;
-            $client->dias_restantes = $dias_restantes < 7 ? 7 : ($dias_restantes > 9 ? 9 : $dias_restantes);
+            
+            $client->dias_restantes = $dias_restantes;
 
             return $client;
         });
