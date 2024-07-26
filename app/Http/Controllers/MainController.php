@@ -71,7 +71,7 @@ class MainController extends Controller
 
             $client->delay_time = $delay_time;
             $client->dias_pasados = $dias_pasados;
-            $client->dias_restantes = $dias_restantes;
+            $client->dias_restantes = $dias_restantes < 7 ? 7 : ($dias_restantes > 9 ? 9 : $dias_restantes);
 
             return $client;
         });
