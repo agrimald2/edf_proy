@@ -232,7 +232,13 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                         </span> <br />
                                         <span v-if="client.STATUS === 'EN RUTA'"
                                             class="text-green-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900">
-                                            <i class="fa-solid fa-calendar-days"></i> El EDF llega en 7 días
+                                            <i class="fa-solid fa-calendar-days"></i>
+                                            <span v-if="client.dias_restantes >= 0">
+                                                El EDF llega en {{client.dias_restantes}} días
+                                            </span>
+                                            <span v-else class="text-red-600">
+                                                El EDF debió llegar hace {{ Math.abs(client.dias_restantes) }} días
+                                            </span>
                                         </span>
                                     </div>
                                 </div>

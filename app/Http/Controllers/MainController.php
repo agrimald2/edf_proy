@@ -8,6 +8,7 @@ use App\Models\Main;
 use App\Models\SubRegion;
 use App\Models\Location;
 use App\Models\Region;
+use App\Models\WorkshopLocationDay;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\MainImport;
@@ -21,17 +22,60 @@ class MainController extends Controller
 
     public function getInfoByRuta($ruta){
         
-        $cuota = Main::where('RUTA', $ruta)->first()->CUOTA ?? 'N/A' ;
         $clients = Main::where('RUTA', $ruta)->get();
+        $cuota = $clients->first()->CUOTA ?? 'N/A';
 
-        $negociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->distinct('COD_CLIENTE')->count('COD_CLIENTE');
-        $noNegociados = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'PENDIENTE')->distinct('COD_CLIENTE')->count('COD_CLIENTE');
+        $negociados = Main::where('RUTA', $ruta)
+                          ->where('NEGOCIADO', 'NEGOCIADO')
+                          ->distinct('COD_CLIENTE')
+                          ->count('COD_CLIENTE');
 
-        $gv = Main::where('RUTA', $ruta)->first()->GV ?? 'N/A';
-        $sv = Main::where('RUTA', $ruta)->first()->SV ?? 'N/A';
+        $noNegociados = Main::where('RUTA', $ruta)
+                             ->where('NEGOCIADO', 'PENDIENTE')
+                             ->distinct('COD_CLIENTE')
+                             ->count('COD_CLIENTE');
 
-        $negociated_by_sv = Main::where('SV', $sv)->where('NEGOCIADO', 'NEGOCIADO')->count();;
+        $gv = $clients->first()->GV ?? 'N/A';
+        $sv = $clients->first()->SV ?? 'N/A';
 
+        $negociated_by_sv = Main::where('SV', $sv)
+                                ->where('NEGOCIADO', 'NEGOCIADO')
+                                ->count();
+
+        $clients = $clients->map(function($client) {
+            $delay_time = WorkshopLocationDay::where('LOCACION', $client->LOCACION)
+                                             ->where('TALLER', $client->TALLER)
+                                             ->where('CONDICION', $client->CONDICION)
+                                             ->first();
+
+            if ($delay_time) {
+                $delay_time = $delay_time->TIEMPO;
+            } else {
+                $delay_time = 0;
+            }
+
+            log::debug($delay_time);
+
+            $fecha_negociado = $client->FECHA_NEGOCIADO;
+
+            if ($fecha_negociado) {
+                $fecha_negociado_date = \Carbon\Carbon::createFromFormat('Y-m-d', $fecha_negociado);
+                $fecha_actual = \Carbon\Carbon::now();
+                $dias_pasados = $fecha_actual->diffInDays($fecha_negociado_date);
+            } else {
+                $dias_pasados = 0;
+            }
+
+            $dias_restantes = $delay_time - $dias_pasados;
+            log::debug("Días restantes: " . $dias_restantes);
+
+            $client->delay_time = $delay_time;
+            $client->dias_pasados = $dias_pasados;
+            $client->dias_restantes = $dias_restantes;
+
+            return $client;
+        });
+        
         $pending = is_numeric($cuota) ? $cuota - $negociated_by_sv : 'N/A';
         if (is_numeric($pending) && $pending < 0) {
             $pending = 0; // Ensure pending is not negative
