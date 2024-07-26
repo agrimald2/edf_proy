@@ -230,11 +230,16 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                             class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-200 dark:text-yellow-900">
                                             <i class="fa-solid fa-fax"></i> Cuenta con {{ client.N_EDF }} EDF
                                         </span> <br />
-                                        <span v-if="client.STATUS === 'EN RUTA'"
+                                        <span v-if="client.STATUS === 'EN RUTA' || client.STATUS === 'NEGOCIADO'"
                                             class="text-green-600 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-red-200 dark:text-red-900">
                                             <i class="fa-solid fa-calendar-days"></i>
                                             <span v-if="client.dias_restantes >= 0">
-                                                El EDF llega en {{client.dias_restantes}} días
+                                                <span v-if="client.STATUS === 'EN RUTA'">
+                                                    El EDF llega en {{client.dias_restantes}} días
+                                                </span>
+                                                <span v-else>
+                                                    El EDF llega en {{client.dias_restantes + 4}} días
+                                                </span>
                                             </span>
                                             <span v-else class="text-red-600">
                                                 El EDF debió llegar hace {{ Math.abs(client.dias_restantes) }} días
