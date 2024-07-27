@@ -236,8 +236,19 @@ class MainController extends Controller
                     ->distinct('COD_CLIENTE')
                     ->count('COD_CLIENTE');
             
-                $n_puertas_negociadas_repotenciadas = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->where('CONDICION', 'REPOTENCIADO')->sum('N_PUERTAS');
-                $n_puertas_negociadas_nuevas = Main::where('RUTA', $ruta)->where('NEGOCIADO', 'NEGOCIADO')->where('CONDICION', 'NUEVO')->sum('N_PUERTAS');
+                $n_puertas_negociadas_repotenciadas = Main::where('RUTA', $ruta)
+                    ->where('NEGOCIADO', 'NEGOCIADO')
+                    ->where('CONDICION', 'REPOTENCIADO')
+                    ->get()
+                    ->unique('COD_CLIENTE')
+                    ->sum('PUERTAS_A_NEGOCIAR');
+
+                $n_puertas_negociadas_nuevas = Main::where('RUTA', $ruta)
+                    ->where('NEGOCIADO', 'NEGOCIADO')
+                    ->where('CONDICION_2', 'NUEVO')
+                    ->get()
+                    ->unique('COD_CLIENTE')
+                    ->sum('PUERTAS_A_NEGOCIAR_2');
 
                 /*
                 $n_puertas_negociadas_repotenciadas  = Main::where('RUTA', $ruta)
