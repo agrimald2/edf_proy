@@ -12,7 +12,10 @@
             </h2>
         </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
-            <div class="flex flex-col gap-4">
+            <div v-if="sortedPermutas.length === 0" class="text-center text-gray-500">
+                No hay permutas por aprobar.
+            </div>
+            <div v-else class="flex flex-col gap-4">
                 <PendingPermutaItem
                     v-for="permuta in sortedPermutas"
                     :key="permuta.id"

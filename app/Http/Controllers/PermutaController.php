@@ -198,7 +198,9 @@ class PermutaController extends Controller
      */
     public function getTradePermutas()
     {
-        $permutas = Permuta::where('instance_status', 'Trade')->with('location')->get();
+        $permutas = Permuta::where('instance_status', 'Trade')
+                            ->with(['location', 'location.subregion.region'])
+                            ->get();
         return response()->json($permutas);
     }
 

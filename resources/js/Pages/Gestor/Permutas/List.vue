@@ -2,89 +2,61 @@
     <GuestLayout :title="`Permutas | EDF`">
         <AddPermutaModal v-if="showAddPermutaModal" @close="closeAddPermutaModal" :sv="sv" :ruta="route"
             :location_id="location_id" />
-        <template #header>
-            <div class="grid grid-cols-2 gap-4 items-center">
-                <div>
-                    <h2 class="font-bold text-sm text-black leading-tight">
-                        ¡Hola!
-                    </h2>
-                    <p>Gestor <span v-if="gv !== 'N/A'" class="text-sm"> {{ gv }}</span></p>
-                </div>
-                <!-- 
-                <div class="flex items-center" style="margin-left: auto">
-                    <span class="text-xs font-bold">Frecuencia:</span>
-                    <select style="padding-right: 2rem;"
-                        class="block mt-1 border-none rounded focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm">
-                        <option value="lunes">Lunes</option>
-                        <option value="martes">Martes</option>
-                        <option value="miércoles">Miércoles</option>
-                        <option value="jueves">Jueves</option>
-                        <option value="viernes">Viernes</option>
-                        <option value="sábado">Sábado</option>
-                        <option value="domingo">Domingo</option>
-                    </select>
-                    <button @click="logout"
-                        class="absolute top-2 right-0 ml-4 flex items-center text-sm font-bold text-red-600">
-                        <i class="fa-solid fa-sign-out-alt mr-2"></i>
-                    </button>
-                </div>
-                -->
+        <div class="flex items-center justify-between px-4 py-2 bg-white shadow-md border-b border-gray-200">
+            <button @click="goBack()" class="text-black text-sm hover:text-gray-800">
+                <i class="fa-solid fa-chevron-left font-bold"></i>
+            </button>
+            <h3 class="text-center text-sm font-bold text-gray-800 flex-1">Permutas</h3>
+        </div>
+        <div class="flex flex-row gap-2 bg-white shadow-md rounded-lg overflow-hidden p-2 items-center">
+            <div class="flex-1 text-center text-xs">
+                <span class="font-bold"> Aprobadas: </span> {{ approvedCount }}
             </div>
-        </template>
-        <div class="flex flex-col gap-4">
-            <div class="bg-white shadow-md rounded-lg overflow-hidden flex">
-                <div class="flex-1 border-r border-gray-200">
-                    <div class="p-4">
-                        <div class="text-sm font-semibold"><i class="fa-solid fa-check-circle text-green-500"></i>
-                            Aprobadas
-                        </div>
-                        <div class="text-xs pt-2 pl-4">
-                            <span class="font-bold">
-                                Cantidad:
-                            </span>
-                            {{ approvedCount }}
-                        </div>
-                    </div>
-                </div>
-                <div class="flex-1 text-left">
-                    <div class="p-4 text-left">
-                        <div class="text-sm text-black font-bold"><i class="fa-solid fa-clock text-yellow-500"></i>
-                            Pendientes
-                        </div>
-                        <div class="text-xs mt-1 font-medium text-gray-500">
-                            Cantidad: {{ pendingCount }}
-                        </div>
-                    </div>
-                </div>
+            <div class="flex-1 text-center text-xs text-black">
+                <span class="font-bold">Pendientes: </span> {{ pendingCount }}
+            </div>
+            <div class="flex-1 text-center">
+                <label class="text-xs font-semibold mr-2">Mes:</label>
+                <select v-model="selectedMonth" class="border border-gray-300 rounded-md text-xs p-1 px-2">
+                    <option selected value="todos">todos</option>
+                    <option value="enero">Ene</option>
+                    <option value="febrero">Feb</option>
+                    <option value="marzo">Mar</option>
+                    <option value="abril">Abr</option>
+                    <option value="mayo">May</option>
+                    <option value="junio">Jun</option>
+                    <option value="julio">Jul</option>
+                    <option value="agosto">Ago</option>
+                    <option value="septiembre">Sep</option>
+                    <option value="octubre">Oct</option>
+                    <option value="noviembre">Nov</option>
+                    <option value="diciembre">Dic</option>
+                </select>
             </div>
         </div>
-        <div class="px-2 my-2">
-            <button @click="openAddPermutaModal"
-                class="bg-black text-white px-4 py-1 rounded-lg shadow-lg flex-1 font-bold">
-                <i class="fa-solid fa-plus mr-2"></i>Ingresar permuta
-            </button>
+        <div class="px-2 flex justify-between items-center my-4">
+            <h2 class="font-bold text-sm text-black leading-tight">
+                Lista de Permutas
+            </h2>
         </div>
         <div class="px-2">
-            <div class="relative mx-auto text-gray-600 w-full">
-                <h2 class="font-bold text-sm text-black leading-tight pt-4 pb-2">
-                    Lista de Permutas
-                </h2>
+            <div class="relative text-gray-600 w-full">
                 <input
                     class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none w-full"
                     type="search" name="search" placeholder="Buscar" v-model="searchQuery">
             </div>
         </div>
         <div class="flex gap-2 my-4 px-2">
-            <button class="px-3 py-1 text-sm rounded-full border-black border-2"
+            <button class="px-3 py-1 text-xxs rounded-full border-black border-2"
                 :class="{ 'bg-black text-white': selectedFilter === 'todos', 'bg-white text-black': selectedFilter !== 'todos' }"
                 @click="selectedFilter = 'todos'">Todos</button>
-            <button class="px-3 py-1 text-sm rounded-full border-black border-2"
+            <button class="px-3 py-1 text-xxs rounded-full border-black border-2"
                 :class="{ 'bg-black text-white': selectedFilter === 'approved', 'bg-white text-black': selectedFilter !== 'approved' }"
                 @click="selectedFilter = 'approved'">Aprobadas</button>
-            <button class="px-3 py-1 text-sm rounded-full border-black border-2"
+            <button class="px-3 py-1 text-xxs rounded-full border-black border-2"
                 :class="{ 'bg-black text-white': selectedFilter === 'rejected', 'bg-white text-black': selectedFilter !== 'rejected' }"
                 @click="selectedFilter = 'rejected'">Rechazadas</button>
-            <button class="px-3 py-1 text-sm rounded-full border-black border-2"
+            <button class="px-3 py-1 text-xxs rounded-full border-black border-2"
                 :class="{ 'bg-black text-white': selectedFilter === 'pending', 'bg-white text-black': selectedFilter !== 'pending' }"
                 @click="selectedFilter = 'pending'">Pendientes</button>
         </div>
@@ -98,6 +70,20 @@
                                 {{ permuta.cod_cliente }} - {{ permuta.location.name }}
                             </div>
                             <div class="text-xs flex items-center justify-between">
+                                <div :class="{
+                                    'bg-green-100 rounded pt-1 pl-1 pb-1 pr-2 flex-3/4': permuta.trade_status === 'Approved',
+                                    'bg-red-100 rounded pt-1 pl-1 pb-1 pr-2 flex-3/4': permuta.trade_status === 'Rejected',
+                                    'bg-gray-100 rounded pt-1 pl-1 pb-1 pr-2 flex-3/4': permuta.trade_status === 'Pending'
+                                }">
+                                    <i :class="{
+                                        'fa-solid fa-check text-green-500': permuta.trade_status === 'Approved',
+                                        'fa-solid fa-times text-red-500': permuta.trade_status === 'Rejected',
+                                        'fa-solid fa-clock text-gray-500': permuta.trade_status === 'Pending'
+                                    }"></i>
+                                    <span v-if="permuta.trade_status === 'Approved'"> Aprobado</span>
+                                    <span v-if="permuta.trade_status === 'Rejected'"> Rechazado</span>
+                                    <span v-if="permuta.trade_status === 'Pending'"> Pendiente</span>
+                                </div>
                                 <div class="bg-gray-100 rounded pt-1 pl-1 pb-1 pr-2 flex-3/4">
                                     <i class="fa-brands fa-square-letterboxd"></i>
                                     {{ permuta.volume }} CU
@@ -206,6 +192,7 @@ export default {
                 month: 'short', day: 'numeric'
             }).replace(/^\w/, c => c.toUpperCase()),
             selectedFilter: 'todos',
+            selectedMonth: 'todos',
             permutas: [],
             searchQuery: '',
             showDetailModal: false,
@@ -273,20 +260,11 @@ export default {
             this.selectedPermuta = permuta;
             this.showDetailModal = true;
         },
-        logout() {
-            axios.post('/logout')
-                .then(response => {
-                    window.location.href = '/login';
-                })
-                .catch(error => {
-                    console.error('Error during logout:', error);
-                });
+        goBack() {
+            window.history.back();
         },
-        openAddPermutaModal() {
-            this.showAddPermutaModal = true;
-        },
-        closeAddPermutaModal() {
-            this.showAddPermutaModal = false;
+        goToPendingPermutas() {
+            window.location.href = `/gestor/${this.route}/dashboard/permutas/pending`;
         }
     },
     mounted() {

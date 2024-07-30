@@ -15,6 +15,7 @@
                         <p class="font-semibold mb-2">Información del cliente</p>
                         <div class="space-y-2">
                             <p><span class="font-medium">Código de cliente:</span> {{ formData.clientCode }}</p>
+                            <p><span class="font-medium">Fecha de permuta:</span> {{ formData.date }}</p>
                             <p><span class="font-medium">Volumen en CU:</span> {{ formData.volumeCU }}</p>
                             <p><span class="font-medium">Locación:</span> {{ formData.location }}</p>
                             <p><span class="font-medium">Ruta:</span> {{ formData.route }}</p>
@@ -105,6 +106,11 @@ export default {
     data() {
         return {
             formData: {
+                date: new Date(this.permuta.created_at).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }),
                 clientCode: this.permuta.cod_cliente,
                 volumeCU: this.permuta.volume,
                 location: this.permuta.location.name,

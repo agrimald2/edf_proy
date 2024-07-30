@@ -80,6 +80,16 @@
                 :class="{ 'bg-black text-white': selectedFilter === 'pending', 'bg-white text-black': selectedFilter !== 'pending' }"
                 @click="selectedFilter = 'pending'">Pendientes</button>
         </div>
+        <div class="flex gap-2 my-4 px-2">
+            <select v-model="selectedRegion" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <option value="">Todas las Regiones</option>
+                <option v-for="region in regions" :key="region.id" :value="region.name">{{ region.name }}</option>
+            </select>
+            <select v-model="selectedLocation" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <option value="">Todas las Localidades</option>
+                <option v-for="location in locations" :key="location.id" :value="location.name">{{ location.name }}</option>
+            </select>
+        </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="flex flex-col gap-4">
                 <div v-for="permuta in filteredPermutas" :key="permuta.id"
@@ -127,6 +137,7 @@
         </div>
     </GuestLayout>
 </template>
+
 <script>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import PermutaDetails from './PermutaDetails.vue';
@@ -145,7 +156,11 @@ export default {
                 month: 'short', day: 'numeric'
             }).replace(/^\w/, c => c.toUpperCase()),
             selectedFilter: 'todos',
+            selectedRegion: '',
+            selectedLocation: '',
             permutas: [],
+            regions: [],
+            locations: [],
             searchQuery: '',
             showDetailModal: false,
             selectedPermuta: null
@@ -154,7 +169,9 @@ export default {
     computed: {
         filteredPermutas() {
             return this.permutas.filter(permuta => {
-                return this.selectedFilter === 'todos' || permuta.trade_status.toLowerCase() === this.selectedFilter;
+                return (this.selectedFilter === 'todos' || permuta.trade_status.toLowerCase() === this.selectedFilter) &&
+                       (this.selectedRegion === '' || permuta.location.subregion.region.name === this.selectedRegion) &&
+                       (this.selectedLocation === '' || permuta.location.name === this.selectedLocation);
             }).filter(permuta => {
                 return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery);
             });
@@ -173,6 +190,22 @@ export default {
                 this.permutas = response.data;
             } catch (error) {
                 console.error('Error fetching permutas:', error);
+            }
+        },
+        async getRegions() {
+            try {
+                const response = await axios.get('/api/regions');
+                this.regions = response.data;
+            } catch (error) {
+                console.error('Error fetching regions:', error);
+            }
+        },
+        async getLocations() {
+            try {
+                const response = await axios.get('/api/locations');
+                this.locations = response.data;
+            } catch (error) {
+                console.error('Error fetching locations:', error);
             }
         },
         statusClass(trade_status) {
@@ -215,6 +248,8 @@ export default {
     },
     mounted() {
         this.getPermutas();
+        this.getRegions();
+        this.getLocations();
     }
 };
 </script>
