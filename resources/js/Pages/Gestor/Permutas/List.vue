@@ -271,6 +271,12 @@ export default {
         },
         goToPendingPermutas() {
             window.location.href = `/gestor/${this.route}/dashboard/permutas/pending`;
+        },
+        openAddPermutaModal() {
+            this.showAddPermutaModal = true; 
+        },
+        closeAddPermutaModal() {
+            this.showAddPermutaModal = false;
         }
     },
     mounted() {
