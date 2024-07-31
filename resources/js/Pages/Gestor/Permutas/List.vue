@@ -35,9 +35,15 @@
             </div>
         </div>
         <div class="px-2 flex justify-between items-center my-4">
+            
             <h2 class="font-bold text-sm text-black leading-tight">
                 Lista de Permutas
             </h2>
+
+            <button @click="openAddPermutaModal"
+                class="bg-black text-white px-2 py-1 rounded-lg shadow-lg font-bold ml-auto">
+                <i class="fa-solid fa-plus mr-2"></i>Ingresar permuta
+            </button>
         </div>
         <div class="px-2">
             <div class="relative text-gray-600 w-full">
