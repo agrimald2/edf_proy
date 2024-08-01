@@ -1,7 +1,7 @@
 <template>
     <GuestLayout :title="`Permutas | EDF`">
         <div class="flex items-center justify-between px-4 py-2 bg-white shadow-md border-b border-gray-200">
-            <h3 class="text-center text-sm font-bold text-gray-800 flex-1">Hola Carla!</h3>
+            <h3 class="text-center text-sm font-bold text-gray-800 flex-1">¡Hola Carla Estrada!</h3>
         </div>
         <div class="flex flex-row gap-2 bg-white shadow-md rounded-lg overflow-hidden p-2 items-center">
             <div class="flex-1 text-center text-xs">
@@ -40,16 +40,16 @@
             </div>
         </div>
         <div class="flex gap-2 my-4 px-2">
-            <button class="px-3 py-1 text-sm rounded-full border-black border-2"
+            <button class="px-2 py-1 text-xs rounded-full border-black border-2"
                 :class="{ 'bg-black text-white': selectedFilter === 'todos', 'bg-white text-black': selectedFilter !== 'todos' }"
                 @click="selectedFilter = 'todos'">Todos</button>
-            <button class="px-3 py-1 text-sm rounded-full border-black border-2"
+            <button class="px-2 py-1 text-xs rounded-full border-black border-2"
                 :class="{ 'bg-black text-white': selectedFilter === 'approved', 'bg-white text-black': selectedFilter !== 'approved' }"
                 @click="selectedFilter = 'approved'">Aprobadas</button>
-            <button class="px-3 py-1 text-sm rounded-full border-black border-2"
+            <button class="px-2 py-1 text-xs rounded-full border-black border-2"
                 :class="{ 'bg-black text-white': selectedFilter === 'rejected', 'bg-white text-black': selectedFilter !== 'rejected' }"
                 @click="selectedFilter = 'rejected'">Rechazadas</button>
-            <button class="px-3 py-1 text-sm rounded-full border-black border-2"
+            <button class="px-2 py-1 text-xs rounded-full border-black border-2"
                 :class="{ 'bg-black text-white': selectedFilter === 'pending', 'bg-white text-black': selectedFilter !== 'pending' }"
                 @click="selectedFilter = 'pending'">Pendientes</button>
         </div>
