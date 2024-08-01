@@ -7,7 +7,7 @@
             <div v-if="showDetails">
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-bold">Detalles de Permuta</h2>
-                    <p class="text-gray-600">Revisa la información de la permuta</p>
+                    <p v-if="permuta.supervisor_approved_by" class="text-gray-600">Aprobado por: {{permuta.supervisor_approved_by}}</p>
                 </div>
                 <div>
                     <div v-if="errorMessage" class="text-red-500 text-center mb-4">{{ errorMessage }}</div>

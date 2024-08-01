@@ -1,59 +1,32 @@
 <template>
     <GuestLayout :title="`Permutas | EDF`">
-        <template #header>
-            <div class="grid grid-cols-2 gap-4 items-center">
-                <div>
-                    <h2 class="font-bold text-sm text-black leading-tight">
-                        ¡Hola, Carla Estrada!
-                    </h2>
-                    <p class="text-sm">Trade</p>
-                </div>
-                <!--
-                <div class="flex items-center" style="margin-left: auto">
-                    <span class="text-xs font-bold">Frecuencia:</span>
-                    <select style="padding-right: 2rem;"
-                        class="block mt-1 border-none rounded focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm">
-                        <option value="lunes">Lunes</option>
-                        <option value="martes">Martes</option>
-                        <option value="miércoles">Miércoles</option>
-                        <option value="jueves">Jueves</option>
-                        <option value="viernes">Viernes</option>
-                        <option value="sábado">Sábado</option>
-                        <option value="domingo">Domingo</option>
-                    </select>
-                    <button @click="logout"
-                        class="absolute top-2 right-0 ml-4 flex items-center text-sm font-bold text-red-600">
-                        <i class="fa-solid fa-sign-out-alt mr-2"></i>
-                    </button>
-                </div>
-                -->
+        <div class="flex items-center justify-between px-4 py-2 bg-white shadow-md border-b border-gray-200">
+            <h3 class="text-center text-sm font-bold text-gray-800 flex-1">Hola Carla!</h3>
+        </div>
+        <div class="flex flex-row gap-2 bg-white shadow-md rounded-lg overflow-hidden p-2 items-center">
+            <div class="flex-1 text-center text-xs">
+                <span class="font-bold"> Aprobadas: </span> {{ approvedCount }}
             </div>
-        </template>
-        <div class="flex flex-col gap-4">
-            <div class="bg-white shadow-md rounded-lg overflow-hidden flex">
-                <div class="flex-1 border-r border-gray-200">
-                    <div class="p-4">
-                        <div class="text-sm font-semibold"><i class="fa-solid fa-check-circle text-green-500"></i>
-                            Aprobadas
-                        </div>
-                        <div class="text-xs pt-2 pl-4">
-                            <span class="font-bold">
-                                Cantidad:
-                            </span>
-                            {{ approvedCount }}
-                        </div>
-                    </div>
-                </div>
-                <div class="flex-1 text-left">
-                    <div class="p-4 text-left">
-                        <div class="text-sm text-black font-bold"><i class="fa-solid fa-clock text-yellow-500"></i>
-                            Restantes
-                        </div>
-                        <div class="text-xs mt-1 font-medium text-gray-500">
-                            Cantidad: {{ pendingCount }}
-                        </div>
-                    </div>
-                </div>
+            <div class="flex-1 text-center text-xs text-black">
+                <span class="font-bold">Pendientes: </span> {{ pendingCount }}
+            </div>
+            <div class="flex-1 text-center">
+                <label class="text-xs font-semibold mr-2">Mes:</label>
+                <select v-model="selectedMonth" class="border border-gray-300 rounded-md text-xs p-1 px-2">
+                    <option selected value="todos">todos</option>
+                    <option value="enero">Ene</option>
+                    <option value="febrero">Feb</option>
+                    <option value="marzo">Mar</option>
+                    <option value="abril">Abr</option>
+                    <option value="mayo">May</option>
+                    <option value="junio">Jun</option>
+                    <option value="julio">Jul</option>
+                    <option value="agosto">Ago</option>
+                    <option value="septiembre">Sep</option>
+                    <option value="octubre">Oct</option>
+                    <option value="noviembre">Nov</option>
+                    <option value="diciembre">Dic</option>
+                </select>
             </div>
         </div>
         <div class="px-2">
@@ -156,6 +129,7 @@ export default {
                 month: 'short', day: 'numeric'
             }).replace(/^\w/, c => c.toUpperCase()),
             selectedFilter: 'todos',
+            selectedMonth: 'todos',
             selectedRegion: '',
             selectedLocation: '',
             permutas: [],
@@ -169,10 +143,38 @@ export default {
     computed: {
         filteredPermutas() {
             return this.permutas.filter(permuta => {
-                return (this.selectedFilter === 'todos' || permuta.trade_status.toLowerCase() === this.selectedFilter) &&
-                       (this.selectedRegion === '' || permuta.location.subregion.region.name === this.selectedRegion) &&
-                       (this.selectedLocation === '' || permuta.location.name === this.selectedLocation);
+                if (this.selectedFilter === 'todos') {
+                    return true;
+                } else if (this.selectedFilter === 'approved') {
+                    return permuta.trade_status.toLowerCase() === 'approved';
+                } else if (this.selectedFilter === 'rejected') {
+                    return permuta.trade_status.toLowerCase() === 'rejected' || permuta.supervisor_status.toLowerCase() === 'rejected' || permuta.gerente_status.toLowerCase() === 'rejected';
+                } else if (this.selectedFilter === 'pending') {
+                    return permuta.trade_status.toLowerCase() === 'pending' && permuta.supervisor_status.toLowerCase() !== 'rejected' && permuta.gerente_status.toLowerCase() !== 'rejected';
+                } else {
+                    return permuta.gerente_status.toLowerCase() === this.selectedFilter;
+                }
             }).filter(permuta => {
+                if (this.selectedMonth !== 'todos') {
+                    const monthMap = {
+                        'enero': 0,
+                        'febrero': 1,
+                        'marzo': 2,
+                        'abril': 3,
+                        'mayo': 4,
+                        'junio': 5,
+                        'julio': 6,
+                        'agosto': 7,
+                        'septiembre': 8,
+                        'octubre': 9,
+                        'noviembre': 10,
+                        'diciembre': 11
+                    };
+                    const permutaDate = new Date(permuta.created_at);
+                    if (permutaDate.getMonth() !== monthMap[this.selectedMonth]) {
+                        return false;
+                    }
+                }
                 return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery);
             });
         },
@@ -235,6 +237,9 @@ export default {
         openDetailModal(permuta) {
             this.selectedPermuta = permuta;
             this.showDetailModal = true;
+        },
+        goBack() {
+            window.location.href = `/mesa/${this.supervisor}/info`;
         },
         logout() {
             axios.post('/logout')

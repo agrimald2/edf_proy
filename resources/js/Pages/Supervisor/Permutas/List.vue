@@ -111,6 +111,7 @@ export default {
                 month: 'short', day: 'numeric'
             }).replace(/^\w/, c => c.toUpperCase()),
             selectedFilter: 'todos',
+            selectedMonth: 'todos',
             permutas: [],
             searchQuery: '',
             showDetailModal: false,
@@ -133,6 +134,26 @@ export default {
                     return permuta.gerente_status.toLowerCase() === this.selectedFilter;
                 }
             }).filter(permuta => {
+                if (this.selectedMonth !== 'todos') {
+                    const monthMap = {
+                        'enero': 0,
+                        'febrero': 1,
+                        'marzo': 2,
+                        'abril': 3,
+                        'mayo': 4,
+                        'junio': 5,
+                        'julio': 6,
+                        'agosto': 7,
+                        'septiembre': 8,
+                        'octubre': 9,
+                        'noviembre': 10,
+                        'diciembre': 11
+                    };
+                    const permutaDate = new Date(permuta.created_at);
+                    if (permutaDate.getMonth() !== monthMap[this.selectedMonth]) {
+                        return false;
+                    }
+                }
                 return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery);
             });
         },
@@ -151,7 +172,7 @@ export default {
             return this.permutas.filter(permuta => permuta.trade_status.toLowerCase() === 'approved').length;
         },
         pendingCount() {
-            return this.permutas.filter(permuta => permuta.trade_status.toLowerCase() === 'pending' && permuta.supervisor_status.toLowerCase() !== 'rejected' && permuta.gerente_status.toLowerCase() !== 'rejected').length;
+            return this.permutas.filter(permuta => permuta.supervisor_status.toLowerCase() === 'pending').length;
         }
     },
     methods: {

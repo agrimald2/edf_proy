@@ -7,15 +7,7 @@
                 <i class="fa-solid fa-chevron-left font-bold"></i>
             </button>
             <h3 class="text-center text-sm font-bold text-gray-800 flex-1">Permutas</h3>
-        </div>
-        <div class="flex flex-row gap-2 bg-white shadow-md rounded-lg overflow-hidden p-2 items-center">
-            <div class="flex-1 text-center text-xs">
-                <span class="font-bold"> Aprobadas: </span> {{ approvedCount }}
-            </div>
-            <div class="flex-1 text-center text-xs text-black">
-                <span class="font-bold">Pendientes: </span> {{ pendingCount }}
-            </div>
-            <div class="flex-1 text-center">
+            <div class="flex items-center">
                 <label class="text-xs font-semibold mr-2">Mes:</label>
                 <select v-model="selectedMonth" class="border border-gray-300 rounded-md text-xs p-1 px-2">
                     <option selected value="todos">todos</option>
@@ -32,6 +24,14 @@
                     <option value="noviembre">Nov</option>
                     <option value="diciembre">Dic</option>
                 </select>
+            </div>
+        </div>
+        <div class="flex flex-row gap-2 bg-white shadow-md rounded-lg overflow-hidden p-2 items-center">
+            <div class="flex-1 text-center text-xs">
+                <span class="font-bold"> Aprobadas: </span> {{ approvedCount }}
+            </div>
+            <div class="flex-1 text-center text-xs text-black">
+                <span class="font-bold">Pendientes: </span> {{ pendingCount }}
             </div>
         </div>
         <div class="px-2 flex justify-between items-center my-4">
@@ -219,6 +219,26 @@ export default {
                     return permuta.trade_status.toLowerCase() === this.selectedFilter;
                 }
             }).filter(permuta => {
+                if (this.selectedMonth !== 'todos') {
+                    const monthMap = {
+                        'enero': 0,
+                        'febrero': 1,
+                        'marzo': 2,
+                        'abril': 3,
+                        'mayo': 4,
+                        'junio': 5,
+                        'julio': 6,
+                        'agosto': 7,
+                        'septiembre': 8,
+                        'octubre': 9,
+                        'noviembre': 10,
+                        'diciembre': 11
+                    };
+                    const permutaDate = new Date(permuta.created_at);
+                    if (permutaDate.getMonth() !== monthMap[this.selectedMonth]) {
+                        return false;
+                    }
+                }
                 return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery);
             });
         },

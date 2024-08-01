@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('subcanal');
             $table->boolean('have_edf');
             $table->string('condition');
-            $table->integer('doors_to_negotiate');
+            $table->decimal('doors_to_negotiate', 8, 2);
             $table->text('reason');
             $table->text('justification');
             

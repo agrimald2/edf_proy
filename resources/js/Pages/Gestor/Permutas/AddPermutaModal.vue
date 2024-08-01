@@ -17,11 +17,11 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <input v-model="formData.clientCode" type="tel" placeholder="Código de cliente"
-                                :class="['w-full inputs_permutas', formData.clientCode === '' ? 'border-red-500' : '']">
+                                :class="['w-full inputs_permutas', showError && formData.clientCode === '' ? 'border-red-500' : '']">
                         </div>
                         <div>
                             <input v-model="formData.volumeCU" type="tel" placeholder="Volumen en CU"
-                                :class="['w-full inputs_permutas', formData.volumeCU === '' ? 'border-red-500' : '']">
+                                :class="['w-full inputs_permutas', showError && formData.volumeCU === '' ? 'border-red-500' : '']">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -40,7 +40,7 @@
                     <div class="grid grid-cols-1 gap-4 mt-4">
                         <div>
                             <input v-model="formData.subcanal" type="text" placeholder="Subcanal"
-                                :class="['w-full inputs_permutas', formData.subcanal === '' ? 'border-red-500' : '']">
+                                :class="['w-full inputs_permutas', showError && formData.subcanal === '' ? 'border-red-500' : '']">
                         </div>
                     </div>
                     <div class="flex items-center justify-center">
@@ -83,7 +83,7 @@
                         <div class="grid grid-cols-1 gap-4 mt-4">
                             <div>
                                 <input v-model="formData.justification" type="text" placeholder="Justificación"
-                                    :class="['w-full inputs_permutas', formData.justification === '' ? 'border-red-500' : '']">
+                                    :class="['w-full inputs_permutas', showError && formData.justification === '' ? 'border-red-500' : '']">
                             </div>
                         </div>
                     </div>
@@ -167,7 +167,8 @@ export default {
             locations: [],
             sentPermutaViewModal: false,
             errorMessage: '',
-            isSubmitting: false
+            isSubmitting: false,
+            showError: false
         };
     },
     mounted() {
@@ -253,13 +254,15 @@ export default {
                     })
                     .catch((error) => {
                         console.error('Error:', error);
-                        this.errorMessage = 'Failed to submit permuta. Please try again.';
+                        this.errorMessage = 'ERROR: Por favor, rellena todos los campos';
+                        this.showError = true;
                     })
                     .finally(() => {
                         this.isSubmitting = false;
                     });
             } else {
                 this.errorMessage = 'Please complete all fields before submitting.';
+                this.showError = true;
             }
         },
         showSentPermutaView() {
