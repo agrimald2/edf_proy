@@ -9,7 +9,7 @@
             </svg>
         </div>
         <div class="text-center mb-10 pt-2">
-            <h2 class="text-lg font-bold">¿Estás seguro?</h2>
+            <h2 class="text-lg font-bold">¿Estás seguro? {{$page.props.auth.user.name}}</h2>
             <p>¿Estás seguro que deseas aprobar esta permuta?</p>
         </div>
         <div>
@@ -44,22 +44,16 @@ export default {
     },
     methods: {
         confirmApproval() {
-            console.log(this.permutaId);
-            fetch(`/api/permutas/${this.permutaId}/approve/gerente`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Permuta approved:', data);
-                    this.$emit('close');
-                    this.$emit('show-approved-modal');
-                })
-                .catch(error => {
-                    console.error('Error approving permuta:', error);
-                });
+               console.log(this.permutaId);
+               axios.post(`/api/permutas/${this.permutaId}/approve/gerente/${this.$page.props.auth.user.name}`)
+                   .then(response => {
+                       console.log('Permuta approved:', response.data);
+                       this.$emit('close');
+                       this.$emit('show-approved-modal');
+                   })
+                   .catch(error => {
+                       console.error('Error approving permuta:', error);
+                   });
         },
         closeModal() {
             this.$emit('close');

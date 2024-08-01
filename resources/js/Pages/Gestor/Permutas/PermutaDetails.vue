@@ -1,21 +1,23 @@
 <template>
-    <div class="z-20 fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
-            <button @click="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+    <div class="z-20 fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-2 overflow-y-auto">
+        <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-4 relative">
+            <button @click="closeModal" class="absolute top-1 right-1 text-gray-500 hover:text-gray-700">
                 <i class="fa-solid fa-circle-xmark text-gray-500"></i>
             </button>
             <div v-if="showDetails">
-                <div class="text-center mb-6">
-                    <h2 class="text-2xl font-bold">Detalles de Permuta</h2>
-                    <p class="text-gray-600">Revisa la información de la permuta</p>
+                <div class="text-center mb-4">
+                    <h2 class="text-xl font-bold">Detalles de Permuta</h2>
+                    <p class="text-gray-600 text-sm">Revisa la información de la permuta</p>
                 </div>
                 <div>
-                    <div v-if="errorMessage" class="text-red-500 text-center mb-4">{{ errorMessage }}</div>
-                    <div class="space-y-4">
-                        <div class="px-4  rounded-lg">
-                            <div class="grid grid-cols-2">
+                    <div v-if="errorMessage" class="text-red-500 text-center mb-2 text-sm">{{ errorMessage }}</div>
+                    <div class="space-y-2">
+                        <div class="px-2 rounded-lg">
+                            <div class="grid grid-cols-2 text-sm">
                                 <p><span class="font-bold">Código de cliente:</span></p>
                                 <p class="text-right">{{ formData.clientCode }}</p>
+                                <p><span class="font-bold">Fecha de Permuta:</span></p>
+                                <p class="text-right">{{ new Date(permuta.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }) }}</p>
                                 <p><span class="font-bold">Volumen en CU:</span></p>
                                 <p class="text-right">{{ formData.volumeCU }}</p>
                                 <p><span class="font-bold">Locación:</span></p>
@@ -27,9 +29,9 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="px-4 pb-2 rounded-lg">
-                            <h3 class="font-bold mb-2 text-red-700">EDF a solicitar</h3>
-                            <div class="grid grid-cols-2 gap-4">
+                        <div class="px-2 pb-1 rounded-lg">
+                            <h3 class="font-bold mb-1 text-red-700 text-sm">EDF a solicitar</h3>
+                            <div class="grid grid-cols-2 text-sm">
                                 <p><span class="font-bold">Condición:</span></p>
                                 <p class="text-right">{{ formData.condition }}</p>
                                 <p><span class="font-bold">Puertas a negociar:</span></p>
@@ -41,9 +43,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-3 text-center">
+                    <div class="mt-2 text-center">
                         <button @click="closeModal"
-                            class="w-full bg-black text-white px-4 py-2 rounded-lg hover:bg-red-600 focus:outline-none">Cerrar</button>
+                            class="w-full bg-black text-white px-2 py-1 rounded-lg hover:bg-red-600 focus:outline-none text-sm">Cerrar</button>
                     </div>
                 </div>
             </div>

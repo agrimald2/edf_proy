@@ -1,65 +1,70 @@
 <template>
-    <div class="z-20 fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
-            <button @click="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+    <div class="z-20 fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-2 overflow-y-auto">
+        <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-4 relative">
+            <button @click="closeModal" class="absolute top-1 right-1 text-gray-500 hover:text-gray-700">
                 <i class="fa-solid fa-circle-xmark text-gray-500"></i>
             </button>
             <div v-if="showDetails">
-                <div class="text-center mb-6">
-                    <h2 class="text-2xl font-bold">Detalles de Permuta</h2>
-                    <p v-if="permuta.supervisor_approved_by" class="text-gray-600">Aprobado por: {{permuta.supervisor_approved_by}}</p>
+                <div class="text-center mb-4">
+                    <h2 class="text-xl font-bold">Detalles de Permuta</h2>
+                    <p class="text-gray-600 text-sm">Aprobado por: {{ approvedBy }}</p>
                 </div>
                 <div>
-                    <div v-if="errorMessage" class="text-red-500 text-center mb-4">{{ errorMessage }}</div>
-                    <div class="space-y-4">
-                        <div class="bg-gray-100 p-4 rounded-lg">
-                            <h3 class="font-bold mb-2 text-red-700">Información del cliente</h3>
-                            <div class="grid grid-cols-2 gap-4">
-                                <p><span class="font-medium">Código de cliente:</span></p>
-                                <p>{{ formData.clientCode }}</p>
-                                <p><span class="font-medium">Volumen en CU:</span></p>
-                                <p>{{ formData.volumeCU }}</p>
-                                <p><span class="font-medium">Locación:</span></p>
-                                <p>{{ formData.location }}</p>
-                                <p><span class="font-medium">Ruta:</span></p>
-                                <p>{{ formData.route }}</p>
-                                <p><span class="font-medium">Subcanal:</span></p>
-                                <p>{{ formData.subcanal }}</p>
+                    <div v-if="errorMessage" class="text-red-500 text-center mb-2 text-sm">{{ errorMessage }}</div>
+                    <div class="space-y-2">
+                        <div class="px-2 rounded-lg">
+                            <div class="grid grid-cols-2 text-sm">
+                                <p><span class="font-bold">Código de cliente:</span></p>
+                                <p class="text-right">{{ formData.clientCode }}</p>
+                                <p><span class="font-bold">Fecha de Permuta:</span></p>
+                                <p class="text-right">{{ new Date(permuta.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }) }}</p>
+                                <p><span class="font-bold">Volumen en CU:</span></p>
+                                <p class="text-right">{{ formData.volumeCU }}</p>
+                                <p><span class="font-bold">Locación:</span></p>
+                                <p class="text-right">{{ formData.location }}</p>
+                                <p><span class="font-bold">Ruta:</span></p>
+                                <p class="text-right">{{ formData.route }}</p>
+                                <p><span class="font-bold">Subcanal:</span></p>
+                                <p class="text-right">{{ formData.subcanal }}</p>
                             </div>
                         </div>
-                        <div class="bg-gray-100 p-4 rounded-lg">
-                            <h3 class="font-bold mb-2 text-red-700">EDF a solicitar</h3>
-                            <div class="grid grid-cols-2 gap-4">
-                                <p><span class="font-medium">Condición:</span></p>
-                                <p>{{ formData.condition }}</p>
-                                <p><span class="font-medium">Puertas a negociar:</span></p>
-                                <p>{{ formData.doorsToNegotiate }}</p>
-                                <p><span class="font-medium">Motivo:</span></p>
-                                <p>{{ formData.reason }}</p>
-                                <p><span class="font-medium">Justificación:</span></p>
-                                <p>{{ formData.justification }}</p>
+                        <hr>
+                        <div class="px-2 pb-1 rounded-lg">
+                            <h3 class="font-bold mb-1 text-red-700 text-sm">EDF a solicitar</h3>
+                            <div class="grid grid-cols-2 text-sm">
+                                <p><span class="font-bold">Condición:</span></p>
+                                <p class="text-right">{{ formData.condition }}</p>
+                                <p><span class="font-bold">Puertas a negociar:</span></p>
+                                <p class="text-right">{{ formData.doorsToNegotiate }}</p>
+                                <p><span class="font-bold">Motivo:</span></p>
+                                <p class="text-right">{{ formData.reason }}</p>
+                                <p><span class="font-bold">Justificación:</span></p>
+                                <p class="text-right">{{ formData.justification }}</p>
                             </div>
                         </div>
                     </div>
                     <div v-if="permuta.gerente_status == 'Pending'" class="mt-6 flex justify-between">
                         <button @click="approvePermuta"
-                            class="w-1/2 py-3 font-medium rounded-md bg-green-500 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 mr-2">
-                            APROBAR
+                            class="w-1/2 py-1 font-medium rounded-md bg-green-500 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 mr-2">
+                            Aprobar
                         </button>
                         <button @click="rejectPermuta"
-                            class="w-1/2 py-3 font-medium rounded-md bg-red-500 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50 ml-2">
-                            RECHAZAR
+                            class="w-1/2 py-1 font-medium rounded-md bg-red-500 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50 ml-2">
+                            Rechazar
                         </button>
+                    </div>
+                    <div class="mt-2 text-center">
+                        <button @click="closeModal"
+                            class="w-full bg-black text-white px-2 py-1 rounded-lg hover:bg-red-600 focus:outline-none text-sm">Cerrar</button>
                     </div>
                 </div>
             </div>
-
             <PermutaRejectReasonModal v-if="showRejectReasonModal" :permuta-id="permuta.id"
                 @show-details-modal="detailsModal" @show-rejected-modal="showRejectedModal = true"
                 @close="showRejectReasonModal = false" />
             <PermutaRejectedModal v-if="showRejectedModal" :permuta-id="permuta.id"
                 @close="showRejectedModal = false" />
-            <PermutaApproveConfirmationModal v-if="showApproveConfirmationModal" :permuta-id="permuta.id"
+            <PermutaApproveConfirmationModal v-if="showApproveConfirmationModal" :permuta-id="permuta.id" :sv="sv"
                 @show-details-modal="detailsModal" @close="showApproveConfirmationModal = false"
                 @show-approved-modal="showApprovedModal = true" />
             <PermutaApprovedModal v-if="showApprovedModal" :permuta-id="permuta.id"
@@ -73,6 +78,7 @@ import PermutaRejectReasonModal from './PermutaRejectReasonModal.vue';
 import PermutaApproveConfirmationModal from './PermutaApproveConfirmationModal.vue';
 import PermutaApprovedModal from './PermutaApprovedModal.vue';
 import PermutaRejectedModal from './PermutaRejectedModal.vue';
+
 export default {
     components: {
         PermutaRejectReasonModal,
@@ -88,11 +94,23 @@ export default {
         permuta: {
             type: Object,
             required: true
+        },
+        haveAvailableLimit: {
+            type: Boolean,
+            default: true
+        },
+        sv: {
+            type: String,
         }
     },
     data() {
         return {
             formData: {
+                date: new Date(this.permuta.created_at).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }),
                 clientCode: this.permuta.cod_cliente,
                 volumeCU: this.permuta.volume,
                 location: this.permuta.location.name,
@@ -112,7 +130,8 @@ export default {
             showRejectReasonModal: false,
             showRejectedModal: false,
             showApproveConfirmationModal: false,
-            showApprovedModal: false
+            showApprovedModal: false,
+            approvedBy: '-'
         };
     },
     mounted() {
@@ -124,6 +143,17 @@ export default {
             .catch(error => {
                 console.error('Error fetching reasons:', error);
             });
+
+        fetch(`/api/supervisor/nameByMesa/${this.permuta.supervisor_approved_by}`)
+            .then(response => response.json())
+            .then(data => {
+                this.approvedBy = data.nombre_sv;
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error fetching approved by name:', error);
+            });
+        console.log(this.permuta.supervisor_approved_by);
     },
     methods: {
         approvePermuta() {

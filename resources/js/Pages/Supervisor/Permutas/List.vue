@@ -16,7 +16,7 @@
             <div class="flex-1 text-center">
                 <label class="text-xs font-semibold mr-2">Mes:</label>
                 <select v-model="selectedMonth" class="border border-gray-300 rounded-md text-xs p-1 px-2">
-                    <option selected value="todos">todos</option>
+                    <option value="todos">todos</option>
                     <option value="enero">Ene</option>
                     <option value="febrero">Feb</option>
                     <option value="marzo">Mar</option>
@@ -58,19 +58,19 @@
                     type="search" name="search" placeholder="Buscar" v-model="searchQuery">
             </div>
         </div>
-        <div class="flex gap-2 my-4 px-2">
-            <button class="px-3 py-1 text-xxs rounded-full border-black border-2"
+        <div class="flex gap-1 my-2 px-1 overflow-x-auto no-scrollbar">
+            <button class="px-1 py0.5 text-xxs rounded-full border-black border"
                 :class="{ 'bg-black text-white': selectedFilter === 'todos', 'bg-white text-black': selectedFilter !== 'todos' }"
-                @click="selectedFilter = 'todos'">Todos</button>
-            <button class="px-3 py-1 text-xxs rounded-full border-black border-2"
+                @click="selectedFilter = 'todos'" style="font-size: 12px">Todos</button>
+            <button class="px-1 py-0.5 text-xxs rounded-full border-black border"
                 :class="{ 'bg-black text-white': selectedFilter === 'approved', 'bg-white text-black': selectedFilter !== 'approved' }"
-                @click="selectedFilter = 'approved'">Aprobadas</button>
-            <button class="px-3 py-1 text-xxs rounded-full border-black border-2"
+                @click="selectedFilter = 'approved'" style="font-size: 12px">Aprobadas</button>
+            <button class="px-1 py-0.5 text-xxs rounded-full border-black border"
                 :class="{ 'bg-black text-white': selectedFilter === 'rejected', 'bg-white text-black': selectedFilter !== 'rejected' }"
-                @click="selectedFilter = 'rejected'">Rechazadas</button>
-            <button class="px-3 py-1 text-xxs rounded-full border-black border-2"
+                @click="selectedFilter = 'rejected'" style="font-size: 12px">Rechazadas</button>
+            <button class="px-1 py-0.5 text-xxs rounded-full border-black border"
                 :class="{ 'bg-black text-white': selectedFilter === 'pending', 'bg-white text-black': selectedFilter !== 'pending' }"
-                @click="selectedFilter = 'pending'">Pendientes</button>
+                @click="selectedFilter = 'pending'" style="font-size: 12px">Pendientes</button>
         </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="flex flex-col gap-4">
@@ -80,6 +80,7 @@
                     :permuta="permuta"
                     :showDetailModal="showDetailModal"
                     :selectedPermuta="selectedPermuta"
+                    :sv="mesa"
                     @open-detail-modal="openDetailModal"
                 />
             </div>
@@ -111,7 +112,7 @@ export default {
                 month: 'short', day: 'numeric'
             }).replace(/^\w/, c => c.toUpperCase()),
             selectedFilter: 'todos',
-            selectedMonth: 'todos',
+            selectedMonth: new Date().toLocaleString('es-ES', { month: 'long' }).toLowerCase(),
             permutas: [],
             searchQuery: '',
             showDetailModal: false,

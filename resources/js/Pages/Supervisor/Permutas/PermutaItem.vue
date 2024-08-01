@@ -87,7 +87,7 @@
                         @click="openDetailModal(permuta)">Ver Detalles</button>
                 </div>
                 <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
-                    @close="showDetailModal = false" />
+                    @close="showDetailModal = false" :sv="sv" />
             </div>
         </div>
     </div>
@@ -109,6 +109,9 @@ export default {
         selectedPermuta: {
             type: Object,
             required: true
+        },
+        sv: {
+            type: String
         }
     },
     components: {

@@ -26,11 +26,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <select v-model="formData.location_id" class="w-full inputs_permutas" disabled>
-                                <option value="" disabled selected>Locación</option>
-                                <option v-for="location in locations" :key="location.id" :value="location.id">{{
-            location.name }}</option>
-                            </select>
+                            <input type="text" class="w-full inputs_permutas" disabled :value="locationName">
                         </div>
                         <div>
                             <input v-model="formData.route" type="text" placeholder="Ruta" disabled
@@ -226,6 +222,10 @@ export default {
             }
 
             return options;
+        },
+        locationName() {
+            const location = this.locations.find(loc => loc.id === this.formData.location_id);
+            return location ? location.name : '';
         }
     },
     methods: {
@@ -244,7 +244,10 @@ export default {
                 })
                     .then(response => {
                         if (!response.ok) {
-                            throw new Error('Network response was not ok');
+                            return response.json().then(errData => {
+                                console.dir(errData);
+                                throw new Error(errData.error || 'Network response was not ok');
+                            });
                         }
                         return response.json();
                     })
@@ -254,7 +257,7 @@ export default {
                     })
                     .catch((error) => {
                         console.error('Error:', error);
-                        this.errorMessage = 'ERROR: Por favor, rellena todos los campos';
+                        this.errorMessage = `ERROR: ${error.message}`;
                         this.showError = true;
                     })
                     .finally(() => {

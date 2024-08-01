@@ -123,13 +123,14 @@ export default {
     },
     props: ['supervisor'],
     data() {
+        const currentMonth = new Date().toLocaleString('es-ES', { month: 'long' }).toLowerCase();
         return {
             todaysDate: new Date().toLocaleDateString('es-ES', {
                 weekday: 'short', year: 'numeric',
                 month: 'short', day: 'numeric'
             }).replace(/^\w/, c => c.toUpperCase()),
             selectedFilter: 'todos',
-            selectedMonth: 'todos',
+            selectedMonth: currentMonth,
             selectedRegion: '',
             selectedLocation: '',
             permutas: [],

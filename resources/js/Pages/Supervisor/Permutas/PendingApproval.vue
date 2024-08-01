@@ -4,7 +4,7 @@
             <button @click="goBack()" class="text-black text-sm hover:text-gray-800">
                 <i class="fa-solid fa-chevron-left font-bold"></i>
             </button>
-            <h3 class="text-center text-sm font-bold text-gray-800 flex-1">Permutas por aprobar</h3>
+            <h3 class="text-center text-sm font-bold text-gray-800 flex-1">Permutas por aprobar </h3>
         </div>
         <div class="px-2 flex justify-between items-center my-4">
             <h2 class="font-bold text-sm text-black leading-tight">
@@ -22,6 +22,7 @@
                     :permuta="permuta"
                     :showDetailModal="showDetailModal"
                     :selectedPermuta="selectedPermuta"
+                    :sv="mesa"
                     @open-detail-modal="openDetailModal"
                 />
             </div>

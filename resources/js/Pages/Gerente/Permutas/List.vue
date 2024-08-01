@@ -26,7 +26,7 @@
             <div class="flex-1 text-center">
                 <label class="text-xs font-semibold mr-2">Mes:</label>
                 <select v-model="selectedMonth" class="border border-gray-300 rounded-md text-xs p-1 px-2">
-                    <option selected value="todos">todos</option>
+                    <option value="todos">todos</option>
                     <option value="enero">Ene</option>
                     <option value="febrero">Feb</option>
                     <option value="marzo">Mar</option>
@@ -200,6 +200,7 @@ export default {
     },
     props: ['supervisor'],
     data() {
+        const currentMonth = new Date().toLocaleString('es-ES', { month: 'long' }).toLowerCase();
         return {
             todaysDate: new Date().toLocaleDateString('es-ES', {
                 weekday: 'short', year: 'numeric',
@@ -208,6 +209,7 @@ export default {
             selectedFilter: 'todos',
             selectedSubregion: '',
             selectedLocation: '',
+            selectedMonth: currentMonth,
             permutas: [],
             searchQuery: '',
             showDetailModal: false,

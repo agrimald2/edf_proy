@@ -48,6 +48,7 @@ export default {
     methods: {
         confirmApproval() {
             console.log(this.permutaId);
+            console.log(this.sv);
             fetch(`/api/permutas/${this.permutaId}/approve/supervisor/${this.sv}`, {
                 method: 'POST',
                 headers: {

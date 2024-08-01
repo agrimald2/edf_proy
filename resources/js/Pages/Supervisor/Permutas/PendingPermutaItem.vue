@@ -38,7 +38,7 @@
                     <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full"
                         @click="openDetailModal(permuta)">Ver Más</button>
                 </div>
-                <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
+                <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta" :sv="sv"
                     @close="showDetailModal = false" />
             </div>
         </div>
@@ -61,6 +61,9 @@ export default {
         selectedPermuta: {
             type: Object,
             required: true
+        },
+        sv: {
+            type: String
         }
     },
     components: {

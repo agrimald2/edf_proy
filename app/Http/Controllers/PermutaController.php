@@ -42,7 +42,7 @@ class PermutaController extends Controller
         try {
             $validatedData = $request->validate([
                 'sv' => 'string',
-                'clientCode' => 'required|string',
+                'clientCode' => 'required|string|max:7',
                 'volumeCU' => 'required|string',
                 'location_id' => 'required|integer',
                 'route' => 'required|string',
@@ -52,6 +52,27 @@ class PermutaController extends Controller
                 'doorsToNegotiate' => 'required|integer',
                 'reason' => 'required|string',
                 'justification' => 'string|nullable',
+            ], [
+                'clientCode.required' => 'El campo código de cliente es obligatorio.',
+                'clientCode.string' => 'El campo código de cliente debe ser una cadena de texto.',
+                'clientCode.max' => 'El campo código de cliente no debe ser mayor a 7 caracteres.',
+                'volumeCU.required' => 'El campo volumen CU es obligatorio.',
+                'volumeCU.string' => 'El campo volumen CU debe ser una cadena de texto.',
+                'location_id.required' => 'El campo locación es obligatorio.',
+                'location_id.integer' => 'El campo locación debe ser un número entero.',
+                'route.required' => 'El campo ruta es obligatorio.',
+                'route.string' => 'El campo ruta debe ser una cadena de texto.',
+                'subcanal.required' => 'El campo subcanal es obligatorio.',
+                'subcanal.string' => 'El campo subcanal debe ser una cadena de texto.',
+                'haveEdf.required' => 'El campo tiene EDF es obligatorio.',
+                'haveEdf.boolean' => 'El campo tiene EDF debe ser verdadero o falso.',
+                'condition.required' => 'El campo condición es obligatorio.',
+                'condition.string' => 'El campo condición debe ser una cadena de texto.',
+                'doorsToNegotiate.required' => 'El campo puertas a negociar es obligatorio.',
+                'doorsToNegotiate.integer' => 'El campo puertas a negociar debe ser un número entero.',
+                'reason.required' => 'El campo motivo es obligatorio.',
+                'reason.string' => 'El campo motivo debe ser una cadena de texto.',
+                'justification.string' => 'El campo justificación debe ser una cadena de texto.',
             ]);
 
             $permuta = Permuta::create([
@@ -70,8 +91,8 @@ class PermutaController extends Controller
 
             return response()->json($permuta, 201);
         } catch (\Exception $e) {
-            Log::error('Validation or creation failed: ' . $e->getMessage());
-            return response()->json(['error' => 'Validation or creation failed'], 400);
+            Log::error('La validación o creación falló: ' . $e->getMessage());
+            return response()->json(['error' =>  $e->getMessage()], 400);
         }
     }
     /**
@@ -245,11 +266,11 @@ class PermutaController extends Controller
     /**
      * Approve the specified permuta by Gerente.
      */
-    public function approveByGerente(string $id)
+    public function approveByGerente(string $id, string $name)
     {
         $permuta = Permuta::findOrFail($id);
         $permuta->gerente_status = 'Approved';
-        $permuta->gerente_approved_by = auth()->check() ? auth()->user()->name : 'Not Logged User';
+        $permuta->gerente_approved_by = $name;
         $permuta->gerente_approved_at = now();
         $permuta->instance_status = 'Trade';
         $permuta->save();
