@@ -141,7 +141,6 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                     </h2>
                 </div>
                 <div>
-                    <!-- 
                     <select v-model="selectedDay"
                         class="block w-full mt-1 border border-gray-100 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 font-bold">
                         <option value="">TODOS</option>
@@ -153,7 +152,6 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                         <option value="SABADO">Sábado</option>
                         <option value="DOMINGO">Domingo</option>
                     </select>
-                    -->
                 </div>
             </div>
         </template>
