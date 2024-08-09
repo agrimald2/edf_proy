@@ -308,12 +308,21 @@ class MainController extends Controller
 
     public function loginByCode($code){
         if (stripos($code, 'SV') !== false) {
-            // Supervisor
-            return redirect()->route('infoByMesa', ['mesa' => $code]);
+            // Check if the supervisor code exists
+            $exists = Main::where('SV', $code)->exists();
+            if ($exists) {
+                return redirect()->route('infoByMesa', ['mesa' => $code]);
+            }
         } else {
-            // Ruta
-            return redirect()->route('infoByRuta', ['ruta' => $code]);
+            // Check if the ruta code exists
+            $exists = Main::where('RUTA', $code)->exists();
+            if ($exists) {
+                return redirect()->route('infoByRuta', ['ruta' => $code]);
+            }
         }
+        
+        // If code does not exist, redirect back with an error message
+        return redirect()->back()->withErrors(['code' => 'El código no existe.']);
     }
 
     public function getSubRegions(){

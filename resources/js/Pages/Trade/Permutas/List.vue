@@ -53,6 +53,13 @@
                 :class="{ 'bg-black text-white': selectedFilter === 'pending', 'bg-white text-black': selectedFilter !== 'pending' }"
                 @click="selectedFilter = 'pending'">Pendientes</button>
         </div>
+        <div v-if="selectedFilter === 'pending'" class="flex gap-2 my-4 px-2">
+            <button class="px-2 py-1 text-xs rounded-full border-black border-2 bg-blue-500 text-white"
+                @click="exportExcel">Exportar Excel</button>
+            <input type="file" @change="handleFileUpload" class="hidden" ref="fileInput">
+            <button class="px-2 py-1 text-xs rounded-full border-black border-2 bg-green-500 text-white"
+                @click="triggerFileInput">Importar Excel</button>
+        </div>
         <div class="flex gap-2 my-4 px-2">
             <select v-model="selectedRegion" @change="filterLocationsByRegion" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 <option value="">Todas las Regiones</option>
@@ -179,19 +186,13 @@ export default {
                         return false;
                     }
                 }
-                // Filtrar por búsqueda de texto
-                if (!permuta.cod_cliente.includes(this.searchQuery) && !permuta.location.name.includes(this.searchQuery)) {
+                if (this.selectedRegion && permuta.location.region.name !== this.selectedRegion) {
                     return false;
                 }
-                // Filtrar por región seleccionada
-                if (this.selectedRegion && permuta.location.subregion.region_id !== this.selectedRegion) {
-                    return false;
-                }
-                // Filtrar por localización seleccionada
                 if (this.selectedLocation && permuta.location.name !== this.selectedLocation) {
                     return false;
                 }
-                return true;
+                return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery);
             });
         },
         approvedCount() {
@@ -281,6 +282,34 @@ export default {
                 .catch(error => {
                     console.error('Error during logout:', error);
                 });
+        },
+        exportExcel() {
+            window.location.href = '/trade/pendingPermutas';
+        },
+        triggerFileInput() {
+            this.$refs.fileInput.click();
+        },
+        async handleFileUpload(event) {
+            console.log("HOLA");
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await axios.post('/trade/importPendingPermutas', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                console.log('Import successful:', response.data);
+                this.getPermutas(); // Refresh the permutas list
+                alert('Importación exitosa');
+            } catch (error) {
+                console.error('Error importing permutas:', error);
+                alert('Error durante la importación');
+            }
         }
     },
     mounted() {

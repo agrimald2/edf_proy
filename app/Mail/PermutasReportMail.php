@@ -20,7 +20,6 @@ class PermutasReportMail extends Mailable
     public function build()
     {
         return $this->view('emails.permutas_report')
-                    ->subject('Permutas Approved Today')
-                    ->attach($this->filePath);
+                    ->subject('Permutas Approved Today');    
     }
 }
