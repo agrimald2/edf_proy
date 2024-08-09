@@ -16,6 +16,11 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="red" />
         <link rel="apple-touch-icon" href="https://nedfac.com/logo.png" />
 
+        <link rel="icon" href="https://nedfac.com/logo.png" type="image/png">
+<link rel="shortcut icon" href="https://nedfac.com/logo.png" type="image/png">
+<link rel="apple-touch-icon" href="https://nedfac.com/logo.png">
+<link rel="manifest" href="/manifest.json">
+
         <!-- Primary Meta Tags -->
         <meta name="title" content="NEF - Negociación Equipos de Frío" />
         <meta name="description" content="Negociación Equipos de Frío Arca Continental Lindley" />
