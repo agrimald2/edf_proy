@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import AddPermutaModal from './Permutas/AddPermutaModal.vue';
 import CatalogoModal from './Catalogo/CatalogoModal.vue';
+import NotificationModal from '@/Pages/Gestor/Notification/NotificationModal.vue';
 
 const props = defineProps({
     sv: String,
@@ -21,6 +22,7 @@ const selectedDay = ref('');
 
 let showAddPermutaModal = ref(false);
 let showCatalogoModal = ref(false);
+let showNotificationModal = ref(false); // Added state for Notification Modal
 
 // Function to get the current day of the week
 const getCurrentDayOfWeek = () => {
@@ -42,6 +44,14 @@ const openCatalogoModal = () => {
 
 const closeCatalogoModal = () => {
     showCatalogoModal.value = false;
+};
+
+const openNotificationModal = () => { // Added function to open Notification Modal
+    showNotificationModal.value = true;
+};
+
+const closeNotificationModal = () => { // Added function to close Notification Modal
+    showNotificationModal.value = false;
 };
 
 const seePermutas = () => {
@@ -132,6 +142,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
     <GuestLayout :title="`Dashboard | EDF`">
         <AddPermutaModal v-if="showAddPermutaModal" @close="closeAddPermutaModal" :sv="sv" :ruta="ruta" />
         <CatalogoModal v-if="showCatalogoModal" @close="closeCatalogoModal" />
+        <NotificationModal v-if="showNotificationModal" @close="closeNotificationModal" /> <!-- Added Notification Modal -->
         <template #header>
             <div class="grid grid-cols-2 gap-4 items-center">
                 <div>
@@ -140,7 +151,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                         ¡Hola, {{ props.gv }}!
                     </h2>
                 </div>
-                <div>
+                <div class="flex items-center gap-2"> <!-- Added flex container for select and notification button -->
                     <select v-model="selectedDay"
                         class="block w-full mt-1 border border-gray-100 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 font-bold">
                         <option value="">TODOS</option>
@@ -152,6 +163,10 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                         <option value="SABADO">Sábado</option>
                         <option value="DOMINGO">Domingo</option>
                     </select>
+                    <button @click="openNotificationModal" class="relative">
+                        <i class="fa-solid fa-bell text-xl"></i>
+                        <span class="absolute top-0 right-0 inline-block w-4 h-4 bg-red-600 text-white text-xs font-bold rounded-full text-center">3</span> <!-- Example notification count -->
+                    </button>
                 </div>
             </div>
         </template>
@@ -250,7 +265,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                     <div class="text-sm text-black font-bold">Puedes negociar</div>
                                     <ul class="list-disc pl-3">
                                         <li style="font-size:10px" class="text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR }} Puertas - {{ client.CONDICION.charAt(0).toUpperCase() + client.CONDICION.slice(1).toLowerCase() }}</li>
-                                        <li  v-if="client.PUERTAS_A_NEGOCIAR_2" style="font-size:10px" class="mb-2 text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR_2 }} Puertas - {{ client.CONDICION.charAt(0).toUpperCase() + client.CONDICION_2.slice(1).toLowerCase() }}</li>
+                                        <li  v-if="client.PUERTAS_A_NEGOCIAR_2" style="font-size:10px" class="mb-2 text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR_2 }} Puertas - {{ client.CONDICION_2.charAt(0).toUpperCase() + client.CONDICION_2.slice(1).toLowerCase() }}</li>
                                     </ul>
                                     
                                     <a :href="`https://wa.link/ibba8o`" target="_blank"

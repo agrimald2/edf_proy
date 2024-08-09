@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\Main;
+use App\Models\Permuta;
 use DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PendingPermutasExport;
+use Log;
 
 class TradeController extends Controller
 {
@@ -14,4 +17,60 @@ class TradeController extends Controller
                 'supervisor' => 'Alonso',
         ]); 
     } 
+
+    public function exportPendingPermutas(){
+        $permutas = Permuta::where('instance_status', 'Trade')
+                        ->where('trade_status', 'PENDING')
+                        ->get([
+                            'id', 
+                            'cod_cliente', 
+                            'created_at as fecha_de_permuta', 
+                            'volume as volumen_en_cu', 
+                            'condition as condición', 
+                            'doors_to_negotiate as puertas_a_negotiar', 
+                            'reason as motivo', 
+                            'justification as justificación',
+                            'trade_status as status'
+                        ]);
+        
+        Log::debug($permutas);
+
+        $permutas->map(function($permuta) {
+            $permuta->status = 'PENDIENTE';
+            return $permuta;
+        });
+        
+
+        return Excel::download(new PendingPermutasExport($permutas), 'pending_permutas.xlsx');
+    }
+
+    public function importPendingPermutas(Request $request){
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        $file = $request->file('file');
+        $data = Excel::toArray([], $file)[0];
+
+        foreach ($data as $index => $row) {
+            // Skip the header row
+            if ($index === 0) {
+                continue;
+            }
+
+            $permuta = Permuta::find($row[0]);
+            if ($permuta) {
+                if ($row[8] === 'SI') {
+                    $permuta->trade_status = 'Approved';
+                    $permuta->trade_approved_at = now();
+                } elseif ($row[8] === 'NO') {
+                    $permuta->trade_status = 'Rejected';
+                    $permuta->trade_rejected_at = now();
+                }
+                $permuta->save();
+            }
+        }
+
+        return response()->json(['message' => 'Permutas processed successfully']);
+    }
 }
