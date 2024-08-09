@@ -15,9 +15,17 @@
                 <form class="space-y-4" @submit.prevent="submitForm">
                     <p class="font-semibold mb-2">Información del cliente</p>
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
+                        <div class="relative" ref="search">
                             <input v-model="formData.clientCode" type="tel" placeholder="Código de cliente"
-                                :class="['w-full inputs_permutas', showError && formData.clientCode === '' ? 'border-red-500' : '']">
+                                :class="['w-full inputs_permutas', showError && formData.clientCode === '' ? 'border-red-500' : '']"
+                                @focus="showDropdown = true" @blur="setTimeout(() => showDropdown = false, 100)">
+                            <ul v-show="showDropdown && searchResults.length"
+                                class="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-lg">
+                                <li v-for="result in searchResults" :key="result.code"
+                                    class="p-2 hover:bg-gray-100 cursor-pointer" @click="selectClient(result)">
+                                    {{ result.code }}
+                                </li>
+                            </ul>
                         </div>
                         <div>
                             <input v-model="formData.volumeCU" type="tel" placeholder="Volumen en CU"
@@ -164,10 +172,14 @@ export default {
             sentPermutaViewModal: false,
             errorMessage: '',
             isSubmitting: false,
-            showError: false
+            showError: false,
+            searchResults: [],
+            selectedClient: null,
+            showDropdown: false,
         };
     },
     mounted() {
+        document.addEventListener('click', this.handleClickOutside);
         fetch('/api/permuta-reasons')
             .then(response => response.json())
             .then(data => {
@@ -185,6 +197,9 @@ export default {
             .catch(error => {
                 console.error('Error fetching locations:', error);
             });
+    },
+    beforeDestroy() {
+        document.removeEventListener('click', this.handleClickOutside);
     },
     computed: {
         isFormComplete() {
@@ -226,6 +241,20 @@ export default {
         locationName() {
             const location = this.locations.find(loc => loc.id === this.formData.location_id);
             return location ? location.name : '';
+        }
+    },
+    watch: {
+        'formData.clientCode'(newVal) {
+            if (newVal.length >= 3) { // Asumiendo que quieres empezar a buscar después de 3 caracteres
+                this.searchClients(newVal);
+            } else {
+                this.searchResults = [];
+            }
+        },
+        selectedClient(newVal, oldVal) {
+            if (newVal) {
+                this.formData.volumeCU = newVal.volumen_cu;
+            }
         }
     },
     methods: {
@@ -270,7 +299,27 @@ export default {
         },
         showSentPermutaView() {
             this.sentPermutaViewModal = true;
-        }
+        },
+        searchClients(query) {
+            fetch(`/api/customers/search/${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    this.searchResults = data;
+                })
+                .catch(error => {
+                    console.error('Error fetching clients:', error);
+                });
+        },
+        selectClient(client) {
+            this.selectedClient = client;
+            this.formData.clientCode = client.code;
+            // El volumen en CU se actualizará automáticamente gracias al watcher de selectedClient
+        },
+        handleClickOutside(event) {
+            if (this.$refs.search && !this.$refs.search.contains(event.target)) {
+                this.showDropdown = false;
+            }
+        },
     }
 }
 </script>

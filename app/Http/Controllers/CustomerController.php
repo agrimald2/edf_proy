@@ -62,4 +62,12 @@ class CustomerController extends Controller
     {
         //
     }
+
+    public function getCustomers($searchQuery = null){
+        if($searchQuery){
+            $searchQuery = $searchQuery . '%';
+            return \DB::select('SELECT code, volumen_cu FROM customers WHERE code LIKE ?', [$searchQuery]);
+        }
+        return collect();
+    }
 }

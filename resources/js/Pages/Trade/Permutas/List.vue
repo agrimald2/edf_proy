@@ -54,13 +54,13 @@
                 @click="selectedFilter = 'pending'">Pendientes</button>
         </div>
         <div class="flex gap-2 my-4 px-2">
-            <select v-model="selectedRegion" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <select v-model="selectedRegion" @change="filterLocationsByRegion" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 <option value="">Todas las Regiones</option>
-                <option v-for="region in regions" :key="region.id" :value="region.name">{{ region.name }}</option>
+                <option v-for="region in regions" :key="region.id" :value="region.id">{{ region.name }}</option>
             </select>
             <select v-model="selectedLocation" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 <option value="">Todas las Localidades</option>
-                <option v-for="location in locations" :key="location.id" :value="location.name">{{ location.name }}</option>
+                <option v-for="location in filteredLocations" :key="location.id" :value="location.name">{{ location.name }}</option>
             </select>
         </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
@@ -133,6 +133,7 @@ export default {
             selectedMonth: currentMonth,
             selectedRegion: '',
             selectedLocation: '',
+            filteredLocations: [],
             permutas: [],
             regions: [],
             locations: [],
@@ -144,6 +145,7 @@ export default {
     computed: {
         filteredPermutas() {
             return this.permutas.filter(permuta => {
+                // Filtrar por estado de la permuta
                 if (this.selectedFilter === 'todos') {
                     return true;
                 } else if (this.selectedFilter === 'approved') {
@@ -156,6 +158,7 @@ export default {
                     return permuta.gerente_status.toLowerCase() === this.selectedFilter;
                 }
             }).filter(permuta => {
+                // Filtrar por mes seleccionado
                 if (this.selectedMonth !== 'todos') {
                     const monthMap = {
                         'enero': 0,
@@ -176,7 +179,19 @@ export default {
                         return false;
                     }
                 }
-                return permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery);
+                // Filtrar por búsqueda de texto
+                if (!permuta.cod_cliente.includes(this.searchQuery) && !permuta.location.name.includes(this.searchQuery)) {
+                    return false;
+                }
+                // Filtrar por región seleccionada
+                if (this.selectedRegion && permuta.location.subregion.region_id !== this.selectedRegion) {
+                    return false;
+                }
+                // Filtrar por localización seleccionada
+                if (this.selectedLocation && permuta.location.name !== this.selectedLocation) {
+                    return false;
+                }
+                return true;
             });
         },
         approvedCount() {
@@ -185,6 +200,11 @@ export default {
         pendingCount() {
             return this.permutas.filter(permuta => permuta.trade_status.toLowerCase() === 'pending').length;
         }
+    },
+    watch: {
+        selectedRegion(newRegion) {
+            this.filterLocationsByRegion();
+        },
     },
     methods: {
         async getPermutas() {
@@ -207,9 +227,20 @@ export default {
             try {
                 const response = await axios.get('/api/locations');
                 this.locations = response.data;
+                this.filteredLocations = response.data;
             } catch (error) {
                 console.error('Error fetching locations:', error);
             }
+        },
+        filterLocationsByRegion() {
+            if (this.selectedRegion === '') {
+                this.filteredLocations = this.locations;
+            } else {
+                this.filteredLocations = this.locations.filter(location => {
+                    return location.sub_region.region_id === this.selectedRegion;
+                });
+            }
+            this.selectedLocation = '';
         },
         statusClass(trade_status) {
             switch (trade_status.toLowerCase()) {

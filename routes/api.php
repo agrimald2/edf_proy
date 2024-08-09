@@ -9,6 +9,7 @@ use App\Http\Controllers\SupervisorController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\RegionController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,3 +60,5 @@ Route::get('location/list', [MainController::class, 'getLocations'])->name('loca
 
 
 Route::get('supervisor/nameByMesa/{sv}', [SupervisorController::class, 'getNameByMesa'])->name('supervisor.name.mesa');
+
+Route::get('customers/search/{searchQuery}', [CustomerController::class, 'getCustomers'])->name('customers.search');

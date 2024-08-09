@@ -9,7 +9,7 @@ class LocationController extends Controller
 {
     public function index()
     {
-        $locations = Location::all();
+        $locations = Location::with('subRegion')->get();
         return response()->json($locations);
     }
 }

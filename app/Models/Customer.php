@@ -15,4 +15,5 @@ class Customer extends Model
         'code',
         'volumen_cu',
     ];
+    
 }
