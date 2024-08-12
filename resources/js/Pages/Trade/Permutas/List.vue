@@ -2,6 +2,10 @@
     <GuestLayout :title="`Permutas | EDF`">
         <div class="flex items-center justify-between px-4 py-2 bg-white shadow-md border-b border-gray-200">
             <h3 class="text-center text-sm font-bold text-gray-800 flex-1">¡Hola Carla Estrada!</h3>
+            <button @click="logout"
+                class="absolute top-2 right-0 ml-4 flex items-center text-sm font-bold text-red-600">
+                <i class="fa-solid fa-sign-out-alt mr-2"></i>
+            </button>
         </div>
         <div class="flex flex-row gap-2 bg-white shadow-md rounded-lg overflow-hidden p-2 items-center">
             <div class="flex-1 text-center text-xs">
@@ -61,13 +65,16 @@
                 @click="triggerFileInput">Importar Excel</button>
         </div>
         <div class="flex gap-2 my-4 px-2">
-            <select v-model="selectedRegion" @change="filterLocationsByRegion" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <select v-model="selectedRegion" @change="filterLocationsByRegion"
+                class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 <option value="">Todas las Regiones</option>
                 <option v-for="region in regions" :key="region.id" :value="region.id">{{ region.name }}</option>
             </select>
-            <select v-model="selectedLocation" class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            <select v-model="selectedLocation"
+                class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 <option value="">Todas las Localidades</option>
-                <option v-for="location in filteredLocations" :key="location.id" :value="location.name">{{ location.name }}</option>
+                <option v-for="location in filteredLocations" :key="location.id" :value="location.name">{{ location.name
+                    }}</option>
             </select>
         </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
@@ -91,8 +98,10 @@
                             <div class="mt-2">
                                 <span :class="statusClass(permuta.trade_status)"
                                     class="text-xs font-semibold mr-2 px-2.5 py-1 rounded">
-                                    <i :class="statusIcon(permuta.trade_status)"></i> 
-                                    {{ permuta.trade_status === 'Approved' ? 'Aprobada' : permuta.trade_status === 'Rejected' ? 'Rechazada' : permuta.trade_status === 'Pending' ? 'Pendiente' : permuta.trade_status }}
+                                    <i :class="statusIcon(permuta.trade_status)"></i>
+                                    {{ permuta.trade_status === 'Approved' ? 'Aprobada' : permuta.trade_status ===
+                                        'Rejected' ? 'Rechazada' : permuta.trade_status === 'Pending' ? 'Pendiente' :
+                                    permuta.trade_status }}
                                 </span>
                             </div>
                         </div>
