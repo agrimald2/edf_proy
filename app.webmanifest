@@ -1,0 +1,21 @@
+{
+  "name": "AC Equipos",
+  "short_name": "ACEquipos",
+  "description": "Control de equipos de frío AC",
+  "icons": [
+    {
+      "src": "https://nedfac.com/logo.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "https://nedfac.com/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "fullscreen",
+  "theme_color": "#c41c39",
+  "background_color": "#c41c39"
+}

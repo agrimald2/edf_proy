@@ -17,9 +17,10 @@
         <link rel="apple-touch-icon" href="https://nedfac.com/logo.png" />
 
         <link rel="icon" href="https://nedfac.com/logo.png" type="image/png">
-<link rel="shortcut icon" href="https://nedfac.com/logo.png" type="image/png">
-<link rel="apple-touch-icon" href="https://nedfac.com/logo.png">
-<link rel="manifest" href="/manifest.json">
+        <link rel="shortcut icon" href="https://nedfac.com/logo.png" type="image/png">
+        <link rel="apple-touch-icon" href="https://nedfac.com/logo.png">
+        <link rel="manifest" href="app.webmanifest" />
+
 
         <!-- Primary Meta Tags -->
         <meta name="title" content="NEF - Negociación Equipos de Frío" />
