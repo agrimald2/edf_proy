@@ -33,7 +33,6 @@ class TradeController extends Controller
                             'trade_status as status'
                         ]);
         
-        Log::debug($permutas);
 
         $permutas->map(function($permuta) {
             $permuta->status = 'PENDIENTE';

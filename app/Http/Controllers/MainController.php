@@ -47,16 +47,11 @@ class MainController extends Controller
             $condition = 'NUEVO';
             $dias_restantes = 0;
             
-            Log::debug($client->COD_CLIENTE);
             
             if($client->PUERTAS_A_NEGOCIAR > 0){
                 $condition = 'REPOTENCIADO';
             } 
-            
-            log::debug("Locacion: " . $client->LOCACION);
-            log::debug("Taller: " . $client->TALLER);
-            log::debug("Condicion: " . $condition);
-
+        
             
             $delay_time = WorkshopLocationDay::where('LOCACION', $client->LOCACION)
                                              ->where('TALLER', $client->TALLER)
@@ -76,7 +71,6 @@ class MainController extends Controller
             }
 
             if($client->NEGOCIADO == 'NEGOCIADO' && $client->STATUS == 'EN RUTA'){
-                log::debug($delay_time);
                 if (!is_int($delay_time)) {
                     $delay_time = $delay_time->TIEMPO ?? 0;
                 }
@@ -90,15 +84,11 @@ class MainController extends Controller
                 $delay_time = $delay_time + 4;
             }
             
-            log::debug("Días a sumar: " . $delay_time);
-
             $fecha_negociado = $client->FECHA_NEGOCIADO;
 
             if ($fecha_negociado) {
                 $fecha_negociado_date = \Carbon\Carbon::createFromFormat('Y-m-d', $fecha_negociado);
-                Log::debug("Fecha Negociado: " . $fecha_negociado_date);
                 $fecha_actual = \Carbon\Carbon::now();
-                Log::debug("Fecha Actual " . $fecha_actual);
                 
                 $fecha_estimada = $fecha_negociado_date->copy();
                 $dias_habiles_sumados = 0;
@@ -109,8 +99,6 @@ class MainController extends Controller
                         $dias_habiles_sumados++;
                     }
                 }
-
-                Log::debug("Fecha Estimada: " . $fecha_estimada);
 
                 // Calculate remaining business days
                 $dias_restantes = 0;
@@ -138,8 +126,6 @@ class MainController extends Controller
             }
             
             $dias_restantes = $dias_restantes+1;
-
-            log::debug("Días restantes: " . $dias_restantes);
             
             $client->dias_restantes = $dias_restantes;
 
@@ -164,7 +150,6 @@ class MainController extends Controller
     } 
 
     public function replaceDataFromExcel(Request $request){
-        Log::debug($request);
         $request->validate([
             'excel' => 'required|mimes:xlsx,xls,csv',
         ]);

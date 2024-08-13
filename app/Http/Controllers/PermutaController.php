@@ -34,9 +34,7 @@ class PermutaController extends Controller
         /**
          * Enviar el "SV" al entrar a la ruta
          */
-        
-        Log::debug($request);
-        
+                
         $requestData = $request->all();
         
         try {
@@ -233,7 +231,6 @@ class PermutaController extends Controller
      */
     public function approveBySupervisor(string $id, string $sv)
     {
-        Log::debug($sv);
         $permuta = Permuta::findOrFail($id);
         $permuta->supervisor_status = 'Approved';
         $permuta->supervisor_approved_by = $sv;

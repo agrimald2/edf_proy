@@ -16,8 +16,6 @@ class GestorController extends Controller
         $gv = Main::where('RUTA', $route)->first()->GV ?? 'N/A';
         
         $location = Main::where('RUTA', $route)->first()->LOCACION ?? 'N/A';
-
-        Log::debug($location);
         
         $location = Location::where('name', $location)->first();
         $location_id = $location ? $location->id : 2;

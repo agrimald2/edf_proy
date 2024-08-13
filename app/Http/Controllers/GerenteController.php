@@ -35,9 +35,7 @@ class GerenteController extends Controller
         $userId = Auth::id();
         $locations = Location::where('user_id', $userId)->get();
 
-        Log::debug($user);
-        Log::debug($userId);
-        Log::debug($locations);
+
         return response()->json($locations);
     }
 

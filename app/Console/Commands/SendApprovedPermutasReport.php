@@ -28,7 +28,6 @@ class SendApprovedPermutasReport extends Command
                             ->where('trade_status', 'Approved')
                             ->get();
 
-        Log::debug($permutas);
 
         if ($permutas->isEmpty()) {
             $this->info('No approved permutas found for today.');
