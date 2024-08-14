@@ -259,7 +259,8 @@ class MainController extends Controller
             ->values();
 
         
-        $negociados = Main::where('SV', $mesa)->where('NEGOCIADO', 'NEGOCIADO')->count();
+        $negociados = Main::where('SV', $mesa)->where('NEGOCIADO', 'NEGOCIADO')->sum('N_EDF');
+                
         $noNegociados = Main::where('SV', $mesa)->where('NEGOCIADO', 'PENDIENTE')->count();
 
         
