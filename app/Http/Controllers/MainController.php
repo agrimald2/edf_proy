@@ -258,7 +258,7 @@ class MainController extends Controller
             ->sortBy('total_negociados')
             ->values();
 
-        
+        // Sum N_EDF where NEGOCIADO is NEGOCIADO || Suma de equipos de frío negociados por todas las rutas del supervisor
         $negociados = Main::where('SV', $mesa)->where('NEGOCIADO', 'NEGOCIADO')->sum('N_EDF');
                 
         $noNegociados = Main::where('SV', $mesa)->where('NEGOCIADO', 'PENDIENTE')->count();
