@@ -53,8 +53,8 @@ const login = () => {
                         Ingresar
                     </button>
                     <div class="mt-4 text-center">
-                        <a href="/login" class="text-sm text-blue-300 hover:text-blue-500">
-                            Acceso Gerente/Trade
+                        <a href="/" class="text-sm text-blue-300 hover:text-blue-500">
+                            Acceso Gestor/Supervisor
                         </a>
                     </div>
                 </form>

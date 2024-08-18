@@ -191,6 +191,8 @@ class MainController extends Controller
                         'LOCACION' => $row[20],
                         'TALLER' => $row[21],
                         'FECHA_NEGOCIADO' => $row[22],
+                        'PROMEDIO_MES' => $row[23],
+                        'EDF_NEGOCIADOS' => $row[24],
                     ];
                 }, $batch);
     

@@ -58,7 +58,7 @@ const seePermutas = () => {
     window.location.href = `/gestor/${props.ruta}/permutas`;
 }
 onMounted(() => {
-    //selectedDay.value = getCurrentDayOfWeek();
+    selectedDay.value = getCurrentDayOfWeek();
 });
 
 const filteredClients = computed(() => {

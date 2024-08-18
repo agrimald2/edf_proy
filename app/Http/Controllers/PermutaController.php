@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Permuta;
+use App\Models\BlackList;
 use Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -32,9 +33,13 @@ class PermutaController extends Controller
     public function store(Request $request)
     {
         /**
-         * Enviar el "SV" al entrar a la ruta
+         * Validar que el código de cliente no esté en la lista negra
          */
-                
+        $blackList = BlackList::where('client_code', $request->clientCode)->first();
+        if ($blackList) {
+            return response()->json(['error' => 'El código de cliente está en la lista negra.'], 400);
+        }
+
         $requestData = $request->all();
         
         try {

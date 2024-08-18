@@ -34,6 +34,8 @@ class Main extends Model
         'SV_LIMIT',
         'LOCACION',
         'TALLER',
-        'FECHA_NEGOCIADO'
+        'FECHA_NEGOCIADO',
+        'PROMEDIO_MES',
+        'EDF_NEGOCIADOS'
     ];
 }

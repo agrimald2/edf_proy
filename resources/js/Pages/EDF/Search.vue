@@ -1,8 +1,17 @@
 <script setup>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 
 const ruta = ref('');
+const errors = ref({});
+
+const { props } = usePage();
+onMounted(() => {
+    if (props.errors && props.errors.code) {
+        errors.value = props.errors;
+    }
+});
 
 const search = () => {
     const baseUrl = `/login/${ruta.value}`;
@@ -17,6 +26,9 @@ const search = () => {
                 <form @submit.prevent="search" class="bg-white px-8 pt-6 pb-4 mb-4">
                     <div class="text-center flex justify-center my-4">
                         <img src="/logo.png" alt="" style="width: 65%;">
+                    </div>
+                    <div v-if="errors.code" class="mb-4 mt-6">
+                        <p class="text-red-500 text-xs italic">{{ errors.code }}</p>
                     </div>
                     <div class="mb-4 mt-6">
                         <input v-model="ruta"

@@ -45,6 +45,8 @@ class MainImport implements ToCollection, WithHeadingRow, WithChunkReading
                 'CUOTA' => $row['cuota'] ?? null,
                 'TALLER' => $row['taller'] ?? null,
                 'LOCACION' => $row['locacion'] ?? null,
+                'PROMEDIO_MES' => $row['promedio_mes'] ?? null,
+                'EDF_NEGOCIADOS' => $row['edf_negociados'] ?? null,
             ];
         }
 
