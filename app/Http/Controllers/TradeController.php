@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Permuta;
+use App\Models\EdfData;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PendingPermutasExport;
@@ -12,39 +13,43 @@ use Log;
 
 class TradeController extends Controller
 {
-    public function index(){     
+    public function index()
+    {
         return Inertia::render('Trade/Permutas/List', [
-                'supervisor' => 'Alonso',
-        ]); 
-    } 
+            'supervisor' => 'Alonso',
+        ]);
+    }
 
-    public function exportPendingPermutas(){
+    public function exportPendingPermutas()
+    {
         $permutas = Permuta::where('instance_status', 'Trade')
-                        ->where('trade_status', 'PENDING')
-                        ->get([
-                            'id', 
-                            'cod_cliente', 
-                            'created_at as fecha_de_permuta', 
-                            'volume as volumen_en_cu', 
-                            'condition as condición', 
-                            'doors_to_negotiate as puertas_a_negotiar', 
-                            'reason as motivo', 
-                            'justification as justificación',
-                            'subcanal as subcanal',
-                            'trade_status as status'
-                        ]);
-        
+            ->where('trade_status', 'PENDING')
+            ->get([
+                'id',
+                'cod_cliente',
+                'created_at as fecha_de_permuta',
+                'volume as volumen_en_cu',
+                'condition as condición',
+                'doors_to_negotiate as puertas_a_negotiar',
+                'reason as motivo',
+                'justification as justificación',
+                'subcanal as subcanal',
+                'trade_status as status'
+            ]);
 
-        $permutas->map(function($permuta) {
+        $permutas->map(function ($permuta) {
+            $edfData = EdfData::where('code', $permuta->cod_cliente)->first(['n_edf', 'n_doors']);
+            $permuta->n_edf = $edfData ? $edfData->n_edf : '';
+            $permuta->n_doors = $edfData ? $edfData->n_doors : '';
             $permuta->status = 'PENDIENTE';
             return $permuta;
         });
-        
 
         return Excel::download(new PendingPermutasExport($permutas), 'pending_permutas.xlsx');
     }
 
-    public function importPendingPermutas(Request $request){
+    public function importPendingPermutas(Request $request)
+    {
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
