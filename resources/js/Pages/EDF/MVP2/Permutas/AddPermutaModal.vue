@@ -20,7 +20,7 @@
                         </div>
                         <div>
                             <input v-model="formData.volumeCU" type="text" placeholder="Volumen en CU"
-                                class="w-full inputs_permutas">
+                                class="w-full inputs_permutas" disabled>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">

@@ -30,6 +30,7 @@ class TradeController extends Controller
                             'doors_to_negotiate as puertas_a_negotiar', 
                             'reason as motivo', 
                             'justification as justificación',
+                            'subcanal as subcanal',
                             'trade_status as status'
                         ]);
         

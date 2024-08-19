@@ -28,7 +28,7 @@
                             </ul>
                         </div>
                         <div>
-                            <input v-model="formData.volumeCU" type="tel" placeholder="Volumen en CU"
+                            <input v-model="formData.volumeCU" type="tel" placeholder="Volumen en CU" :disabled="disableVolumeCU"
                                 :class="['w-full inputs_permutas', showError && formData.volumeCU === '' ? 'border-red-500' : '']">
                         </div>
                     </div>
@@ -167,6 +167,7 @@ export default {
                 justification: '',
                 sv: this.sv
             },
+            disableVolumeCU: false,
             reasons: [],
             locations: [],
             sentPermutaViewModal: false,
@@ -314,6 +315,8 @@ export default {
             this.selectedClient = client;
             this.formData.clientCode = client.code;
             // El volumen en CU se actualizará automáticamente gracias al watcher de selectedClient
+            // disabled input volumen cu
+            this.disableVolumeCU = true;
         },
         handleClickOutside(event) {
             if (this.$refs.search && !this.$refs.search.contains(event.target)) {
