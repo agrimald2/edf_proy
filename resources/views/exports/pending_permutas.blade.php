@@ -13,7 +13,7 @@
             <th>Locacion</th>
             <th>N° EDF</th>
             <th>N° Puertas</th>
-            <th>Status</th>
+            <th>Status (SI ó NO)</th>
         </tr>
     </thead>
     <tbody>
