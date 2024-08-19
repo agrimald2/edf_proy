@@ -73,7 +73,7 @@ class TradeController extends Controller
 
             $permuta = Permuta::find($row[0]);
             if ($permuta) {
-                Log::debug($permuta);
+                Log::debug($row);
                 if ($row[10] === 'SI') {
                     $permuta->trade_status = 'Approved';
                     $permuta->trade_approved_at = now();
