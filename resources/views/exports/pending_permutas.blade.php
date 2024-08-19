@@ -9,6 +9,10 @@
             <th>Puertas a Negociar</th>
             <th>Motivo</th>
             <th>Justificación</th>
+            <th>Subcanal</th>
+            <th>Locacion</th>
+            <th>N° EDF</th>
+            <th>N° Puertas</th>
             <th>Status</th>
         </tr>
     </thead>
@@ -23,6 +27,10 @@
                 <td>{{ $permuta->puertas_a_negotiar }}</td>
                 <td>{{ $permuta->motivo }}</td>
                 <td>{{ $permuta->justificación }}</td>
+                <td>{{ $permuta->subcanal }}</td>
+                <td>{{ $permuta->locacion }}</td>
+                <td>{{ $permuta->n_edf }}</td>
+                <td>{{ $permuta->n_doors }}</td>
                 <td>{{ $permuta->status }}</td>
             </tr>
         @endforeach

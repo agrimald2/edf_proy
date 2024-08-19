@@ -24,6 +24,9 @@ class TradeController extends Controller
     {
         $permutas = Permuta::where('instance_status', 'Trade')
             ->where('trade_status', 'PENDING')
+            ->with(['location' => function($query) {
+                $query->select('id', 'name');
+            }])
             ->get([
                 'id',
                 'cod_cliente',
@@ -34,11 +37,16 @@ class TradeController extends Controller
                 'reason as motivo',
                 'justification as justificación',
                 'subcanal as subcanal',
-                'trade_status as status'
-            ]);
+                'trade_status as status',
+                'location_id'
+            ])->map(function ($permuta) {
+                $permuta->locacion = $permuta->location ? $permuta->location->name : null;
+                unset($permuta->location);
+                return $permuta;
+            });
 
         $permutas->map(function ($permuta) {
-            $edfData = EdfData::where('code', $permuta->cod_cliente)->first(['n_edf', 'n_doors']);
+            $edfData = EdfData::where('id', $permuta->cod_cliente)->first(['n_edf', 'n_doors']);
             $permuta->n_edf = $edfData ? $edfData->n_edf : '';
             $permuta->n_doors = $edfData ? $edfData->n_doors : '';
             $permuta->status = 'PENDIENTE';
@@ -65,10 +73,10 @@ class TradeController extends Controller
 
             $permuta = Permuta::find($row[0]);
             if ($permuta) {
-                if ($row[8] === 'SI') {
+                if ($row[10] === 'SI') {
                     $permuta->trade_status = 'Approved';
                     $permuta->trade_approved_at = now();
-                } elseif ($row[8] === 'NO') {
+                } elseif ($row[10] === 'NO') {
                     $permuta->trade_status = 'Rejected';
                     $permuta->trade_rejected_at = now();
                 }
