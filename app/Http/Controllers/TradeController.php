@@ -64,7 +64,7 @@ class TradeController extends Controller
 
         $file = $request->file('file');
         $data = Excel::toArray([], $file)[0];
-
+        
         foreach ($data as $index => $row) {
             // Skip the header row
             if ($index === 0) {
@@ -73,6 +73,7 @@ class TradeController extends Controller
 
             $permuta = Permuta::find($row[0]);
             if ($permuta) {
+                Log::debug($permuta);
                 if ($row[10] === 'SI') {
                     $permuta->trade_status = 'Approved';
                     $permuta->trade_approved_at = now();
