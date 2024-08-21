@@ -165,8 +165,6 @@ class MainController extends Controller
             $batchSize = 1000; // Adjust batch size as needed
             $batches = array_chunk($data, $batchSize);
             
-            Log::info($data);
-
             foreach ($batches as $batch) {
                 $insertData = array_map(function($row) {
                     return [
