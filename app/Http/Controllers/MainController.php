@@ -164,7 +164,9 @@ class MainController extends Controller
             $data = array_slice($data, 1);
             $batchSize = 1000; // Adjust batch size as needed
             $batches = array_chunk($data, $batchSize);
-    
+            
+            Log::info($data);
+
             foreach ($batches as $batch) {
                 $insertData = array_map(function($row) {
                     return [
@@ -205,6 +207,7 @@ class MainController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
+
     public function getInfoByMesa($mesa){     
         $mesa = strtoupper($mesa);
         $cuota = Main::where('SV', $mesa)->first()->CUOTA ?? 'N/A';
