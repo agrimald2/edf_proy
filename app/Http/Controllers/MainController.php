@@ -26,7 +26,6 @@ class MainController extends Controller
         $cuota = $clients->first()->CUOTA ?? 'N/A';
 
         $negociados = Main::where('RUTA', $ruta)
-                          ->distinct('COD_CLIENTE')
                           ->sum('EDF_NEGOCIADOS');
 
         Log::info(Main::where('RUTA', $ruta)->orderBy('EDF_NEGOCIADOS', 'desc')->get());
