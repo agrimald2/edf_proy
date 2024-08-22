@@ -220,7 +220,8 @@ class MainController extends Controller
                 $ruta = $gestor->RUTA;
                 $gv = $gestor->GV;
                 $total_negociados = Main::where('RUTA', $ruta)
-                    ->distinct('COD_CLIENTE')
+                    ->get()
+                    ->unique('COD_CLIENTE')
                     ->sum('EDF_NEGOCIADOS');
             
                 $n_puertas_negociadas_repotenciadas = Main::where('RUTA', $ruta)
