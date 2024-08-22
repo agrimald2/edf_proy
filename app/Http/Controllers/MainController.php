@@ -27,7 +27,7 @@ class MainController extends Controller
 
         $negociados = Main::where('RUTA', $ruta)
                           ->distinct('COD_CLIENTE')
-                          ->count('EDF_NEGOCIADOS');
+                          ->sum('EDF_NEGOCIADOS');
 
         $noNegociados = Main::where('RUTA', $ruta)
                              ->where('NEGOCIADO', 'PENDIENTE')
