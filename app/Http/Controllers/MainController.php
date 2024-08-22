@@ -26,7 +26,8 @@ class MainController extends Controller
         $cuota = $clients->first()->CUOTA ?? 'N/A';
 
         $negociados = Main::where('RUTA', $ruta)
-                          ->distinct('COD_CLIENTE')
+                          ->get()
+                          ->unique('COD_CLIENTE')
                           ->sum('EDF_NEGOCIADOS');
 
         $noNegociados = Main::where('RUTA', $ruta)
