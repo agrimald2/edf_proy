@@ -29,6 +29,8 @@ class MainController extends Controller
                           ->distinct('COD_CLIENTE')
                           ->sum('EDF_NEGOCIADOS');
 
+        Log::info(Main::where('RUTA', $ruta)->get());
+
         $noNegociados = Main::where('RUTA', $ruta)
                              ->where('NEGOCIADO', 'PENDIENTE')
                              ->distinct('COD_CLIENTE')
