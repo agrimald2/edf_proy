@@ -26,9 +26,8 @@ class MainController extends Controller
         $cuota = $clients->first()->CUOTA ?? 'N/A';
 
         $negociados = Main::where('RUTA', $ruta)
-                          ->where('NEGOCIADO', 'NEGOCIADO')
                           ->distinct('COD_CLIENTE')
-                          ->count('COD_CLIENTE');
+                          ->count('EDF_NEGOCIADOS');
 
         $noNegociados = Main::where('RUTA', $ruta)
                              ->where('NEGOCIADO', 'PENDIENTE')
