@@ -19,8 +19,13 @@ const uploadFile = async () => {
         isProcessing.value = true;
         uploadStatus.value = 'Uploading...';
         const formData = new FormData();
+        
+        console.log('FormData');
+
         formData.append('excel', file.value);
 
+        console.log('Appended');
+        
         try {
             console.log('Try...');
             const response = await axios.post('/upload-excel', formData, {
