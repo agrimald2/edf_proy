@@ -157,11 +157,15 @@ class MainController extends Controller
             'excel' => 'required|mimes:xlsx,xls,csv',
         ]);
 
+        Log::debug('Validado');
+        
         $file = $request->file('excel');
+
+        Log::debug('Requerido');
 
         $data = \Excel::toArray([], $file)[0];
 
-        Log::debug('Hola');
+        Log::debug('Convertido a Array');
         
         return;
 
