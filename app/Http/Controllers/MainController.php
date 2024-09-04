@@ -154,7 +154,7 @@ class MainController extends Controller
     public function replaceDataFromExcel(Request $request)
     {
         Log::debug("Arrancó");
-        
+
         $request->validate([
             'excel' => 'required|mimes:xlsx,xls,csv',
         ]);
@@ -169,8 +169,6 @@ class MainController extends Controller
 
         Log::debug('Convertido a Array');
         
-        return;
-
         DB::table('mains')->truncate();
 
         try {
