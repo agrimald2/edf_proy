@@ -290,7 +290,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                             <span
                                                 :class="[
                                                     'flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0',
-                                                    client.STATUS === 'NEGOCIADO' || client.STATUS === 'EN RUTA' || client.STATUS === 'ENTREGADO' || client.STATUS === 'NO EFECTIVA' ? 'bg-green-500 text-white' : 'bg-gray-50 text-gray-300'
+                                                    client.STATUS === 'NEGOCIADO' || client.STATUS === 'EN RUTA' || client.STATUS === 'ENTREGADO' || client.STATUS === 'NO EFECTIVO' ? 'bg-green-500 text-white' : 'bg-gray-50 text-gray-300'
                                                 ]">
                                                 <i class="fa-solid fa-handshake text-xs"></i>
                                             </span>
@@ -300,7 +300,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                             <span
                                                 :class="[
                                                     'flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0',
-                                                    client.STATUS === 'EN RUTA' || client.STATUS === 'ENTREGADO' || client.STATUS === 'NO EFECTIVA' ? 'bg-green-500 text-white' : 'bg-gray-50 text-gray-300'
+                                                    client.STATUS === 'EN RUTA' || client.STATUS === 'ENTREGADO' || client.STATUS === 'NO EFECTIVO' ? 'bg-green-500 text-white' : 'bg-gray-50 text-gray-300'
                                                 ]">
                                                 <i class="fa-solid fa-arrows-rotate text-xs"></i>
                                             </span>
@@ -310,9 +310,9 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                             <span
                                                 :class="[
                                                     'flex items-center justify-center w-8 h-8 rounded-full lg:h-10 lg:w-10 shrink-0',
-                                                    client.STATUS === 'ENTREGADO' ? 'bg-green-500 text-white' : client.STATUS === 'NO EFECTIVA' ? 'bg-red-500 text-white' : 'bg-gray-50 text-gray-300'
+                                                    client.STATUS === 'ENTREGADO' ? 'bg-green-500 text-white' : client.STATUS === 'NO EFECTIVO' ? 'bg-red-500 text-white' : 'bg-gray-50 text-gray-300'
                                                 ]">
-                                                <i :class="client.STATUS === 'NO EFECTIVA' ? 'fa-solid fa-xmark text-xs' : 'fa-solid fa-check text-xs'"></i>
+                                                <i :class="client.STATUS === 'NO EFECTIVO' ? 'fa-solid fa-xmark text-xs' : 'fa-solid fa-check text-xs'"></i>
                                             </span>
                                         </li>
                                     </ol>
@@ -326,7 +326,7 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                         </div>
                                         <div class="flex w-full items-center justify-left text-xs text-gray-500">
                                             <span v-if="client.STATUS === 'ENTREGADO'" class="text-green-500">Entregado</span>
-                                            <span v-if="client.STATUS === 'NO EFECTIVA'" class="text-red-500">No efectiva</span>
+                                            <span v-if="client.STATUS === 'NO EFECTIVO'" class="text-red-500">No efectiva</span>
                                         </div>
                                     </div>
                                 </div>
