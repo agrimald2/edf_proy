@@ -153,6 +153,8 @@ class MainController extends Controller
 
     public function replaceDataFromExcel(Request $request)
     {
+        Log::debug("Arrancó");
+        
         $request->validate([
             'excel' => 'required|mimes:xlsx,xls,csv',
         ]);
