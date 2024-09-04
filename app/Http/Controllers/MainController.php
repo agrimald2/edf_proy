@@ -163,7 +163,7 @@ class MainController extends Controller
         
         $file = $request->file('excel');
 
-        Log::debug('Requerido');
+        Log::debug('Requerido...');
 
         $data = \Excel::toArray([], $file)[0];
 
