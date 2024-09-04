@@ -158,47 +158,112 @@ class MainController extends Controller
         ]);
 
         $file = $request->file('excel');
-        $import = new FastExcel;
 
-        DB::beginTransaction(); // Iniciar transacción
+        $data = \Excel::toArray([], $file)[0];
+
+        Log::debug($data);
+        
+        return;
+
+        DB::table('mains')->truncate();
 
         try {
-            DB::table('mains')->truncate(); // Vaciar la tabla Main
+            $data = array_slice($data, 1);
+            $batchSize = 1000; // Adjust batch size as needed
+            $batches = array_chunk($data, $batchSize);
 
-            $import->import($file, function ($line) {
-                return Main::create([
-                    'COD_CLIENTE' => $line['COD_CLIENTE'],
-                    'RUTA' => $line[1],
-                    'FREC_VISITA' => $line[2],
-                    'CLIENTE' => $line[3],
-                    'DIRECCION' => $line[4],
-                    'SV' => $line[5],
-                    'GV' => $line[6],
-                    'NOMBRE_SV' => $line[7],
-                    'TAMANO' => $line[8],
-                    'PROMEDIO_CU_3M' => $line[9],
-                    'N_EDF' => $line[10],
-                    'N_PUERTAS' => $line[11],
-                    'CONDICION' => $line[12],
-                    'PUERTAS_A_NEGOCIAR' => $line[13],
-                    'CONDICION_2' => $line[14],
-                    'PUERTAS_A_NEGOCIAR_2' => $line[15],
-                    'NEGOCIADO' => $line[16],
-                    'STATUS' => $line[17],
-                    'CUOTA' => $line[18],
-                    'SV_LIMIT' => $line[19],
-                    'LOCACION' => $line[20],
-                    'TALLER' => $line[21],
-                    'FECHA_NEGOCIADO' => $line[22],
-                    'PROMEDIO_MES' => $line[23],
-                    'EDF_NEGOCIADOS' => $line[24],
-                ]);
-            });
+            foreach ($batches as $batch) {
+                $insertData = array_map(function ($row) {
+                    return [
+                        'COD_CLIENTE' => $row[0],
+                        'RUTA' => $row[1],
+                        'FREC_VISITA' => $row[2],
+                        'CLIENTE' => $row[3],
+                        'DIRECCION' => $row[4],
+                        'SV' => $row[5],
+                        'GV' => $row[6],
+                        'NOMBRE_SV' => $row[7],
+                        'TAMANO' => $row[8],
+                        'PROMEDIO_CU_3M' => $row[9],
+                        'N_EDF' => $row[10],
+                        'N_PUERTAS' => $row[11],
+                        'CONDICION' => $row[12],
+                        'PU ERTAS_A_NEGOCIAR' => $row[13],
+                        'CONDICION_2' => $row[14],
+                        'PUERTAS_A_NEGOCIAR_2' => $row[15],
+                        'NEGOCIADO' => $row[16],
+                        'STATUS' => $row[17],
+                        'CUOTA' => $row[18],
+                        'SV_LIMIT' => $row[19],
+                        'LOCACION' => $row[20],
+                        'TALLER' => $row[21],
+                        'FECHA_NEGOCIADO' => $row[22],
+                        'PROMEDIO_MES' => $row[23],
+                        'EDF_NEGOCIADOS' => $row[24],
+                    ];
+                }, $batch);
 
-            DB::commit(); // Confirmar transacción
+                Main::insert($insertData);
+            }
+
             return back()->with('success', 'Data has been replaced successfully.');
         } catch (\Exception $e) {
-            DB::rollBack(); // Revertir transacción en caso de error
+            Log::error($e->getMessage());
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function uploadNewDataFromExcel(Request $request)
+    {
+        $request->validate([
+            'excel' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        $file = $request->file('excel');
+
+        $data = \Excel::toArray([], $file)[0];
+
+        try {
+            $data = array_slice($data, 1);
+            $batchSize = 1000; // Adjust batch size as needed
+            $batches = array_chunk($data, $batchSize);
+
+            foreach ($batches as $batch) {
+                $insertData = array_map(function ($row) {
+                    return [
+                        'COD_CLIENTE' => $row[0],
+                        'RUTA' => $row[1],
+                        'FREC_VISITA' => $row[2],
+                        'CLIENTE' => $row[3],
+                        'DIRECCION' => $row[4],
+                        'SV' => $row[5],
+                        'GV' => $row[6],
+                        'NOMBRE_SV' => $row[7],
+                        'TAMANO' => $row[8],
+                        'PROMEDIO_CU_3M' => $row[9],
+                        'N_EDF' => $row[10],
+                        'N_PUERTAS' => $row[11],
+                        'CONDICION' => $row[12],
+                        'PU ERTAS_A_NEGOCIAR' => $row[13],
+                        'CONDICION_2' => $row[14],
+                        'PUERTAS_A_NEGOCIAR_2' => $row[15],
+                        'NEGOCIADO' => $row[16],
+                        'STATUS' => $row[17],
+                        'CUOTA' => $row[18],
+                        'SV_LIMIT' => $row[19],
+                        'LOCACION' => $row[20],
+                        'TALLER' => $row[21],
+                        'FECHA_NEGOCIADO' => $row[22],
+                        'PROMEDIO_MES' => $row[23],
+                        'EDF_NEGOCIADOS' => $row[24],
+                    ];
+                }, $batch);
+
+                Main::insert($insertData);
+            }
+
+            return back()->with('success', 'Data has been uploaded successfully.');
+        } catch (\Exception $e) {
             Log::error($e->getMessage());
             return back()->with('error', $e->getMessage());
         }
