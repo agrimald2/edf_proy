@@ -161,7 +161,7 @@ class MainController extends Controller
 
         $data = \Excel::toArray([], $file)[0];
 
-        Log::debug($data);
+        Log::debug('Hola');
         
         return;
 
