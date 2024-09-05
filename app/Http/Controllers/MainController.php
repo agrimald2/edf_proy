@@ -27,13 +27,19 @@ class MainController extends Controller
         $clients = Main::where('RUTA', $ruta)->get();
         $cuota = $clients->first()->CUOTA ?? 'N/A';
 
+
+
+        $currentMonth = now()->format('Y-m');
+
         $negociados = Main::where('RUTA', $ruta)
+            ->where('FECHA_NEGOCIADO', 'like', $currentMonth . '%')
             ->get()
             ->unique('COD_CLIENTE')
             ->sum('EDF_NEGOCIADOS');
 
         $noNegociados = Main::where('RUTA', $ruta)
             ->where('NEGOCIADO', 'PENDIENTE')
+            ->where('FECHA_NEGOCIADO', 'like', $currentMonth . '%')
             ->distinct('COD_CLIENTE')
             ->count('COD_CLIENTE');
 
