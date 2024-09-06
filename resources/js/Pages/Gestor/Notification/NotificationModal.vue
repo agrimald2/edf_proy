@@ -8,9 +8,11 @@
         </button>
       </div>
       <ul class="p-4 space-y-4">
-        <li v-for="(notification, index) in notifications" :key="index" class="flex items-center space-x-4">
-          <i :class="notification.icon" class="text-xl"></i>
-          <span>{{ notification.text }}</span>
+        <li v-for="(notification, index) in notifications" :key="index" class="flex items-center space-x-4 hover:bg-gray-100 rounded-md transition duration-150 ease-in-out">
+          <a :href="notification.link" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-4 w-full p-2 rounded-md">
+            <i :class="notification.icon" class="text-xl"></i>
+            <span>{{ notification.text }}</span>
+          </a>
         </li>
       </ul>
     </div>
@@ -22,14 +24,30 @@ export default {
   data() {
     return {
       show: true,
-      notifications: [
-        { icon: 'fas fa-info-circle', text: 'Notificación 1' },
-        { icon: 'fas fa-exclamation-circle', text: 'Notificación 2' },
-        { icon: 'fas fa-check-circle', text: 'Notificación 3' },
-      ],
+      notifications: [],
     };
   },
+  created() {
+    this.fetchNotifications();
+  },
   methods: {
+    fetchNotifications() {
+      axios.get('/api/notifications')
+        .then(response => {
+          this.notifications = response.data.map(notification => ({
+            icon: this.getIconClass(notification),
+            text: notification.content,
+            link: notification.link
+          }));
+        })
+        .catch(error => {
+          console.error('There was an error fetching the notifications:', error);
+        });
+    },
+    getIconClass(notification) {
+      // Placeholder for icon class logic based on notification properties
+      return 'fas fa-info-circle'; // Default icon class
+    },
     close() {
       this.show = false;
       setTimeout(() => {

@@ -51,8 +51,13 @@ const logout = () => {
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Excel
                                 </NavLink>
+                                <!-- 
                                 <NavLink :href="route('permutas')" :active="route().current('permutas')">
                                     Permutas
+                                </NavLink>
+                                -->
+                                <NavLink :href="route('notifications.admin')" :active="route().current('notifications.admin')">
+                                    Notificaciones
                                 </NavLink>
                             </div>
                         </div>
@@ -211,6 +216,9 @@ const logout = () => {
                         </ResponsiveNavLink>
                         <ResponsiveNavLink :href="route('permutas')" :active="route().current('permutas')">
                             Permutas
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('notifications.admin')" :active="route().current('notifications.admin')">
+                            Notificaciones 
                         </ResponsiveNavLink>
                     </div>
 
