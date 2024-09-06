@@ -30,8 +30,6 @@ class MainController extends Controller
         $cuota = $clients->first()->CUOTA ?? 'N/A';
 
 
-
-
         $negociados = Main::where('RUTA', $ruta)
             ->where('FECHA_NEGOCIADO', 'like', $currentMonth . '%')
             ->get()
@@ -43,10 +41,12 @@ class MainController extends Controller
             ->distinct('COD_CLIENTE')
             ->count('COD_CLIENTE');
 
+
         $gv = $clients->first()->GV ?? 'N/A';
         $sv = $clients->first()->SV ?? 'N/A';
 
         $negociated_by_sv = Main::where('SV', $sv)
+            ->where('FECHA_NEGOCIADO', 'like', $currentMonth . '%')
             ->where('NEGOCIADO', 'NEGOCIADO')
             ->count();
 
@@ -140,10 +140,17 @@ class MainController extends Controller
             return $client;
         });
 
+        Log::debug($cuota);
+        Log::debug($negociated_by_sv);
+
         $pending = is_numeric($cuota) ? $cuota - $negociated_by_sv : 'N/A';
+        Log::debug($pending);
+
         if (is_numeric($pending) && $pending < 0) {
             $pending = 0; // Ensure pending is not negative
         }
+
+        Log::debug($pending);
 
         return Inertia::render('EDF/MVP2/InfoByRuta', [
             'sv' => $sv,
