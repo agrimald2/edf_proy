@@ -33,8 +33,12 @@ class PermutaController extends Controller
     public function store(Request $request)
     {
         /**
-         * Validar que el código de cliente no esté en la lista negra
+         * Validar que el código de cliente no esté en la lista negra y no empiece con cero
          */
+        if (substr($request->clientCode, 0, 1) === '0') {
+            return response()->json(['error' => 'El código de cliente no puede empezar con cero.'], 400);
+        }
+
         $blackList = BlackList::where('id', $request->clientCode)->first();
         if ($blackList) {
             return response()->json(['error' => 'El código de cliente está en la lista negra.'], 400);
