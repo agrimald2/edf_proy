@@ -288,6 +288,8 @@ class MainController extends Controller
 
     public function getInfoByMesa($mesa)
     {
+        $currentMonth = now()->format('Y-m');
+        
         $mesa = strtoupper($mesa);
         $cuota = Main::where('SV', $mesa)->first()->CUOTA ?? 'N/A';
         $supervisor = Main::where('SV', $mesa)->first()->NOMBRE_SV ?? 'N/A';
@@ -343,7 +345,9 @@ class MainController extends Controller
             ->values();
 
         // Sum N_EDF where NEGOCIADO is NEGOCIADO || Suma de equipos de frío negociados por todas las rutas del supervisor
+        
         $negociados = Main::where('SV', $mesa)
+            ->where('FECHA_NEGOCIADO', 'like', $currentMonth . '%')
             ->select('COD_CLIENTE', 'EDF_NEGOCIADOS')
             ->get()
             ->unique('COD_CLIENTE')
