@@ -207,6 +207,18 @@ export default {
             return this.formData.location_id && this.formData.clientCode && this.formData.volumeCU && this.formData.route && this.formData.haveEdf !== '' && this.formData.doorsToNegotiate && this.formData.condition && this.formData.reason;
         },
         doorsOptions() {
+            const condition = this.formData.condition.toUpperCase();
+            let options = [];
+
+            if (condition === 'NUEVO') {
+                options = [1, 2];
+            } else if (condition === 'REPOTENCIADO') {
+                options = [0.5, 1, 2];
+            }
+
+            return options;
+        },
+        oldDoorsOptions() {
             const volumeCU = parseInt(this.formData.volumeCU);
             const condition = this.formData.condition.toUpperCase();
             let options = [];
