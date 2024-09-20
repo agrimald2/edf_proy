@@ -39,7 +39,7 @@ class PermutaController extends Controller
             return response()->json(['error' => 'El código de cliente no puede empezar con cero.'], 400);
         }
 
-        $blackList = BlackList::where('id', $request->clientCode)->first();
+        $blackList = BlackList::where('client_code', $request->clientCode)->first();
         if ($blackList) {
             return response()->json(['error' => 'El código de cliente está en la lista negra.'], 400);
         }
@@ -56,7 +56,7 @@ class PermutaController extends Controller
                 'subcanal' => 'required|string',
                 'haveEdf' => 'required|boolean',
                 'condition' => 'required|string',
-                'doorsToNegotiate' => 'required|integer',
+                'doorsToNegotiate' => 'required',
                 'reason' => 'required|string',
                 'justification' => 'string|nullable',
             ], [
@@ -76,7 +76,6 @@ class PermutaController extends Controller
                 'condition.required' => 'El campo condición es obligatorio.',
                 'condition.string' => 'El campo condición debe ser una cadena de texto.',
                 'doorsToNegotiate.required' => 'El campo puertas a negociar es obligatorio.',
-                'doorsToNegotiate.integer' => 'El campo puertas a negociar debe ser un número entero.',
                 'reason.required' => 'El campo motivo es obligatorio.',
                 'reason.string' => 'El campo motivo debe ser una cadena de texto.',
                 'justification.string' => 'El campo justificación debe ser una cadena de texto.',
