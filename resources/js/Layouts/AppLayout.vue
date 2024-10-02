@@ -49,15 +49,19 @@ const logout = () => {
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Excel
+                                    Data
                                 </NavLink>
-                                <!-- 
                                 <NavLink :href="route('permutas')" :active="route().current('permutas')">
                                     Permutas
                                 </NavLink>
-                                -->
                                 <NavLink :href="route('notifications.admin')" :active="route().current('notifications.admin')">
                                     Notificaciones
+                                </NavLink>
+                                <NavLink :href="route('admin.black-list')" :active="route().current('admin.black-list')">
+                                    Lista Negra
+                                </NavLink>
+                                <NavLink :href="route('admin.customers')" :active="route().current('admin.customers')">
+                                    Clientes
                                 </NavLink>
                             </div>
                         </div>

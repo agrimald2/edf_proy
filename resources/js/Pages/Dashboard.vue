@@ -61,7 +61,7 @@ const isUploading = computed(() => uploadStatus.value === 'File selected' || isP
     <AppLayout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Upload Excel Document 2
+                Importar Data
             </h2>
         </template>
 

@@ -53,6 +53,20 @@ Route::middleware([
     Route::put('/notifications/{notification}', [NotificationController::class, 'update'])->name('notifications.update');
     Route::put('/notifications/toggle/{notification}', [NotificationController::class, 'toggleStatus'])->name('notifications.toggle');
     Route::delete('/notifications/{notification}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+
+    // Admin Routes
+    Route::get('/admin/black-list', [AdminController::class, 'blackListIndex'])->name('admin.black-list');
+    Route::get('/admin/customers', [AdminController::class, 'customersIndex'])->name('admin.customers');
+
+    // Upload BlackList
+    Route::post('/admin/upload-blacklist', [AdminController::class, 'uploadBlackList'])->name('admin.upload-blacklist');
+
+    // Upload Customers
+    Route::post('/admin/upload-customers', [AdminController::class, 'uploadCustomers'])->name('admin.upload-customers');
+
+    // Get Permutas
+    Route::post('/admin/permutas', [AdminController::class, 'getPermutas'])->name('admin.permutas');
+    Route::delete('/admin/permutas/{id}', [AdminController::class, 'deletePermuta'])->name('admin.permutas.delete');
 });
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
