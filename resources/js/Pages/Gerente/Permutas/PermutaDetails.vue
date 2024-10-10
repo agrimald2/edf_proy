@@ -162,6 +162,7 @@ export default {
         },
         fetchReasons() {
             console.log("Llamada a fetchReasons");
+            console.log(this.permuta.id);
             fetch('/api/permuta-reasons')
                 .then(response => {
                     if (!response.ok) {
