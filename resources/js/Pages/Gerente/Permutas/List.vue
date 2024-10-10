@@ -181,15 +181,13 @@
                                 <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full"
                                     @click="openDetailModal(permuta.id)">Ver Detalles</button>
                             </div>
-                            <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
-                                :id="'Permuta' + selectedPermuta.id" @close="closeDetailModal" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <PermutaDetails v-if="showDetailModal && selectedPermuta.id === permuta.id" :show="showDetailModal"
-            :permuta="selectedPermuta" :id="'Permuta' + selectedPermuta.id" @close="closeDetailModal" />
+        <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
+            :id="`Permuta${selectedPermuta.id}`" @close="closeDetailModal" />
     </GuestLayout>
 </template>
 <script>
@@ -312,7 +310,13 @@ export default {
                     return 'fa-solid fa-question';
             }
         },
+        openDetailModal(permutaId) {
+            console.log("Opening detail modal for permuta ID:", permutaId);
+            this.selectedPermuta = this.permutas.find(p => p.id === permutaId);
+            this.showDetailModal = true;
+        },
         closeDetailModal() {
+            console.log("Closing detail modal");
             this.showDetailModal = false;
             this.selectedPermuta = null;
         },
@@ -327,12 +331,7 @@ export default {
         },
         goToPendingPermutas() {
             window.location.href = `/gerente/permutas/pending`;
-        },
-        openDetailModal(permutaId) {
-            console.log("Llamada a openDetailModal con ID:", permutaId);
-            this.selectedPermuta = this.permutas.find(permuta => permuta.id === permutaId);
-            this.showDetailModal = true;
-        },
+        }
     },
     mounted() {
         this.getPermutas();
