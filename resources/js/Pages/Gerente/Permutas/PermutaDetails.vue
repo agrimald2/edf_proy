@@ -80,6 +80,7 @@ import PermutaRejectReasonModal from './PermutaRejectReasonModal.vue';
 import PermutaApproveConfirmationModal from './PermutaApproveConfirmationModal.vue';
 import PermutaApprovedModal from './PermutaApprovedModal.vue';
 import PermutaRejectedModal from './PermutaRejectedModal.vue';
+import { watch } from 'vue';
 
 export default {
     components: {
@@ -136,11 +137,21 @@ export default {
             approvedBy: '-'
         };
     },
-    mounted() {
-        this.fetchReasons();
-        this.fetchSupervisorName();
+    created() {
+        this.fetchData();
+    },
+    watch: {
+        'permuta.id': function(newVal, oldVal) {
+            if (newVal !== oldVal) {
+                this.fetchData();
+            }
+        }
     },
     methods: {
+        fetchData() {
+            this.fetchReasons();
+            this.fetchSupervisorName();
+        },
         approvePermuta() {
             this.showDetails = false;
             this.showApproveConfirmationModal = true;
