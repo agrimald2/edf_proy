@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="px-2 flex justify-between items-center my-4">
-            
+
             <h2 class="font-bold text-sm text-black leading-tight">
                 Lista de Permutas
             </h2>
@@ -163,19 +163,20 @@
                             <div class="text-sm text-black font-bold">
                                 Ruta: {{ permuta.route }}
                             </div>
-                            <div class="text-xs mt-1 font-medium text-gray-500">{{ permuta.condition }} - {{ permuta.doors_to_negotiate }}
+                            <div class="text-xs mt-1 font-medium text-gray-500">{{ permuta.condition }} - {{
+                                permuta.doors_to_negotiate }}
                                 {{ permuta.doors_to_negotiate === 1 ? 'Puerta' : 'Puertas' }} </div>
                             <div class="text-xs font-medium text-gray-500 mt-4">
                                 <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full"
                                     @click="openDetailModal(permuta)">Ver Detalles</button>
                             </div>
-                            <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
-                                @close="showDetailModal = false" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
+            :id="`Permuta${selectedPermuta.id}`" @close="closeDetailModal" />
     </GuestLayout>
 </template>
 <script>
@@ -297,9 +298,15 @@ export default {
                     return 'fa-solid fa-question';
             }
         },
-        openDetailModal(permuta) {
-            this.selectedPermuta = permuta;
+        openDetailModal(permutaId) {
+            console.log("Opening detail modal for permuta ID:", permutaId);
+            this.selectedPermuta = this.permutas.find(p => p.id === permutaId);
             this.showDetailModal = true;
+        },
+        closeDetailModal() {
+            console.log("Closing detail modal");
+            this.showDetailModal = false;
+            this.selectedPermuta = null;
         },
         goBack() {
             window.history.back();
@@ -308,7 +315,7 @@ export default {
             window.location.href = `/gestor/${this.route}/dashboard/permutas/pending`;
         },
         openAddPermutaModal() {
-            this.showAddPermutaModal = true; 
+            this.showAddPermutaModal = true;
         },
         closeAddPermutaModal() {
             this.showAddPermutaModal = false;
