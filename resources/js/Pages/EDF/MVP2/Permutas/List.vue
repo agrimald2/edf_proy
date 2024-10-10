@@ -1,25 +1,14 @@
 <template>
     <GuestLayout :title="`Permutas | EDF`">
         <template #header>
-            <div class="grid grid-cols-2 gap-4 items-center">
+            <div class="grid grid-cols-2 gap-4 items-center border-b border-gray-200">
                 <div>
                     <h2 class="font-bold text-sm text-black leading-tight">
-                        ¡Hola, {{ $page.props.auth.user.name }}!
+                        ¡Hola, {{ $page.props.auth.user.name }} !
                     </h2>
                     <p class="text-sm">Gerente de Sala</p>
                 </div>
                 <div class="flex items-center" style="margin-left: auto">
-                    <span class="text-xs font-bold">Frecuencia:</span>
-                    <select style="padding-right: 2rem;"
-                        class="block mt-1 border-none rounded focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm">
-                        <option value="lunes">Lunes</option>
-                        <option value="martes">Martes</option>
-                        <option value="miércoles">Miércoles</option>
-                        <option value="jueves">Jueves</option>
-                        <option value="viernes">Viernes</option>
-                        <option value="sábado">Sábado</option>
-                        <option value="domingo">Domingo</option>
-                    </select>
                     <button @click="logout"
                         class="absolute top-2 right-0 ml-4 flex items-center text-sm font-bold text-red-600">
                         <i class="fa-solid fa-sign-out-alt mr-2"></i>
@@ -27,38 +16,47 @@
                 </div>
             </div>
         </template>
-        <div class="flex flex-col gap-4">
-            <div class="bg-white shadow-md rounded-lg overflow-hidden flex">
-                <div class="flex-1 border-r border-gray-200">
-                    <div class="p-4">
-                        <div class="text-sm font-semibold"><i class="fa-solid fa-check-circle text-green-500"></i>
-                            Aprobadas
-                        </div>
-                        <div class="text-xs pt-2 pl-4">
-                            <span class="font-bold">
-                                Cantidad:
-                            </span>
-                            {{ approvedCount }}
-                        </div>
-                    </div>
-                </div>
-                <div class="flex-1 text-left">
-                    <div class="p-4 text-left">
-                        <div class="text-sm text-black font-bold"><i class="fa-solid fa-clock text-yellow-500"></i>
-                            Restantes
-                        </div>
-                        <div class="text-xs mt-1 font-medium text-gray-500">
-                            Cantidad: {{ pendingCount }}
-                        </div>
-                    </div>
-                </div>
+        <div class="flex flex-row gap-2 bg-white shadow-md rounded-lg overflow-hidden p-2 items-center">
+            <div class="flex-1 text-center text-xs">
+                <span class="font-bold"> Aprobadas: </span> {{ approvedCount }}
+            </div>
+            <div class="flex-1 text-center text-xs text-black">
+                <span class="font-bold">Pendientes: </span> {{ pendingCount }}
+            </div>
+            <div class="flex-1 text-center">
+                <label class="text-xs font-semibold mr-2">Mes:</label>
+                <select v-model="selectedMonth" class="border border-gray-300 rounded-md text-xs p-1 px-2">
+                    <option value="todos">todos</option>
+                    <option value="enero">Ene</option>
+                    <option value="febrero">Feb</option>
+                    <option value="marzo">Mar</option>
+                    <option value="abril">Abr</option>
+                    <option value="mayo">May</option>
+                    <option value="junio">Jun</option>
+                    <option value="julio">Jul</option>
+                    <option value="agosto">Ago</option>
+                    <option value="septiembre">Sep</option>
+                    <option value="octubre">Oct</option>
+                    <option value="noviembre">Nov</option>
+                    <option value="diciembre">Dic</option>
+                </select>
             </div>
         </div>
+        <div class="px-2 flex justify-between items-center my-4">
+            <h2 class="font-bold text-sm text-black leading-tight">
+                Lista de Permutas
+            </h2>
+            <button @click="goToPendingPermutas"
+                class="relative border border-black text-black font-semibold px-4 py-1 rounded ml-4 text-xs">
+                Permutas por aprobar
+                <span
+                    class="absolute -bottom-1 -left-2 inline-block w-4 h-4 bg-red-500 text-white text-xxs font-bold rounded-full text-center">
+                    {{ pendingCount }}
+                </span>
+            </button>
+        </div>
         <div class="px-2">
-            <div class="relative mx-auto text-gray-600 w-full">
-                <h2 class="font-bold text-sm text-black leading-tight pt-4 pb-2">
-                    Lista de Permutas
-                </h2>
+            <div class="relative text-gray-600 w-full">
                 <input
                     class="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none w-full"
                     type="search" name="search" placeholder="Buscar" v-model="searchQuery">
@@ -78,21 +76,27 @@
                 :class="{ 'bg-black text-white': selectedFilter === 'pending', 'bg-white text-black': selectedFilter !== 'pending' }"
                 @click="selectedFilter = 'pending'">Pendientes</button>
         </div>
+        <div class="flex gap-2 my-4 px-2">
+            <select v-model="selectedLocation"
+                class="form-select mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <option value="">T. Localidades</option>
+                <option v-for="location in locations" :key="location.id" :value="location.name">{{ location.name }}
+                </option>
+            </select>
+        </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="flex flex-col gap-4">
                 <div v-for="permuta in filteredPermutas" :key="permuta.id"
-                    class="bg-white shadow-md rounded-lg overflow-hidden flex">
+                    class="bg-white shadow-md rounded-lg overflow-hidden flex flex-row">
+
                     <div class="w-3/5 border-r border-gray-200">
                         <div class="p-4">
                             <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
-                                {{ permuta.cod_cliente }} - {{ permuta.location }}
+                                {{ permuta.cod_cliente }} - {{ permuta.location.name }}
                             </div>
                             <div class="text-xs flex items-center justify-between">
-                                <div class="bg-gray-100 rounded pt-1 pl-2 pb-1 pr-2 flex-3/4">
-                                    <i class="fa-brands fa-square-letterboxd mr-2"></i>
-                                    {{ permuta.have_edf ? 'Cuenta con EDF' : 'No cuenta con EDF' }}
-                                </div>
-                                <div class="flex-1/4 text-right">
+                                <div class="bg-gray-100 rounded pt-1 pl-1 pb-1 pr-2 flex-3/4">
+                                    <i class="fa-brands fa-square-letterboxd"></i>
                                     {{ permuta.volume }} CU
                                 </div>
                             </div>
@@ -105,9 +109,8 @@
                         </div>
                     </div>
                     <div class="w-2/5 text-left">
-                        <div class="p-4 text-left">
-                            <div class="text-sm text-black font-bold">{{ permuta.subcanal }}</div>
-                            <div class="text-xs mt-1 font-medium text-gray-500">
+                        <div class="pb-2 px-4 text-left pt-2">
+                            <div class="text-sm text-black font-bold">
                                 Ruta: {{ permuta.route }}
                             </div>
                             <div class="text-xs font-medium text-gray-500 mt-2">
@@ -115,13 +118,13 @@
                                     @click="openDetailModal(permuta)">Ver
                                     más</button>
                             </div>
-                            <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
-                                @close="showDetailModal = false" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
+            :id="`Permuta${selectedPermuta.id}`" @close="closeDetailModal" />
     </GuestLayout>
 </template>
 <script>
@@ -196,9 +199,15 @@ export default {
                     return 'fa-solid fa-question';
             }
         },
-        openDetailModal(permuta) {
-            this.selectedPermuta = permuta;
+        openDetailModal(permutaId) {
+            console.log("Opening detail modal for permuta ID:", permutaId);
+            this.selectedPermuta = this.permutas.find(p => p.id === permutaId);
             this.showDetailModal = true;
+        },
+        closeDetailModal() {
+            console.log("Closing detail modal");
+            this.showDetailModal = false;
+            this.selectedPermuta = null;
         },
         logout() {
             axios.post('/logout')
