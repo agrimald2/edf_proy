@@ -64,7 +64,7 @@ class AdminController extends Controller
         try {
             // Validate the uploaded file
             $request->validate([
-                'customers' => 'required',
+                'customers' => 'required|file',
             ]);
 
             // Retrieve the uploaded file
@@ -80,6 +80,9 @@ class AdminController extends Controller
 
             // Load the Excel file
             $rows = Excel::toArray([], $file)[0]; // Assuming the data is in the first sheet
+
+            // Skip the first row (header)
+            array_shift($rows);
 
             // Empty the Customer table
             Customer::truncate();
