@@ -312,6 +312,7 @@ export default {
             }
         },
         openDetailModal(permuta) {
+            console.log("Llamada a openDetailModal");
             this.selectedPermuta = permuta;
             this.showDetailModal = true;
         },
