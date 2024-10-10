@@ -216,6 +216,7 @@ class PermutaController extends Controller
                             ->whereHas('location', function ($query) use ($user) {
                                 $query->where('user_id', $user->id);
                             })
+                            ->take(3)
                             ->get();
         
         return response()->json($permutas);
