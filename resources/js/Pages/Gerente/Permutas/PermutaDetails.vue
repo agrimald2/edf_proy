@@ -17,7 +17,9 @@
                                 <p><span class="font-bold">Código de cliente:</span></p>
                                 <p class="text-right">{{ formData.clientCode }}</p>
                                 <p><span class="font-bold">Fecha de Permuta:</span></p>
-                                <p class="text-right">{{ new Date(permuta.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }) }}</p>
+                                <p class="text-right">{{ new Date(permuta.created_at).toLocaleDateString('es-ES', {
+                                    day:
+                                        '2-digit', month: '2-digit', year: 'numeric' }) }}</p>
                                 <p><span class="font-bold">Volumen en CU:</span></p>
                                 <p class="text-right">{{ formData.volumeCU }}</p>
                                 <p><span class="font-bold">Locación:</span></p>
@@ -135,25 +137,8 @@ export default {
         };
     },
     mounted() {
-        fetch('/api/permuta-reasons')
-            .then(response => response.json())
-            .then(data => {
-                this.reasons = data;
-            })
-            .catch(error => {
-                console.error('Error fetching reasons:', error);
-            });
-
-        fetch(`/api/supervisor/nameByMesa/${this.permuta.supervisor_approved_by}`)
-            .then(response => response.json())
-            .then(data => {
-                this.approvedBy = data.nombre_sv;
-                console.log(data);
-            })
-            .catch(error => {
-                console.error('Error fetching approved by name:', error);
-            });
-        console.log(this.permuta.supervisor_approved_by);
+        this.fetchReasons();
+        this.fetchSupervisorName();
     },
     methods: {
         approvePermuta() {
@@ -165,7 +150,6 @@ export default {
             this.showRejectReasonModal = true;
         },
         detailsModal() {
-            console.log("A");
             this.showDetails = true;
             this.showRejectReasonModal = false;
             this.showRejectedModal = false;
@@ -176,6 +160,47 @@ export default {
             this.$emit('close');
             this.detailsModal();
         },
+        fetchReasons() {
+            console.log("Llamada a fetchReasons");
+            fetch('/api/permuta-reasons')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error fetching reasons');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!this._isDestroyed) { // Comprueba si el componente todavía está montado
+                        this.reasons = data;
+                    }
+                })
+                .catch(error => {
+                    // Manejo de errores, asegúrate de configurar un mensaje de error adecuado
+                    console.error('Error fetching reasons:', error.message);
+                    this.errorMessage = 'Error fetching reasons.';
+                });
+        },
+
+        fetchSupervisorName() {
+            console.log("Llamada a fetchSupervisorName");
+            fetch(`/api/supervisor/nameByMesa/${this.permuta.supervisor_approved_by}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error fetching supervisor name');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!this._isDestroyed) { // Comprueba si el componente todavía está montado
+                        this.approvedBy = data.nombre_sv;
+                    }
+                })
+                .catch(error => {
+                    // Manejo de errores, asegúrate de configurar un mensaje de error adecuado
+                    console.error('Error fetching approved by name:', error.message);
+                    this.errorMessage = 'Error fetching supervisor name.';
+                });
+        }
     }
 }
 </script>
