@@ -1,7 +1,7 @@
 <template>
     <GuestLayout :title="`Permutas | EDF`">
         <template #header>
-            <div class="grid grid-cols-2 gap-4 items-center border-b border-gray-200">   
+            <div class="grid grid-cols-2 gap-4 items-center border-b border-gray-200">
                 <div>
                     <h2 class="font-bold text-sm text-black leading-tight">
                         ¡Hola, {{ $page.props.auth.user.name }} !
@@ -46,9 +46,11 @@
             <h2 class="font-bold text-sm text-black leading-tight">
                 Lista de Permutas
             </h2>
-            <button @click="goToPendingPermutas" class="relative border border-black text-black font-semibold px-4 py-1 rounded ml-4 text-xs">
+            <button @click="goToPendingPermutas"
+                class="relative border border-black text-black font-semibold px-4 py-1 rounded ml-4 text-xs">
                 Permutas por aprobar
-                <span class="absolute -bottom-1 -left-2 inline-block w-4 h-4 bg-red-500 text-white text-xxs font-bold rounded-full text-center">
+                <span
+                    class="absolute -bottom-1 -left-2 inline-block w-4 h-4 bg-red-500 text-white text-xxs font-bold rounded-full text-center">
                     {{ pendingCount }}
                 </span>
             </button>
@@ -92,7 +94,7 @@
             <div class="flex flex-col gap-4">
                 <div v-for="permuta in filteredPermutas" :key="permuta.id"
                     class="bg-white shadow-md rounded-lg overflow-hidden flex flex-row">
-                    
+
                     <div class="w-3/5 border-r border-gray-200">
                         <div class="p-4">
                             <div class="text-sm font-semibold"><i class="fa-solid fa-user"></i>
@@ -172,14 +174,15 @@
                             <div class="text-sm text-black font-bold">
                                 Ruta: {{ permuta.route }}
                             </div>
-                            <div class="text-xs mt-1 font-medium text-gray-500">{{ permuta.condition }} - {{ permuta.doors_to_negotiate }}
+                            <div class="text-xs mt-1 font-medium text-gray-500">{{ permuta.condition }} - {{
+                                permuta.doors_to_negotiate }}
                                 {{ permuta.doors_to_negotiate === 1 ? 'Puerta' : 'Puertas' }} </div>
                             <div class="text-xs font-medium text-gray-500 mt-4">
                                 <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full"
                                     @click="openDetailModal(permuta)">Ver Detalles</button>
                             </div>
                             <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
-                                @close="showDetailModal = false" />
+                                @close="closeDetailModal" />
                         </div>
                     </div>
 
@@ -223,40 +226,40 @@ export default {
             return this.permutas.filter(permuta => {
                 if (this.selectedFilter === 'approved') {
                     return permuta.supervisor_status.toLowerCase() === 'approved' &&
-                           permuta.gerente_status.toLowerCase() === 'approved' &&
-                           permuta.trade_status.toLowerCase() === 'approved';
+                        permuta.gerente_status.toLowerCase() === 'approved' &&
+                        permuta.trade_status.toLowerCase() === 'approved';
                 } else if (this.selectedFilter === 'rejected') {
                     return permuta.supervisor_status.toLowerCase() === 'rejected' ||
-                           permuta.gerente_status.toLowerCase() === 'rejected' ||
-                           permuta.trade_status.toLowerCase() === 'rejected';
+                        permuta.gerente_status.toLowerCase() === 'rejected' ||
+                        permuta.trade_status.toLowerCase() === 'rejected';
                 } else if (this.selectedFilter === 'pending') {
                     return (permuta.supervisor_status.toLowerCase() === 'pending' ||
-                            permuta.gerente_status.toLowerCase() === 'pending' ||
-                            permuta.trade_status.toLowerCase() === 'pending') &&
-                           permuta.supervisor_status.toLowerCase() !== 'rejected' &&
-                           permuta.gerente_status.toLowerCase() !== 'rejected' &&
-                           permuta.trade_status.toLowerCase() !== 'rejected';
+                        permuta.gerente_status.toLowerCase() === 'pending' ||
+                        permuta.trade_status.toLowerCase() === 'pending') &&
+                        permuta.supervisor_status.toLowerCase() !== 'rejected' &&
+                        permuta.gerente_status.toLowerCase() !== 'rejected' &&
+                        permuta.trade_status.toLowerCase() !== 'rejected';
                 } else {
                     return true;
                 }
             }).filter(permuta => {
                 return (this.selectedSubregion === '' || permuta.location.subregion.name === this.selectedSubregion) &&
-                       (this.selectedLocation === '' || permuta.location.name === this.selectedLocation) &&
-                       (permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery));
+                    (this.selectedLocation === '' || permuta.location.name === this.selectedLocation) &&
+                    (permuta.cod_cliente.includes(this.searchQuery) || permuta.location.name.includes(this.searchQuery));
             });
         },
         approvedCount() {
             return this.permutas.filter(permuta => permuta.supervisor_status.toLowerCase() === 'approved' &&
-                                                   permuta.gerente_status.toLowerCase() === 'approved' &&
-                                                   permuta.trade_status.toLowerCase() === 'approved').length;
+                permuta.gerente_status.toLowerCase() === 'approved' &&
+                permuta.trade_status.toLowerCase() === 'approved').length;
         },
         pendingCount() {
             return this.permutas.filter(permuta => (permuta.supervisor_status.toLowerCase() === 'pending' ||
-                                                    permuta.gerente_status.toLowerCase() === 'pending' ||
-                                                    permuta.trade_status.toLowerCase() === 'pending') &&
-                                                   permuta.supervisor_status.toLowerCase() !== 'rejected' &&
-                                                   permuta.gerente_status.toLowerCase() !== 'rejected' &&
-                                                   permuta.trade_status.toLowerCase() !== 'rejected').length;
+                permuta.gerente_status.toLowerCase() === 'pending' ||
+                permuta.trade_status.toLowerCase() === 'pending') &&
+                permuta.supervisor_status.toLowerCase() !== 'rejected' &&
+                permuta.gerente_status.toLowerCase() !== 'rejected' &&
+                permuta.trade_status.toLowerCase() !== 'rejected').length;
         }
     },
     methods: {
@@ -311,6 +314,10 @@ export default {
         openDetailModal(permuta) {
             this.selectedPermuta = permuta;
             this.showDetailModal = true;
+        },
+        closeDetailModal() {
+            this.showDetailModal = false;
+            this.selectedPermuta = null;
         },
         logout() {
             axios.post('/logout')

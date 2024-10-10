@@ -51,8 +51,7 @@
         @routes
         @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
         @inertiaHead
-        <script src="https://kit.fontawesome.com/2780e63ff4.js" crossorigin="anonymous"></script>
-    
+        <script src="https://kit.fontawesome.com/c1d10fc5ed.js" crossorigin="anonymous"></script>    
         <!-- Hotjar Tracking Code for https://nedfac.com/ -->
         <script>
             (function(h,o,t,j,a,r){
