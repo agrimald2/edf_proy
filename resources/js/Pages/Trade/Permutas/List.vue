@@ -101,7 +101,7 @@
                                     <i :class="statusIcon(permuta.trade_status)"></i>
                                     {{ permuta.trade_status === 'Approved' ? 'Aprobada' : permuta.trade_status ===
                                         'Rejected' ? 'Rechazada' : permuta.trade_status === 'Pending' ? 'Pendiente' :
-                                    permuta.trade_status }}
+                                        permuta.trade_status }}
                                 </span>
                             </div>
                         </div>
@@ -117,13 +117,13 @@
                                     @click="openDetailModal(permuta)">Ver
                                     más</button>
                             </div>
-                            <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
-                                @close="showDetailModal = false" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
+            :id="`Permuta${selectedPermuta.id}`" @close="closeDetailModal" />
     </GuestLayout>
 </template>
 
@@ -319,7 +319,17 @@ export default {
                 console.error('Error importing permutas:', error);
                 alert('Error durante la importación');
             }
-        }
+        },
+        openDetailModal(permutaId) {
+            console.log("Opening detail modal for permuta ID:", permutaId);
+            this.selectedPermuta = this.permutas.find(p => p.id === permutaId);
+            this.showDetailModal = true;
+        },
+        closeDetailModal() {
+            console.log("Closing detail modal");
+            this.showDetailModal = false;
+            this.selectedPermuta = null;
+        },
     },
     mounted() {
         this.getPermutas();
