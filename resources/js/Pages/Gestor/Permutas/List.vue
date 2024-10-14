@@ -168,7 +168,7 @@
                                 {{ permuta.doors_to_negotiate === 1 ? 'Puerta' : 'Puertas' }} </div>
                             <div class="text-xs font-medium text-gray-500 mt-4">
                                 <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full"
-                                    @click="openDetailModal(permuta)">Ver Detalles</button>
+                                    @click="openDetailModal(permuta.id)">Ver Detalles</button>
                             </div>
                         </div>
                     </div>
