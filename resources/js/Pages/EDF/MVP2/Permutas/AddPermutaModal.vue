@@ -27,8 +27,7 @@
                         <div>
                             <select v-model="formData.location_id" class="w-full inputs_permutas">
                                 <option value="" disabled selected>Locación</option>
-                                <option v-for="location in locations" :key="location.id" :value="location.id">{{
-            location.name }}</option>
+                                <option v-for="location in locations" :key="location.id" :value="location.id">{{ location.name }}</option>
                             </select>
                         </div>
                         <div>
@@ -72,7 +71,7 @@
                     <div class="mt-4">
                         <div class="w-full">
                             <select v-model="formData.reason" class="w-full inputs_permutas">
-                                <option value="" selected>Motivo</option>
+                                <option value="" disabled selected>Motivo</option>
                                 <option v-for="reason in reasons" :key="reason.id" :value="reason.name">{{ reason.name
                                     }}
                                 </option>
