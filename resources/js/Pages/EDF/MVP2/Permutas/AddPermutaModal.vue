@@ -72,7 +72,7 @@
                     <div class="mt-4">
                         <div class="w-full">
                             <select v-model="formData.reason" class="w-full inputs_permutas">
-                                <option value="" disabled selected>Motivo</option>
+                                <option value="" selected>Motivo</option>
                                 <option v-for="reason in reasons" :key="reason.id" :value="reason.name">{{ reason.name
                                     }}
                                 </option>
