@@ -46,6 +46,7 @@ class AdminController extends Controller
             foreach ($rows as $row) {
                 BlackList::create([
                     'client_code' => $row[0],
+                    'reason' => $row[1],
                 ]);
             }
 
