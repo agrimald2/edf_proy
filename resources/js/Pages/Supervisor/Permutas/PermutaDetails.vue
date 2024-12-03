@@ -26,6 +26,11 @@
                                 <p class="text-right">{{ formData.route }}</p>
                                 <p><span class="font-bold">Subcanal:</span></p>
                                 <p class="text-right">{{ formData.subcanal }}</p>
+                                <p><span class="font-bold">Estado:</span></p>
+                                <p class="text-right">{{ formData.status }}</p>
+                                <p><span class="font-bold">Motivo:</span></p>
+                                <p class="text-right">{{ formData.rejectedReason }}</p>
+                              
                             </div>
                         </div>
                         <hr>
@@ -105,23 +110,7 @@ export default {
     },
     data() {
         return {
-            formData: {
-                date: new Date(this.permuta.created_at).toLocaleDateString('es-ES', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                }),
-                clientCode: this.permuta.cod_cliente,
-                volumeCU: this.permuta.volume,
-                location: this.permuta.location.name,
-                route: this.permuta.route,
-                subcanal: this.permuta.subcanal,
-                haveEdf: this.permuta.have_edf,
-                doorsToNegotiate: this.permuta.doors_to_negotiate,
-                condition: this.permuta.condition,
-                reason: this.permuta.reason,
-                justification: this.permuta.justification
-            },
+            formData: this.mapPermutaToFormData(this.permuta),
             reasons: [],
             sentPermutaViewModal: false,
             errorMessage: '',
@@ -144,6 +133,30 @@ export default {
             });
     },
     methods: {
+        mapPermutaToFormData(permuta) {
+            const status = ['supervisor_status', 'gerente_status', 'trade_status'].find(status => permuta[status].toLowerCase() === 'rejected') ? 'Rejected' : 'Pending';
+            const rejectedReason = permuta.supervisor_rejected_reason || permuta.gerente_rejected_reason || permuta.trade_rejected_reason || '';
+
+            return {
+                date: new Date(permuta.created_at).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }),
+                clientCode: permuta.cod_cliente,
+                volumeCU: permuta.volume,
+                location: permuta.location.name,
+                route: permuta.route,
+                subcanal: permuta.subcanal,
+                haveEdf: permuta.have_edf,
+                doorsToNegotiate: permuta.doors_to_negotiate,
+                condition: permuta.condition,
+                reason: permuta.reason,
+                justification: permuta.justification,
+                status: status,
+                rejectedReason: rejectedReason
+            };
+        },
         approvePermuta() {
             this.showDetails = false;
             this.showApproveConfirmationModal = true;
