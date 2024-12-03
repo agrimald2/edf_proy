@@ -36,8 +36,9 @@ class PermutaController extends Controller
          * Validar que el código de cliente no esté en la lista negra
          */
         $blackList = BlackList::where('id', $request->clientCode)->first();
+        $reason = $blackList ? $blackList->reason : null;
         if ($blackList) {
-            return response()->json(['error' => 'El código de cliente está en la lista negra.'], 400);
+            return response()->json(['error' => 'El código de cliente está en la lista negra por el motivo: ' . $reason], 400);
         }
 
         $requestData = $request->all();

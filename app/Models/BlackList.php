@@ -9,5 +9,5 @@ class BlackList extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['client_code'];
+    protected $fillable = ['client_code', 'reason'];
 }
