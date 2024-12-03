@@ -39,13 +39,15 @@ class PermutaController extends Controller
             return response()->json(['error' => 'El código de cliente no puede empezar con cero.'], 400);
         }
 
-        $blackList = BlackList::where('client_code', $request->clientCode)->first();
+        $blackList = BlackList::where('id', $request->clientCode)->first();
+        $reason = $blackList ? $blackList->reason : null;
+        
         if ($blackList) {
-            return response()->json(['error' => 'El código de cliente está en la lista negra.'], 400);
+            return response()->json(['error' => 'El código de cliente está en la lista negra por el motivo: ' . $reason], 400);
         }
 
         $requestData = $request->all();
-        
+
         try {
             $validatedData = $request->validate([
                 'sv' => 'string',
@@ -161,6 +163,8 @@ class PermutaController extends Controller
         $permutas = Permuta::where('route', $route)
                             ->with('location')
                             ->get();
+
+        Log::info($permutas);
         return response()->json($permutas);
     }
 
@@ -200,7 +204,7 @@ class PermutaController extends Controller
                                 $query->where('user_id', $user->id);
                             })
                             ->get();
-        
+
         return response()->json($permutas);
     }
 
@@ -217,7 +221,7 @@ class PermutaController extends Controller
                                 $query->where('user_id', $user->id);
                             })
                             ->get();
-        
+
         return response()->json($permutas);
     }
     /**
@@ -253,7 +257,7 @@ class PermutaController extends Controller
      * Reject the specified permuta by Supervisor.
      */
     public function rejectBySupervisor(Request $request, string $id)
-    {        
+    {
         $validatedData = $request->validate([
             'rejected_reason' => 'required|string',
             'rejected_comments' => 'nullable|string',
@@ -287,7 +291,7 @@ class PermutaController extends Controller
      * Reject the specified permuta by Gerente.
      */
     public function rejectByGerente(Request $request, string $id)
-    {        
+    {
         $validatedData = $request->validate([
             'rejected_reason' => 'required|string',
             'rejected_comments' => 'nullable|string',
@@ -320,7 +324,7 @@ class PermutaController extends Controller
      * Reject the specified permuta by Trade.
      */
     public function rejectByTrade(Request $request, string $id)
-    {        
+    {
         $validatedData = $request->validate([
             'rejected_reason' => 'required|string',
             'rejected_comments' => 'nullable|string',
@@ -334,5 +338,5 @@ class PermutaController extends Controller
 
         return response()->json($permuta);
     }
-    
+
 }

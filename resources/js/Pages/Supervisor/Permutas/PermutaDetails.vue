@@ -14,61 +14,40 @@
                     <div class="space-y-2">
                         <div class="px-2 rounded-lg">
                             <div class="grid grid-cols-2 text-sm">
-                                <p><span class="font-bold">Código de cliente:</span></p>
-                                <p class="text-right">{{ formData.clientCode }}</p>
-                                <p><span class="font-bold">Fecha de Permuta:</span></p>
-                                <p class="text-right">{{ new Date(permuta.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }) }}</p>
-                                <p><span class="font-bold">Volumen en CU:</span></p>
-                                <p class="text-right">{{ formData.volumeCU }}</p>
-                                <p><span class="font-bold">Locación:</span></p>
-                                <p class="text-right">{{ formData.location }}</p>
-                                <p><span class="font-bold">Ruta:</span></p>
-                                <p class="text-right">{{ formData.route }}</p>
-                                <p><span class="font-bold">Subcanal:</span></p>
-                                <p class="text-right">{{ formData.subcanal }}</p>
+                                <template v-for="(label, key) in formDataLabels" :key="key">
+                                    <p><span class="font-bold">{{ label }}:</span></p>
+                                    <p class="text-right">{{ formData[key] }}</p>
+                                </template>
                             </div>
                         </div>
                         <hr>
                         <div class="px-2 pb-1 rounded-lg">
                             <h3 class="font-bold mb-1 text-red-700 text-sm">EDF a solicitar</h3>
                             <div class="grid grid-cols-2 text-sm">
-                                <p><span class="font-bold">Condición:</span></p>
-                                <p class="text-right">{{ formData.condition }}</p>
-                                <p><span class="font-bold">Puertas a negociar:</span></p>
-                                <p class="text-right">{{ formData.doorsToNegotiate }}</p>
-                                <p><span class="font-bold">Motivo:</span></p>
-                                <p class="text-right">{{ formData.reason }}</p>
-                                <p><span class="font-bold">Justificación:</span></p>
-                                <p class="text-right">{{ formData.justification }}</p>
+                                <template v-for="(label, key) in edfDataLabels" :key="key">
+                                    <p><span class="font-bold">{{ label }}:</span></p>
+                                    <p class="text-right">{{ formData[key] }}</p>
+                                </template>
                             </div>
                         </div>
                     </div>
-                    <div v-if="permuta.supervisor_status == 'Pending'" class="mt-6 flex justify-between">
-                        <button @click="approvePermuta"
-                            class="w-1/2 py-1 font-medium rounded-md bg-green-500 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 mr-2">
+                    <div v-if="permuta.supervisor_status === 'Pending'" class="mt-6 flex justify-between">
+                        <button @click="approvePermuta" class="w-1/2 py-1 font-medium rounded-md bg-green-500 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 mr-2">
                             Aprobar
                         </button>
-                        <button @click="rejectPermuta"
-                            class="w-1/2 py-1 font-medium rounded-md bg-red-500 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50 ml-2">
+                        <button @click="rejectPermuta" class="w-1/2 py-1 font-medium rounded-md bg-red-500 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50 ml-2">
                             Rechazar
                         </button>
                     </div>
                     <div class="mt-2 text-center">
-                        <button @click="closeModal"
-                            class="w-full bg-black text-white px-2 py-1 rounded-lg hover:bg-red-600 focus:outline-none text-sm">Cerrar</button>
+                        <button @click="closeModal" class="w-full bg-black text-white px-2 py-1 rounded-lg hover:bg-red-600 focus:outline-none text-sm">Cerrar</button>
                     </div>
                 </div>
             </div>
-            <PermutaRejectReasonModal v-if="showRejectReasonModal" :permuta-id="permuta.id"
-                @show-details-modal="detailsModal" @show-rejected-modal="showRejectedModal = true"
-                @close="showRejectReasonModal = false" />
-            <PermutaRejectedModal v-if="showRejectedModal" :permuta-id="permuta.id"
-                @close="showRejectedModal = false" />
-            <PermutaApproveConfirmationModal v-if="showApproveConfirmationModal" :permuta-id="permuta.id" :sv="sv"
-                @show-details-modal="detailsModal" @close="showApproveConfirmationModal = false"
-                @show-approved-modal="showApprovedModal = true" />
-            <PermutaApprovedModal v-if="showApprovedModal" :permuta-id="permuta.id"
-                @close="showApprovedModal = false" />
+            <PermutaRejectReasonModal v-if="showRejectReasonModal" :permuta-id="permuta.id" @show-details-modal="detailsModal" @show-rejected-modal="showRejectedModal = true" @close="showRejectReasonModal = false" />
+            <PermutaRejectedModal v-if="showRejectedModal" :permuta-id="permuta.id" @close="showRejectedModal = false" />
+            <PermutaApproveConfirmationModal v-if="showApproveConfirmationModal" :permuta-id="permuta.id" :sv="sv" @show-details-modal="detailsModal" @close="showApproveConfirmationModal = false" @show-approved-modal="showApprovedModal = true" />
+            <PermutaApprovedModal v-if="showApprovedModal" :permuta-id="permuta.id" @close="showApprovedModal = false" />
         </div>
     </div>
 </template>
@@ -105,27 +84,24 @@ export default {
     },
     data() {
         return {
-            formData: {
-                date: new Date(this.permuta.created_at).toLocaleDateString('es-ES', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                }),
-                clientCode: this.permuta.cod_cliente,
-                volumeCU: this.permuta.volume,
-                location: this.permuta.location.name,
-                route: this.permuta.route,
-                subcanal: this.permuta.subcanal,
-                haveEdf: this.permuta.have_edf,
-                doorsToNegotiate: this.permuta.doors_to_negotiate,
-                condition: this.permuta.condition,
-                reason: this.permuta.reason,
-                justification: this.permuta.justification
+            formData: this.mapPermutaToFormData(this.permuta),
+            formDataLabels: {
+                clientCode: 'Código de cliente',
+                date: 'Fecha de Permuta',
+                volumeCU: 'Volumen en CU',
+                location: 'Locación',
+                route: 'Ruta',
+                subcanal: 'Subcanal',
+                status: 'Estado',
+                rejectedReason: 'Motivo'
             },
-            reasons: [],
-            sentPermutaViewModal: false,
+            edfDataLabels: {
+                condition: 'Condición',
+                doorsToNegotiate: 'Puertas a negociar',
+                reason: 'Motivo',
+                justification: 'Justificación'
+            },
             errorMessage: '',
-            isSubmitting: false,
             showDetails: true,
             showRejectReasonModal: false,
             showRejectedModal: false,
@@ -144,6 +120,30 @@ export default {
             });
     },
     methods: {
+        mapPermutaToFormData(permuta) {
+            const status = ['supervisor_status', 'gerente_status', 'trade_status'].find(status => permuta[status].toLowerCase() === 'rejected') ? 'Rejected' : 'Pending';
+            const rejectedReason = permuta.supervisor_rejected_reason || permuta.gerente_rejected_reason || permuta.trade_rejected_reason || '';
+
+            return {
+                date: new Date(permuta.created_at).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }),
+                clientCode: permuta.cod_cliente,
+                volumeCU: permuta.volume,
+                location: permuta.location.name,
+                route: permuta.route,
+                subcanal: permuta.subcanal,
+                haveEdf: permuta.have_edf,
+                doorsToNegotiate: permuta.doors_to_negotiate,
+                condition: permuta.condition,
+                reason: permuta.reason,
+                justification: permuta.justification,
+                status: status,
+                rejectedReason: rejectedReason
+            };
+        },
         approvePermuta() {
             this.showDetails = false;
             this.showApproveConfirmationModal = true;
@@ -153,7 +153,6 @@ export default {
             this.showRejectReasonModal = true;
         },
         detailsModal() {
-            console.log("A");
             this.showDetails = true;
             this.showRejectReasonModal = false;
             this.showRejectedModal = false;

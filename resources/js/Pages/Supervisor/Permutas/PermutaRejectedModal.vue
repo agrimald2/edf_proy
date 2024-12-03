@@ -47,6 +47,11 @@ export default {
                 comments: null
             }
         }
+    },
+    methods: {
+        closeModal() {
+            window.location.reload();
+        }
     }
 }
 </script>
