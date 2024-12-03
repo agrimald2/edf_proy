@@ -102,16 +102,12 @@
                     <button class="bg-red-500 text-white font-bold py-1 px-2 rounded-md w-full"
                         @click="openDetailModal(permuta)">Ver Detalles</button>
                 </div>
-                <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta"
-                    @close="showDetailModal = false" :sv="sv" />
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import PermutaDetails from './PermutaDetails.vue';
-
 export default {
     props: {
         permuta: {
@@ -129,9 +125,6 @@ export default {
         sv: {
             type: String
         }
-    },
-    components: {
-        PermutaDetails
     },
     methods: {
         openDetailModal(permuta) {

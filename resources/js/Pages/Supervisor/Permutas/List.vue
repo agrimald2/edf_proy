@@ -55,18 +55,21 @@
                 />
             </div>
         </div>
+        <PermutaDetails v-if="showDetailModal" :show="showDetailModal" :permuta="selectedPermuta" @close="closeDetailModal" :sv="mesa" />
     </GuestLayout>
 </template>
 
 <script>
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import PermutaItem from './PermutaItem.vue';
+import PermutaDetails from './PermutaDetails.vue';
 import axios from 'axios';
 
 export default {
     components: {
         GuestLayout,
-        PermutaItem
+        PermutaItem,
+        PermutaDetails
     },
     props: {
         mesa: String,
@@ -132,6 +135,10 @@ export default {
         openDetailModal(permuta) {
             this.selectedPermuta = permuta;
             this.showDetailModal = true;
+        },
+        closeDetailModal() {
+            this.showDetailModal = false;
+            this.selectedPermuta = null;
         },
         goBack() {
             window.location.href = `/mesa/${this.mesa}/info`;
