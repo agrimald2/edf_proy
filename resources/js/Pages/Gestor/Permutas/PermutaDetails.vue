@@ -17,7 +17,9 @@
                                 <p><span class="font-bold">Código de cliente:</span></p>
                                 <p class="text-right">{{ formData.clientCode }}</p>
                                 <p><span class="font-bold">Fecha de Permuta:</span></p>
-                                <p class="text-right">{{ new Date(permuta.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' }) }}</p>
+                                <p class="text-right">{{ new Date(permuta.created_at).toLocaleDateString('es-ES', {
+                                    day:
+                                        '2-digit', month: '2-digit', year: 'numeric' }) }}</p>
                                 <p><span class="font-bold">Volumen en CU:</span></p>
                                 <p class="text-right">{{ formData.volumeCU }}</p>
                                 <p><span class="font-bold">Locación:</span></p>
@@ -26,6 +28,10 @@
                                 <p class="text-right">{{ formData.route }}</p>
                                 <p><span class="font-bold">Subcanal:</span></p>
                                 <p class="text-right">{{ formData.subcanal }}</p>
+                                <p v-if="formData.status === 'Rejected'"><span class="font-bold">Estado:</span></p>
+                                <p class="text-right">{{ formData.status }}</p>
+                                <p v-if="formData.status === 'Rejected'"><span class="font-bold">Motivo:</span></p>
+                                <p class="text-right">{{ formData.rejectedReason }}</p>
                             </div>
                         </div>
                         <hr>
@@ -74,18 +80,7 @@ export default {
     },
     data() {
         return {
-            formData: {
-                clientCode: this.permuta.cod_cliente,
-                volumeCU: this.permuta.volume,
-                location: this.permuta.location.name,
-                route: this.permuta.route,
-                subcanal: this.permuta.subcanal,
-                haveEdf: this.permuta.have_edf,
-                doorsToNegotiate: this.permuta.doors_to_negotiate,
-                condition: this.permuta.condition,
-                reason: this.permuta.reason,
-                justification: this.permuta.justification
-            },
+            formData: this.mapPermutaToFormData(this.permuta),
             reasons: [],
             sentPermutaViewModal: false,
             errorMessage: '',
@@ -94,18 +89,39 @@ export default {
         };
     },
     mounted() {
-        fetch('/api/permuta-reasons')
-            .then(response => response.json())
-            .then(data => {
-                this.reasons = data;
-            })
-            .catch(error => {
-                console.error('Error fetching reasons:', error);
-            });
+        this.fetchReasons();
     },
     methods: {
+        mapPermutaToFormData(permuta) {
+            const status = ['supervisor_status', 'gerente_status', 'trade_status'].find(status => permuta[status].toLowerCase() === 'rejected') || 'Pending';
+            const rejectedReason = ['supervisor_rejected_reason', 'gerente_rejected_reason', 'trade_rejected_reason'].find(reason => permuta[reason]) || '';
+            
+            return {
+                clientCode: permuta.cod_cliente,
+                volumeCU: permuta.volume,
+                location: permuta.location.name,
+                route: permuta.route,
+                subcanal: permuta.subcanal,
+                haveEdf: permuta.have_edf,
+                doorsToNegotiate: permuta.doors_to_negotiate,
+                condition: permuta.condition,
+                reason: permuta.reason,
+                justification: permuta.justification,
+                status: status === 'Pending' ? 'Pending' : 'Rejected',
+                rejectedReason: rejectedReason
+            };
+        },
+        fetchReasons() {
+            fetch('/api/permuta-reasons')
+                .then(response => response.json())
+                .then(data => {
+                    this.reasons = data;
+                })
+                .catch(error => {
+                    console.error('Error fetching reasons:', error);
+                });
+        },
         detailsModal() {
-            console.log("A");
             this.showDetails = true;
         },
         closeModal() {

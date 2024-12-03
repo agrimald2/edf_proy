@@ -158,6 +158,8 @@ class PermutaController extends Controller
         $permutas = Permuta::where('route', $route)
                             ->with('location')
                             ->get();
+                    
+        Log::info($permutas);
         return response()->json($permutas);
     }
 
