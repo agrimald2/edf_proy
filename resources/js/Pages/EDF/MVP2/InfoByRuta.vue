@@ -264,8 +264,8 @@ const todaysDate = new Date().toLocaleDateString('es-ES', {
                                 <div class="p-4 text-left">
                                     <div class="text-sm text-black font-bold">Puedes negociar</div>
                                     <ul class="list-disc pl-3">
-                                        <li style="font-size:10px" class="text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR }} Puertas - {{ client.CONDICION.charAt(0).toUpperCase() + client.CONDICION.slice(1).toLowerCase() }}</li>
-                                        <li  v-if="client.PUERTAS_A_NEGOCIAR_2" style="font-size:10px" class="mb-2 text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR_2 }} Puertas - {{ client.CONDICION_2.charAt(0).toUpperCase() + client.CONDICION_2.slice(1).toLowerCase() }}</li>
+                                        <li v-if="client.PUERTAS_A_NEGOCIAR > 0" style="font-size:10px" class="text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR }} Puertas - {{ client.CONDICION.charAt(0).toUpperCase() + client.CONDICION.slice(1).toLowerCase() }}</li>
+                                        <li v-if="client.PUERTAS_A_NEGOCIAR_2 > 0" style="font-size:10px" class="mb-2 text-xs mt-1">EDF - {{ client.PUERTAS_A_NEGOCIAR_2 }} Puertas - {{ client.CONDICION_2.charAt(0).toUpperCase() + client.CONDICION_2.slice(1).toLowerCase() }}</li>
                                     </ul>
                                     
                                     <a :href="`https://wa.link/ibba8o`" target="_blank"
