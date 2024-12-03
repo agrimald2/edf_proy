@@ -152,9 +152,15 @@
                                 </div>
                             </div>
                             <div class="flex justify-between mt-2">
-                                <div class="text-xs font-medium text-gray-500">Supervisor</div>
-                                <div class="text-xs font-medium text-gray-500 pr-5">Gerente</div>
-                                <div class="text-xs font-medium text-gray-500">Trade</div>
+                                <div class="text-xs font-medium text-gray-500">Supervisor <br>  
+                                    <span v-if="permuta.supervisor_approved_at">{{ new Date(permuta.supervisor_approved_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' }) }}</span>
+                                </div>
+                                <div class="text-xs font-medium text-gray-500 pr-5">Gerente <br>  
+                                    <span v-if="permuta.gerente_approved_at">{{ new Date(permuta.gerente_approved_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' }) }}</span>
+                                </div>
+                                <div class="text-xs font-medium text-gray-500">Trade <br>  
+                                    <span v-if="permuta.trade_approved_at">{{ new Date(permuta.trade_approved_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' }) }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>

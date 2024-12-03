@@ -211,34 +211,69 @@ export default {
             const condition = this.formData.condition.toUpperCase();
             let options = [];
 
-            if (volumeCU < 20) {
+            if (condition === 'NUEVO') {
+                options = [2];
+            } else if (volumeCU < 20) {
                 if (condition === 'REPOTENCIADO') {
                     options = [0.5, 1];
                 }
             } else if (volumeCU < 40) {
                 if (condition === 'REPOTENCIADO') {
                     options = [0.5, 1, 2];
-                } else if (condition === 'NUEVO') {
-                    options = [0.5, 1];
                 }
             } else if (volumeCU < 42) {
-                if (condition === 'REPOTENCIADO' || condition === 'NUEVO') {
+                if (condition === 'REPOTENCIADO') {
                     options = [0.5, 1, 2];
                 }
             } else if (volumeCU < 60) {
                 if (condition === 'REPOTENCIADO') {
                     options = [0.5, 1, 2, 3];
-                } else if (condition === 'NUEVO') {
-                    options = [0.5, 1, 2];
                 }
             } else if (volumeCU >= 60) {
-                if (condition === 'REPOTENCIADO' || condition === 'NUEVO') {
+                if (condition === 'REPOTENCIADO') {
                     options = [0.5, 1, 2, 3];
                 }
             }
 
             return options;
         },
+        /** 
+         * OLD VERSION OF THE DOORS OPTIONS
+         *  
+            doorsOptions() {
+                const volumeCU = parseInt(this.formData.volumeCU);
+                const condition = this.formData.condition.toUpperCase();
+                let options = [];
+
+                if (volumeCU < 20) {
+                    if (condition === 'REPOTENCIADO') {
+                        options = [0.5, 1];
+                    }
+                } else if (volumeCU < 40) {
+                    if (condition === 'REPOTENCIADO') {
+                        options = [0.5, 1, 2];
+                    } else if (condition === 'NUEVO') {
+                        options = [0.5, 1];
+                    }
+                } else if (volumeCU < 42) {
+                    if (condition === 'REPOTENCIADO' || condition === 'NUEVO') {
+                        options = [0.5, 1, 2];
+                    }
+                } else if (volumeCU < 60) {
+                    if (condition === 'REPOTENCIADO') {
+                        options = [0.5, 1, 2, 3];
+                    } else if (condition === 'NUEVO') {
+                        options = [0.5, 1, 2];
+                    }
+                } else if (volumeCU >= 60) {
+                    if (condition === 'REPOTENCIADO' || condition === 'NUEVO') {
+                        options = [0.5, 1, 2, 3];
+                    }
+                }
+
+                return options;
+            },
+         */
         locationName() {
             const location = this.locations.find(loc => loc.id === this.formData.location_id);
             return location ? location.name : '';
