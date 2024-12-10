@@ -25,10 +25,8 @@ class MainController extends Controller
     {
         $currentMonth = now()->format('Y-m');
 
-
         $clients = Main::where('RUTA', $ruta)->get();
         $cuota = $clients->first()->CUOTA ?? 'N/A';
-
 
         $negociados = Main::where('RUTA', $ruta)
             ->where('FECHA_NEGOCIADO', 'like', $currentMonth . '%')
@@ -41,7 +39,6 @@ class MainController extends Controller
             ->distinct('COD_CLIENTE')
             ->count('COD_CLIENTE');
 
-
         $gv = $clients->first()->GV ?? 'N/A';
         $sv = $clients->first()->SV ?? 'N/A';
 
@@ -50,111 +47,50 @@ class MainController extends Controller
             ->where('NEGOCIADO', 'NEGOCIADO')
             ->count();
 
-
-        $clients = $clients->map(function ($client) {
-            $condition = 'NUEVO';
-            $dias_restantes = 0;
-
-
-            if ($client->PUERTAS_A_NEGOCIAR > 0) {
-                $condition = 'REPOTENCIADO';
-            }
-
+        $clients = $clients->map(function ($client) use ($currentMonth) {
+            $condition = $client->PUERTAS_A_NEGOCIAR > 0 ? 'REPOTENCIADO' : 'NUEVO';
 
             $delay_time = WorkshopLocationDay::where('LOCACION', $client->LOCACION)
                 ->where('TALLER', $client->TALLER)
                 ->where('CONDICION', $condition)
-                ->first();
-            if (!is_int($delay_time)) {
-                $delay_time = $delay_time->TIEMPO ?? 0;
+                ->value('TIEMPO') ?? 0;
+
+            if ($client->NEGOCIADO == 'NEGOCIADO') {
+                $max_delay_time = WorkshopLocationDay::where('LOCACION', $client->LOCACION)
+                    ->max('TIEMPO') ?? 0;
+                $delay_time = $client->STATUS == 'NEGOCIADO' ? $max_delay_time + 4 : $max_delay_time;
             }
 
-            if ($client->NEGOCIADO == 'NEGOCIADO' && $client->STATUS == 'NEGOCIADO') {
-                $delay_time = WorkshopLocationDay::where('LOCACION', $client->LOCACION)
-                    ->max('TIEMPO');
+            $fecha_negociado = $client->FECHA_NEGOCIADO ?: null;
+            $dias_restantes = 0;
 
-                if (!is_int($delay_time)) {
-                    $delay_time = $delay_time->TIEMPO ?? 0;
-                }
-            }
-
-            if ($client->NEGOCIADO == 'NEGOCIADO' && $client->STATUS == 'EN RUTA') {
-                if (!is_int($delay_time)) {
-                    $delay_time = $delay_time->TIEMPO ?? 0;
-                }
-            }
-
-            if (!$delay_time) {
-                $delay_time = 0;
-            }
-
-            if ($client->NEGOCIADO == 'NEGOCIADO' && $client->STATUS == 'NEGOCIADO') {
-                $delay_time = $delay_time + 4;
-            }
-
-            $fecha_negociado = $client->FECHA_NEGOCIADO;
-
-            if ($fecha_negociado == '') {
-                $fecha_negociado = null;
-            }
             if ($fecha_negociado) {
-                Log::debug($fecha_negociado);
-                $fecha_negociado_date = \Carbon\Carbon::createFromFormat('Y-m-d', $fecha_negociado);
-                $fecha_actual = \Carbon\Carbon::now();
+                try {
+                    $fecha_negociado_date = \Carbon\Carbon::createFromFormat('Y-m-d', $fecha_negociado);
+                    $fecha_actual = \Carbon\Carbon::now();
+                    $fecha_estimada = $fecha_negociado_date->copy();
+                    $dias_habiles_sumados = 0;
 
-                $fecha_estimada = $fecha_negociado_date->copy();
-                $dias_habiles_sumados = 0;
-
-                while ($dias_habiles_sumados < $delay_time) {
-                    $fecha_estimada->addDay();
-                    if (!$fecha_estimada->isWeekend()) {
-                        $dias_habiles_sumados++;
-                    }
-                }
-
-                // Calculate remaining business days
-                $dias_restantes = 0;
-                $temp_date = $fecha_actual->copy();
-
-                while ($temp_date->lessThan($fecha_estimada)) {
-                    if (!$temp_date->isWeekend()) {
-                        $dias_restantes++;
-                    }
-                    $temp_date->addDay();
-                }
-
-                // If the estimated date is in the past, calculate negative business days
-                if ($fecha_actual->greaterThan($fecha_estimada)) {
-                    $dias_restantes = 0;
-                    $temp_date = $fecha_estimada->copy();
-
-                    while ($temp_date->lessThan($fecha_actual)) {
-                        if (!$temp_date->isWeekend()) {
-                            $dias_restantes--;
+                    while ($dias_habiles_sumados < $delay_time) {
+                        $fecha_estimada->addDay();
+                        if (!$fecha_estimada->isWeekend()) {
+                            $dias_habiles_sumados++;
                         }
-                        $temp_date->addDay();
                     }
+
+                    $dias_restantes = $fecha_actual->diffInWeekdays($fecha_estimada);
+                    $dias_restantes = $fecha_actual->lessThan($fecha_estimada) ? $dias_restantes + 1 : -$dias_restantes;
+                } catch (\Exception $e) {
+                    report($e);
                 }
             }
-
-            $dias_restantes = $dias_restantes + 1;
 
             $client->dias_restantes = $dias_restantes;
 
             return $client;
         });
 
-        Log::debug($cuota);
-        Log::debug($negociated_by_sv);
-
-        $pending = is_numeric($cuota) ? $cuota - $negociated_by_sv : 'N/A';
-        Log::debug($pending);
-
-        if (is_numeric($pending) && $pending < 0) {
-            $pending = 0; // Ensure pending is not negative
-        }
-
-        Log::debug($pending);
+        $pending = is_numeric($cuota) ? max($cuota - $negociated_by_sv, 0) : 'N/A';
 
         return Inertia::render('EDF/MVP2/InfoByRuta', [
             'sv' => $sv,
