@@ -95,6 +95,7 @@ class MainController extends Controller
             $fecha_negociado = $client->FECHA_NEGOCIADO;
 
             if ($fecha_negociado) {
+                Log::debug($fecha_negociado);
                 $fecha_negociado_date = \Carbon\Carbon::createFromFormat('Y-m-d', $fecha_negociado);
                 $fecha_actual = \Carbon\Carbon::now();
 
