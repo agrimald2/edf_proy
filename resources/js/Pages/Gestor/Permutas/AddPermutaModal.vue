@@ -167,7 +167,7 @@ export default {
                 justification: '',
                 sv: this.sv
             },
-            disableVolumeCU: false,
+            disableVolumeCU: true,
             reasons: [],
             locations: [],
             sentPermutaViewModal: false,
