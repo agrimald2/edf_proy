@@ -167,7 +167,7 @@ export default {
                 justification: '',
                 sv: this.sv
             },
-            disableVolumeCU: true,
+            disableVolumeCU: false,
             reasons: [],
             locations: [],
             sentPermutaViewModal: false,
@@ -353,6 +353,9 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     this.searchResults = data;
+                    if (data.length === 0) {
+                        this.disableVolumeCU = false;
+                    }
                 })
                 .catch(error => {
                     console.error('Error fetching clients:', error);
@@ -360,7 +363,7 @@ export default {
         },
         selectClient(client) {
             this.selectedClient = client;
-            this.formData.clientCode = client.code;
+            this.formData.clientCode = client.code  ;
             // El volumen en CU se actualizará automáticamente gracias al watcher de selectedClient
             // disabled input volumen cu
             this.disableVolumeCU = true;

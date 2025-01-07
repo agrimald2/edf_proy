@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Permuta;
 use App\Models\BlackList;
+use App\Models\Customer;
 use Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,10 +42,19 @@ class PermutaController extends Controller
 
         $blackList = BlackList::where('id', $request->clientCode)->first();
         $reason = $blackList ? $blackList->reason : null;
-        
+
         if ($blackList) {
             return response()->json(['error' => 'El código de cliente está en la lista negra por el motivo: ' . $reason], 400);
         }
+
+        $customer = Customer::where('code', $request->clientCode)->first();
+        if ($customer) {
+            $customerVolume = $customer->volumen_cu;
+            if ($request->volumeCU !== $customerVolume) {
+                return response()->json(['error' => 'El volumen en CU no coincide con el volumen del cliente.'], 400);
+            }
+        }
+
 
         $requestData = $request->all();
 
@@ -161,8 +171,8 @@ class PermutaController extends Controller
          * @TODO - Cada Permuta debe tener un código de supervisor "SV" - Para poder filtrar las rutas por código de supervisor
          */
         $permutas = Permuta::where('route', $route)
-                            ->with('location')
-                            ->get();
+            ->with('location')
+            ->get();
 
         Log::info($permutas);
         return response()->json($permutas);
@@ -177,18 +187,18 @@ class PermutaController extends Controller
          * @TODO - Cada Permuta debe tener un código de supervisor "SV" - Para poder filtrar las rutas por código de supervisor
          */
         $permutas = Permuta::where('sv', $sv)
-                            ->with('location')
-                            ->get();
+            ->with('location')
+            ->get();
         return response()->json($permutas);
     }
 
     public function getSupervisorPendingPermutas($sv)
     {
         $permutas = Permuta::where('sv', $sv)
-                            ->where('instance_status', 'Supervisor')
-                            ->where('supervisor_status', 'Pending')
-                            ->with('location')
-                            ->get();
+            ->where('instance_status', 'Supervisor')
+            ->where('supervisor_status', 'Pending')
+            ->with('location')
+            ->get();
         return response()->json($permutas);
     }
 
@@ -197,13 +207,13 @@ class PermutaController extends Controller
         $user = Auth::user();
 
         $permutas = Permuta::whereIn('instance_status', ['Gerente', 'Trade'])
-                            ->where('instance_status', 'Gerente')
-                            ->where('gerente_status', 'Pending')
-                            ->with(['location', 'location.subregion'])
-                            ->whereHas('location', function ($query) use ($user) {
-                                $query->where('user_id', $user->id);
-                            })
-                            ->get();
+            ->where('instance_status', 'Gerente')
+            ->where('gerente_status', 'Pending')
+            ->with(['location', 'location.subregion'])
+            ->whereHas('location', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->get();
 
         return response()->json($permutas);
     }
@@ -216,11 +226,11 @@ class PermutaController extends Controller
         $user = Auth::user();
 
         $permutas = Permuta::whereIn('instance_status', ['Gerente', 'Trade'])
-                            ->with(['location', 'location.subregion'])
-                            ->whereHas('location', function ($query) use ($user) {
-                                $query->where('user_id', $user->id);
-                            })
-                            ->get();
+            ->with(['location', 'location.subregion'])
+            ->whereHas('location', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->get();
 
         return response()->json($permutas);
     }
@@ -230,8 +240,8 @@ class PermutaController extends Controller
     public function getTradePermutas()
     {
         $permutas = Permuta::where('instance_status', 'Trade')
-                            ->with(['location', 'location.subregion.region'])
-                            ->get();
+            ->with(['location', 'location.subregion.region'])
+            ->get();
         return response()->json($permutas);
     }
 
@@ -338,5 +348,4 @@ class PermutaController extends Controller
 
         return response()->json($permuta);
     }
-
 }
