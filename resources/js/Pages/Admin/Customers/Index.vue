@@ -28,7 +28,9 @@
                                     <p v-else-if="uploadStatus.includes('Upload Failed')" class="text-xs text-red-500">
                                         {{ uploadStatus }}
                                     </p>
-
+                                    <p v-else-if="uploadStatus === 'File selected'" class="text-xs text-blue-500">
+                                        Archivo listo para subir: {{ fileName }}
+                                    </p>
                                     <svg v-else class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor"
                                         fill="none" viewBox="0 0 48 48" aria-hidden="true">
                                         <path d="M28 8H12a4 4 0 00-4 4v24a4 4 0 004 4h16m8-12l-8 8m0 0l-8-8m8 8V12"
@@ -37,7 +39,7 @@
                                     <div class="flex text-sm text-gray-600">
                                         <label for="customer-upload"
                                             class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                                            <span v-if="!isUploading">Selecciona un Archivo</span>
+                                            <span v-if="!isUploading && !file.value">Selecciona un Archivo</span>
                                             <input id="customer-upload" name="customer-upload" type="file" class="sr-only"
                                                 accept=".xlsx, .xls" @change="onFileChange">
                                         </label>
@@ -67,7 +69,7 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import { ref } from 'vue';
 import axios from 'axios';
 
-const file = ref(null);
+const file = ref('');
 const uploadStatus = ref('');
 const fileName = ref('');
 const isProcessing = ref(false);
@@ -80,6 +82,7 @@ const onFileChange = (event) => {
 
 const uploadCustomers = async () => {
     if (file.value) {
+        console.log("SUBIENDO...");
         isProcessing.value = true;
         uploadStatus.value = 'Uploading...';
         const formData = new FormData();

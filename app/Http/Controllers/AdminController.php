@@ -9,8 +9,9 @@ use App\Models\BlackList;
 use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
-Use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Permuta;
 
 class AdminController extends Controller
@@ -62,44 +63,47 @@ class AdminController extends Controller
 
     public function uploadCustomers(Request $request)
     {
+        Log::info("Starting customer upload...");
         try {
             // Validate the uploaded file
             $request->validate([
                 'customers' => 'required|file',
             ]);
 
-            // Retrieve the uploaded file
             $file = $request->file('customers');
-
-            // Check for upload errors
-            if ($file->getError() != UPLOAD_ERR_OK) {
-                throw new \Exception('Error uploading file: ' . $file->getErrorMessage());
-            }
-
-            // Store the file
             $path = $file->store('customers');
 
-            // Load the Excel file
-            $rows = Excel::toArray([], $file)[0]; // Assuming the data is in the first sheet
-
+            // Load the Excel file and assume the data is in the first sheet
+            $rows = Excel::toArray([], $file)[0];
             // Skip the first row (header)
             array_shift($rows);
 
-            // Empty the Customer table
-            Customer::truncate();
+            // Empty the Customer table using raw SQL
+            DB::statement('TRUNCATE TABLE customers');
 
-            // Parse the data and insert into the Customer model
+            // Prepare the data for bulk insertion using raw SQL
+            $insertData = [];
             foreach ($rows as $row) {
-                Customer::create([
-                    'code' => $row[0],
-                    'volumen_cu' => $row[1],
-                ]);
+                $insertData[] = [
+                    $row[0],  // code
+                    $row[1],  // volumen_cu
+                ];
             }
+
+            // Use transaction to handle large batch insert
+            DB::beginTransaction();
+
+            $insertQuery = 'INSERT INTO customers (code, volumen_cu) VALUES (?, ?)';
+            foreach ($insertData as $data) {
+                DB::insert($insertQuery, $data);
+            }
+
+            DB::commit();
 
             return response()->json(['message' => 'Customers uploaded successfully']);
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error('Failed to upload customers: ' . $e->getMessage());
-            Log::error($e);
             return response()->json(['message' => 'Failed to upload customers: ' . $e->getMessage()], 500);
         }
     }
