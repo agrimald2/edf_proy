@@ -8,6 +8,7 @@ use App\Models\BlackList;
 use App\Models\Customer;
 use Log;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Location;
 
 class PermutaController extends Controller
 {
@@ -106,6 +107,16 @@ class PermutaController extends Controller
                 'reason' => $validatedData['reason'],
                 'justification' => $validatedData['justification'] ?? null,
             ]);
+
+            $location = Location::findOrFail($validatedData['location_id']);
+
+            if (in_array(substr($location->name, 0, 2), ['AD', 'AE', 'AF'])) {
+                $permuta->instance_status = "Gerente";
+                $permuta->supervisor_status = "Approved";
+                $permuta->supervisor_approved_at = now();
+                $permuta->supervisor_approved_by = "sistema";
+                $permuta->save();
+            }
 
             return response()->json($permuta, 201);
         } catch (\Exception $e) {
