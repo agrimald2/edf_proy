@@ -31,7 +31,7 @@
                                 <p v-if="formData.status === 'Rejected'"><span class="font-bold">Estado:</span></p>
                                 <p class="text-right">{{ formData.status }}</p>
                                 <p v-if="formData.status === 'Rejected'"><span class="font-bold">Motivo:</span></p>
-                                <p class="text-right">{{ formData.rejectedReason }}</p>
+                                <p class="text-right">{{ formData.rejectedReasonPermuta }}</p>
                             </div>
                         </div>
                         <hr>
@@ -94,7 +94,8 @@ export default {
     methods: {
         mapPermutaToFormData(permuta) {
             const status = ['supervisor_status', 'gerente_status', 'trade_status'].find(status => permuta[status].toLowerCase() === 'rejected') || 'Pending';
-            const rejectedReason = ['supervisor_rejected_reason', 'gerente_rejected_reason', 'trade_rejected_reason'].find(reason => permuta[reason]) || '';
+            const rejectedReasonKey = ['supervisor_rejected_reason', 'gerente_rejected_reason', 'trade_rejected_reason'].find(key => permuta[key]) || '';
+            const rejectedReason = permuta[rejectedReasonKey] || '';
             
             return {
                 clientCode: permuta.cod_cliente,
@@ -108,7 +109,7 @@ export default {
                 reason: permuta.reason,
                 justification: permuta.justification,
                 status: status === 'Pending' ? 'Pending' : 'Rejected',
-                rejectedReason: rejectedReason
+                rejectedReasonPermuta: rejectedReason
             };
         },
         fetchReasons() {
