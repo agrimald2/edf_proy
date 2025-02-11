@@ -93,10 +93,12 @@ export default {
     },
     methods: {
         mapPermutaToFormData(permuta) {
-            const status = ['supervisor_status', 'gerente_status', 'trade_status'].find(status => permuta[status].toLowerCase() === 'rejected') || 'Pending';
-            const rejectedReasonKey = ['supervisor_rejected_reason', 'gerente_rejected_reason', 'trade_rejected_reason'].find(key => permuta[key]) || '';
-            const rejectedReason = permuta[rejectedReasonKey] || '';
-            
+            const statusTypes = ['supervisor_status', 'gerente_status', 'trade_status'];
+            // Encontrar el primer estado rechazado y asignar 'Rejected' o 'Pending' a status
+            const status = statusTypes.find(status => permuta[status] && permuta[status].toLowerCase() === 'rejected') ? 'Rejected' : 'Pending';
+            // Encuentra la primera razón del rechazo no vacía y asígnala a rejectedReason, o deja una cadena vacía
+            const rejectedReason = (permuta.supervisor_rejected_reason || permuta.gerente_rejected_reason || permuta.trade_rejected_reason) || '';
+
             return {
                 clientCode: permuta.cod_cliente,
                 volumeCU: permuta.volume,
@@ -108,7 +110,7 @@ export default {
                 condition: permuta.condition,
                 reason: permuta.reason,
                 justification: permuta.justification,
-                status: status === 'Pending' ? 'Pending' : 'Rejected',
+                status: status,
                 rejectedReasonPermuta: rejectedReason
             };
         },
