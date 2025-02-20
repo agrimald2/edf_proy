@@ -84,4 +84,6 @@ Route::get('/supervisor/{mesa}/dashboard/permutas/pending', [SupervisorControlle
 
 Route::get('/login/{code}', [MainController::class, 'loginByCode'])->name('loginByCode');
 
-
+Route::get('/maintenance', function () {
+    return Inertia::render('Maintenance');
+});
