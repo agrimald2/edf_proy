@@ -275,6 +275,8 @@ export default {
         async getPermutas() {
             try {
                 const response = await axios.get(`/api/gestor/${this.route}/permutas`);
+                console.log('Permutas response:::');
+                console.dir(response.data);
                 this.permutas = response.data;
             } catch (error) {
                 console.error('Error fetching permutas:', error);
