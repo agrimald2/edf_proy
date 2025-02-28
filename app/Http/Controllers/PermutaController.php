@@ -185,6 +185,7 @@ class PermutaController extends Controller
             ->with('location')
             ->get();
 
+        Log::info('Get Gestor Permutas:::');
         Log::info($permutas);
         return response()->json($permutas);
     }
