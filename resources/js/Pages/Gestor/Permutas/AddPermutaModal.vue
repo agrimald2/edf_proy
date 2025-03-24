@@ -211,7 +211,7 @@ export default {
             let options = [];
 
             if (condition === 'NUEVO') {
-                options = [2];
+                options = [1,2];
             } else if (condition === 'REPOTENCIADO') {
                 options = [0.5, 1, 2];
             }
