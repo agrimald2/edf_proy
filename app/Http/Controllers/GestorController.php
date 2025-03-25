@@ -19,8 +19,6 @@ class GestorController extends Controller
         
         $location = Location::where('name', $location)->first();
 
-        Log::debug($location);
-
         $location_id = $location ? $location->id : 2;
 
         return Inertia::render('Gestor/Permutas/List', [

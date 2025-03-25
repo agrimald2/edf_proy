@@ -113,7 +113,6 @@ class GerenteController extends Controller
 
             $permuta = Permuta::find($row[0]);
             if ($permuta) {
-                Log::debug($row);
                 if (strtoupper($row[12]) === 'SI') {
                     $permuta->gerente_status = 'Approved';
                     $permuta->gerente_approved_at = now();
