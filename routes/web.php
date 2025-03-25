@@ -41,6 +41,9 @@ Route::middleware([
     Route::get('/gerente/permutas/pending/list', [PermutaController::class, 'getGerentePendingPermutas'])->name('permutas.pending.list.gerente');
     
     Route::get('/gerente/locations', [GerenteController::class, 'getGerenteLocations'])->name('locations.gerente');
+    Route::get('/gerente/pendingPermutas', [GerenteController::class, 'exportPendingPermutas']);
+    Route::post('/gerente/importPendingPermutas', [GerenteController::class, 'importPendingPermutas']);
+
     
     Route::get('/trade/pendingPermutas', [TradeController::class, 'exportPendingPermutas']);
     Route::post('/trade/importPendingPermutas', [TradeController::class, 'importPendingPermutas']);

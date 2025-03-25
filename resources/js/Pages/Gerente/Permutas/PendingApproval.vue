@@ -11,16 +11,18 @@
                 Lista de Permutas
             </h2>
         </div>
+        <div class="flex gap-2 my-4 px-2">
+            <button class="px-2 py-1 text-xs rounded-full border-black border-2 bg-blue-500 text-white"
+                @click="exportExcel">Exportar Excel</button>
+            <input type="file" @change="handleFileUpload" class="hidden" ref="fileInput">
+            <button class="px-2 py-1 text-xs rounded-full border-black border-2 bg-green-500 text-white"
+                @click="triggerFileInput">Importar Excel</button>
+        </div>
         <div class="p-2 overflow-hidden shadow-xl sm:rounded-lg">
             <div class="flex flex-col gap-4">
-                <PendingPermutaItem
-                    v-for="permuta in sortedPermutas"
-                    :key="permuta.id"
-                    :permuta="permuta"
-                    :showDetailModal="showDetailModal"
-                    :selectedPermuta="selectedPermuta"
-                    @open-detail-modal="openDetailModal"
-                />
+                <PendingPermutaItem v-for="permuta in sortedPermutas" :key="permuta.id" :permuta="permuta"
+                    :showDetailModal="showDetailModal" :selectedPermuta="selectedPermuta"
+                    @open-detail-modal="openDetailModal" />
             </div>
         </div>
     </GuestLayout>
@@ -132,7 +134,37 @@ export default {
         },
         goBack() {
             window.location.href = `/gerente/dashboard`;
+        },
+        exportExcel() {
+            window.location.href = '/gerente/pendingPermutas';
+        },
+        triggerFileInput() {
+            console.log("HOLA 2");
+            this.$refs.fileInput.click();
+        },
+        async handleFileUpload(event) {
+            console.log("HOLA 3");
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await axios.post('/gerente/importPendingPermutas', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                console.log('Import successful:', response.data);
+                this.getPermutas();
+                alert('Importación exitosa');
+            } catch (error) {
+                console.error('Error importing permutas:', error);
+                alert('Error durante la importación');
+            }
         }
+
     },
     mounted() {
         this.getPermutas();

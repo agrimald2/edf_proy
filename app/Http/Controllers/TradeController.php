@@ -9,8 +9,7 @@ use App\Models\EdfData;
 use DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PendingPermutasExport;
-use Log;
-
+use Illuminate\Support\Facades\Log;
 class TradeController extends Controller
 {
     public function index()
