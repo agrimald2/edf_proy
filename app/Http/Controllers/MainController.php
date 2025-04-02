@@ -13,6 +13,7 @@ use DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\MainImport;
 use Log;
+use App\Jobs\ImportExcelJob;
 
 class MainController extends Controller
 {
@@ -106,75 +107,19 @@ class MainController extends Controller
 
     public function replaceDataFromExcel(Request $request)
     {
-        \Log::info('Replacing data from Excel');
+        \Log::info('Starting data replacement process');
+
         $request->validate([
             'excel' => 'required|mimes:xlsx,xls,csv',
         ]);
-        
+
         $file = $request->file('excel');
+        $filePath = $file->store('temp'); // Store the file and get the path
 
-        $data = \Excel::toArray([], $file)[0];
+        // Dispatch job to the queue with the file path
+        ImportExcelJob::dispatch($filePath);
 
-        //\Log::info('Data: ' . json_encode($data));
-
-        \DB::table('mains')->truncate();
-
-        // Disable Laravel's query log for this transaction
-        \DB::connection()->disableQueryLog();
-
-        // Use a database transaction to wrap the insert operations
-        \DB::beginTransaction();
-        try {
-            // Skip the header row and prepare the data for insertion
-            $data = array_slice($data, 1);
-            // Use Eloquent's insertOrIgnore to handle large batches efficiently
-            $insertData = collect($data)->map(function ($row) {
-                return [
-                    'COD_CLIENTE' => $row[0],
-                    'RUTA' => $row[1],
-                    'FREC_VISITA' => $row[2],
-                    'CLIENTE' => $row[3],
-                    'DIRECCION' => $row[4],
-                    'SV' => $row[5],
-                    'GV' => $row[6],
-                    'NOMBRE_SV' => $row[7],
-                    'TAMANO' => $row[8],
-                    'PROMEDIO_CU_3M' => $row[9],
-                    'N_EDF' => $row[10],
-                    'N_PUERTAS' => $row[11],
-                    'CONDICION' => $row[12],
-                    'PUERTAS_A_NEGOCIAR' => $row[13],
-                    'CONDICION_2' => $row[14],
-                    'PUERTAS_A_NEGOCIAR_2' => $row[15],
-                    'NEGOCIADO' => $row[16],
-                    'STATUS' => $row[17],
-                    'CUOTA' => $row[18],
-                    'SV_LIMIT' => $row[19],
-                    'LOCACION' => $row[20],
-                    'TALLER' => $row[21],
-                    'FECHA_NEGOCIADO' => $row[22],
-                    'PROMEDIO_MES' => $row[23],
-                    'EDF_NEGOCIADOS' => $row[24],
-                ];
-            })->toArray();
-
-            // Insert the data in chunks to avoid memory issues
-            $batchSize = 10000; // Adjust batch size for better performance
-            $chunks = array_chunk($insertData, $batchSize);
-            foreach ($chunks as $chunk) {
-                \DB::table('mains')->insertOrIgnore($chunk);
-                // Consider committing periodically if transaction is too large
-                // \DB::commit();
-                // \DB::beginTransaction();
-            }
-
-            \DB::commit(); // Commit the transaction
-            return back()->with('success', 'Data has been replaced successfully.');
-        } catch (\Exception $e) {
-            \DB::rollBack(); // Rollback the transaction on error
-            \Log::error($e->getMessage());
-            return back()->with('error', $e->getMessage());
-        }
+        return back()->with('success', 'Data replacement process started, it will run in the background.');
     }
 
     public function uploadNewDataFromExcel(Request $request)
@@ -236,7 +181,7 @@ class MainController extends Controller
     public function getInfoByMesa($mesa)
     {
         $currentMonth = now()->format('Y-m');
-        
+
         $mesa = strtoupper($mesa);
         $cuota = Main::where('SV', $mesa)->first()->CUOTA ?? 'N/A';
         $supervisor = Main::where('SV', $mesa)->first()->NOMBRE_SV ?? 'N/A';
@@ -292,7 +237,7 @@ class MainController extends Controller
             ->values();
 
         // Sum N_EDF where NEGOCIADO is NEGOCIADO || Suma de equipos de frío negociados por todas las rutas del supervisor
-        
+
         $negociados = Main::where('SV', $mesa)
             ->where('FECHA_NEGOCIADO', 'like', $currentMonth . '%')
             ->select('COD_CLIENTE', 'EDF_NEGOCIADOS')
