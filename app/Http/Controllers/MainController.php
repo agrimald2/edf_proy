@@ -119,6 +119,11 @@ class MainController extends Controller
 
         \DB::table('mains')->truncate();
 
+        // Disable Laravel's query log for this transaction
+        \DB::connection()->disableQueryLog();
+
+        // Use a database transaction to wrap the insert operations
+        \DB::beginTransaction();
         try {
             // Skip the header row and prepare the data for insertion
             $data = array_slice($data, 1);
@@ -154,14 +159,19 @@ class MainController extends Controller
             })->toArray();
 
             // Insert the data in chunks to avoid memory issues
-            $batchSize = 5000; // Adjust batch size for better performance
+            $batchSize = 10000; // Adjust batch size for better performance
             $chunks = array_chunk($insertData, $batchSize);
             foreach ($chunks as $chunk) {
                 \DB::table('mains')->insertOrIgnore($chunk);
+                // Consider committing periodically if transaction is too large
+                // \DB::commit();
+                // \DB::beginTransaction();
             }
 
+            \DB::commit(); // Commit the transaction
             return back()->with('success', 'Data has been replaced successfully.');
         } catch (\Exception $e) {
+            \DB::rollBack(); // Rollback the transaction on error
             \Log::error($e->getMessage());
             return back()->with('error', $e->getMessage());
         }
