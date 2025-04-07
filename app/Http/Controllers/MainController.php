@@ -280,15 +280,19 @@ class MainController extends Controller
     public function loginByCode($code)
     {
         if (stripos($code, 'SV') !== false) {
+            Log::info('Checking supervisor code: ' . $code);
             // Check if the supervisor code exists
             $exists = Main::where('SV', $code)->exists();
             if ($exists) {
+                Log::info('Redirecting to infoByMesa: ' . $code);
                 return redirect()->route('infoByMesa', ['mesa' => $code]);
             }
         } else {
+            Log::info('Redirecting to infoByRuta: ' . $code);
             // Check if the ruta code exists
             $exists = Main::where('RUTA', $code)->exists();
             if ($exists) {
+                Log::info('Exists: ' . $code);
                 return redirect()->route('infoByRuta', ['ruta' => $code]);
             }
         }
