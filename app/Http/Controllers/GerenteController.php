@@ -116,6 +116,7 @@ class GerenteController extends Controller
                 if (strtoupper($row[12]) === 'SI') {
                     $permuta->gerente_status = 'Approved';
                     $permuta->gerente_approved_at = now();
+                    $permuta->instance_status = 'Trade';
                 } elseif (strtoupper($row[12]) === 'NO') {
                     $permuta->gerente_status = 'Rejected';
                     $permuta->gerente_rejected_at = now();
