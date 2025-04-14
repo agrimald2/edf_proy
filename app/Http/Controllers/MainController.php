@@ -172,7 +172,7 @@ class MainController extends Controller
             })->toArray();
 
             // Insert the data in chunks to avoid memory issues
-            $batchSize = 5000; // Adjust batch size for better performance
+            $batchSize = 1000; // Adjust batch size for better performance
             $chunks = array_chunk($insertData, $batchSize);
             foreach ($chunks as $chunk) {
                 \DB::table('mains')->insertOrIgnore($chunk);
