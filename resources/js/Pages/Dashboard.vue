@@ -22,13 +22,13 @@ const uploadFile = async () => {
         
         console.log('FormData');
 
-        formData.append('excel', file.value);
+        formData.append('csv', file.value);
 
         console.log('Appended');
         
         try {
             console.log('Try...');
-            const response = await axios.post('/upload-excel', formData, {
+            const response = await axios.post('/upload-csv', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },

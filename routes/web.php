@@ -75,6 +75,7 @@ Route::middleware([
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 Route::get('/search', [MainController::class, 'search'])->name('search');
 Route::post('/upload-excel', [MainController::class, 'replaceDataFromExcel'])->name('upload.excel');
+Route::post('/upload-csv', [MainController::class, 'replaceDataFromCSV'])->name('upload.csv');
 
 Route::get('/ruta/{ruta}/info', [MainController::class, 'getInfoByRuta'])->name('infoByRuta');
 Route::get('/mesa/{mesa}/info', [MainController::class, 'getInfoByMesa'])->name('infoByMesa');

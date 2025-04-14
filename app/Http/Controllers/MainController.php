@@ -122,6 +122,68 @@ class MainController extends Controller
         return back()->with('success', 'Data replacement process started, it will run in the background.');
     }
 
+    public function replaceDataFromCSV(Request $request)
+    {
+        \Log::info('Replacing data from CSV');
+        $request->validate([
+            'csv' => 'required|mimes:csv,txt',
+        ]);
+        
+        $file = $request->file('csv');
+
+        $data = array_map('str_getcsv', file($file->getRealPath()));
+
+        //\Log::info('Data: ' . json_encode($data));
+
+        \DB::table('mains')->truncate();
+
+        try {
+            // Skip the header row and prepare the data for insertion
+            $data = array_slice($data, 1);
+            // Use Eloquent's insertOrIgnore to handle large batches efficiently
+            $insertData = collect($data)->map(function ($row) {
+                return [
+                    'COD_CLIENTE' => $row[0],
+                    'RUTA' => $row[1],
+                    'FREC_VISITA' => $row[2],
+                    'CLIENTE' => $row[3],
+                    'DIRECCION' => $row[4],
+                    'SV' => $row[5],
+                    'GV' => $row[6],
+                    'NOMBRE_SV' => $row[7],
+                    'TAMANO' => $row[8],
+                    'PROMEDIO_CU_3M' => $row[9],
+                    'N_EDF' => $row[10],
+                    'N_PUERTAS' => $row[11],
+                    'CONDICION' => $row[12],
+                    'PUERTAS_A_NEGOCIAR' => $row[13],
+                    'CONDICION_2' => $row[14],
+                    'PUERTAS_A_NEGOCIAR_2' => $row[15],
+                    'NEGOCIADO' => $row[16],
+                    'STATUS' => $row[17],
+                    'CUOTA' => $row[18],
+                    'SV_LIMIT' => $row[19],
+                    'LOCACION' => $row[20],
+                    'TALLER' => $row[21],
+                    'FECHA_NEGOCIADO' => $row[22],
+                    'PROMEDIO_MES' => $row[23],
+                    'EDF_NEGOCIADOS' => $row[24],
+                ];
+            })->toArray();
+
+            // Insert the data in chunks to avoid memory issues
+            $batchSize = 5000; // Adjust batch size for better performance
+            $chunks = array_chunk($insertData, $batchSize);
+            foreach ($chunks as $chunk) {
+                \DB::table('mains')->insertOrIgnore($chunk);
+            }
+
+            return back()->with('success', 'Data has been replaced successfully.');
+        } catch (\Exception $e) {
+            \Log::error($e->getMessage());
+            return back()->with('error', $e->getMessage());
+        }
+    }
     public function uploadNewDataFromExcel(Request $request)
     {
         $request->validate([
