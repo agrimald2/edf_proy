@@ -105,7 +105,7 @@ const isUploading = computed(() => uploadStatus.value === 'File selected' || isP
                                             class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                             <span v-if="!isUploading">Selecciona un Archivo</span>
                                             <input id="file-upload" name="file-upload" type="file" class="sr-only"
-                                                accept=".xlsx, .xls" @change="onFileChange">
+                                                accept=".csv" @change="onFileChange">
                                         </label>
                                     </div>
                                     <p class="text-xs text-gray-500">
