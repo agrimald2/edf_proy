@@ -130,6 +130,9 @@ class MainController extends Controller
         
         $file = $request->file('csv');
 
+        // Set the locale to handle UTF-8 characters correctly
+        setlocale(LC_ALL, 'en_US.UTF-8');
+
         $data = array_map('str_getcsv', file($file->getRealPath()));
 
         \DB::table('mains')->truncate();
