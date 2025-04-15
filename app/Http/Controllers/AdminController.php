@@ -63,7 +63,6 @@ class AdminController extends Controller
 
     public function uploadCustomers(Request $request)
     {
-        Log::info("Starting customer upload...");
         try {
             // Validate the uploaded file
             $request->validate([

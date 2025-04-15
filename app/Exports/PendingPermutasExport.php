@@ -13,7 +13,6 @@ class PendingPermutasExport implements FromView
     public function __construct($permutas)
     {
         $this->permutas = $permutas;
-        Log::info($this->permutas); // Log permutas in the constructor
     }
 
     public function view(): View

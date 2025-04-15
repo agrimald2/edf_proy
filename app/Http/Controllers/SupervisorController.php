@@ -94,13 +94,11 @@ class SupervisorController extends Controller
 
 
     public function getNameByMesa($mesa){
-        Log::info($mesa);
         $nombre_sv = Main::where('SV', $mesa)
         ->where('NOMBRE_SV', '!=', '-')
         ->pluck('NOMBRE_SV')
         ->first() ?? '-';
         
-        Log::info($nombre_sv);
         return response()->json(['nombre_sv' => $nombre_sv]);
     }
 }
