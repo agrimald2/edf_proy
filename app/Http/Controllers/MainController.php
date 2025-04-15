@@ -123,20 +123,14 @@ class MainController extends Controller
     public function replaceDataFromCSV(Request $request)
     {
         \Log::info('Replacing data from CSV');
+        
         $request->validate([
             'csv' => 'required|mimes:csv,txt',
         ]);
         
         $file = $request->file('csv');
 
-        // Set the locale to handle special characters like "ñ"
-        setlocale(LC_ALL, 'en_US.UTF-8');
-
-        // Use file_get_contents and str_getcsv with a custom function to handle UTF-8 encoding
-        $csvData = file_get_contents($file->getRealPath());
-        $data = array_map(function($line) {
-            return str_getcsv($line, ",", '"', "\\");
-        }, explode(PHP_EOL, $csvData));
+        $data = array_map('str_getcsv', file($file->getRealPath()));
 
         \DB::table('mains')->truncate();
 
