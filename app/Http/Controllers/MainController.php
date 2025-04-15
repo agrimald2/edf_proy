@@ -131,7 +131,14 @@ class MainController extends Controller
         
         $file = $request->file('csv');
 
-        $data = array_map('str_getcsv', file($file->getRealPath()));
+        // Set the locale to handle special characters like "ñ"
+        setlocale(LC_ALL, 'en_US.UTF-8');
+
+        // Use file_get_contents and str_getcsv with a custom function to handle UTF-8 encoding
+        $csvData = file_get_contents($file->getRealPath());
+        $data = array_map(function($line) {
+            return str_getcsv($line, ",", '"', "\\");
+        }, explode(PHP_EOL, $csvData));
 
         //\Log::info('Data: ' . json_encode($data));
 
