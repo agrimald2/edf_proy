@@ -130,10 +130,17 @@ class MainController extends Controller
         
         $file = $request->file('csv');
 
-        // Set the locale to handle UTF-8 characters correctly
-        setlocale(LC_ALL, 'en_US.UTF-8');
+        // Set the default character encoding to UTF-8
+        ini_set('default_charset', 'UTF-8');
 
         $data = array_map('str_getcsv', file($file->getRealPath()));
+
+        // Convert each row to UTF-8 encoding
+        $data = array_map(function($row) {
+            return array_map(function($field) {
+                return mb_convert_encoding($field, 'UTF-8', 'auto');
+            }, $row);
+        }, $data);
 
         \DB::table('mains')->truncate();
 
