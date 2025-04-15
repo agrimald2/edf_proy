@@ -135,10 +135,10 @@ class MainController extends Controller
 
         $data = array_map('str_getcsv', file($file->getRealPath()));
 
-        // Convert each row to UTF-8 encoding
+        // Convert each row to UTF-8 encoding, assuming the source encoding is ISO-8859-1
         $data = array_map(function($row) {
             return array_map(function($field) {
-                return mb_convert_encoding($field, 'UTF-8', 'auto');
+                return mb_convert_encoding($field, 'UTF-8', 'ISO-8859-1');
             }, $row);
         }, $data);
 
